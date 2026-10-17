@@ -1,0 +1,51 @@
+schema_version: "1.0"
+
+extension:
+  id: aiek
+  name: "AI Engineering Kit Gates"
+  version: "0.1.0"
+  description: "Lane routing, a READY TO BUILD gate after tasks, and mandatory verify + review after implement, backed by the AI Engineering Kit skills."
+  category: "process"
+  effect: "read-write"
+  author: "ai-engineering-kit"
+  repository: "https://github.com/CHANGE-ME/ai-engineering-kit"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  commands:
+    - name: speckit.aiek.route
+      file: commands/speckit.aiek.route.md
+      description: "Classify a change request (shape / assess / Small / Normal / Large) and name the next step"
+    - name: speckit.aiek.ready
+      file: commands/speckit.aiek.ready.md
+      description: "READY TO BUILD gate: check spec, plan and tasks are complete and consistent before implement"
+    - name: speckit.aiek.verify
+      file: commands/speckit.aiek.verify.md
+      description: "Run the verifying-change gate and produce an evidence table for the DONE report"
+    - name: speckit.aiek.review
+      file: commands/speckit.aiek.review.md
+      description: "Review the implemented change against spec and plan, fix findings, and emit the DONE report"
+
+hooks:
+  after_tasks:
+    command: "speckit.aiek.ready"
+    priority: 10
+    optional: false
+    prompt: "Run the READY TO BUILD gate?"
+    description: "Checks the feature artifacts are complete and consistent before implementation"
+  after_implement:
+    - command: "speckit.aiek.verify"
+      priority: 10
+      optional: false
+      prompt: "Verify the implementation?"
+      description: "Mandatory fresh verification evidence before anything is called done"
+    - command: "speckit.aiek.review"
+      priority: 20
+      optional: false
+      prompt: "Review the implementation?"
+      description: "Lane-appropriate review, fix loop, then the DONE handoff"
+
+tags: ["workflow", "verification", "review", "gates", "process"]

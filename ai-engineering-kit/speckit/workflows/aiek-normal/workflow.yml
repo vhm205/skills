@@ -1,0 +1,53 @@
+schema_version: "1.0"
+workflow:
+  id: "aiek-normal"
+  name: "AI Engineering Kit: Normal lane"
+  version: "0.1.0"
+  author: "ai-engineering-kit"
+  description: "specify → plan → tasks (READY TO BUILD gate via hook) → implement (verify + review via hooks). No explicit human gates; requires agent-observed readiness and completion checks."
+
+requires:
+  speckit_version: ">=1.0.0"
+
+inputs:
+  request:
+    type: string
+    required: true
+    prompt: "Feature request or Feature Brief (text or path)"
+  integration:
+    type: string
+    default: "auto"
+    prompt: "Integration to use ('auto' uses the project's initialized integration)"
+
+# Command responses are not machine-enforced gates. See speckit/README.md before
+# unattended use; a BLOCKED response can still accompany a successful process exit.
+steps:
+  - id: specify
+    command: speckit.specify
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"
+
+  - id: clarify
+    command: speckit.clarify
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Only ask if spec.md contains [NEEDS CLARIFICATION] markers or critical ambiguities; otherwise report 'No clarification needed'."
+
+  - id: plan
+    command: speckit.plan
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"
+
+  - id: tasks
+    command: speckit.tasks
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"
+
+  - id: implement
+    command: speckit.implement
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"

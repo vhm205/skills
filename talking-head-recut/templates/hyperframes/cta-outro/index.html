@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=720, height=1280" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .card {
+        position: absolute;
+        top: 85px;
+        left: 36px;
+        right: 36px;
+        background: rgba(11, 25, 44, 0.94);
+        border: 1.5px solid rgba(0, 210, 223, 0.5);
+        border-radius: 22px;
+        padding: 26px 30px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 28px rgba(0, 210, 223, 0.25);
+        backdrop-filter: blur(16px);
+        text-align: center;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #00D2DF;
+        background: rgba(0, 210, 223, 0.15);
+        padding: 6px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 223, 0.4);
+        margin-bottom: 14px;
+      }
+      .subhead {
+        font-size: 18px;
+        font-weight: 600;
+        color: #94A3B8;
+        margin-bottom: 8px;
+      }
+      .headline {
+        font-size: 28px;
+        font-weight: 900;
+        color: #F8F9FA;
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+        margin-bottom: 18px;
+      }
+      .headline span {
+        color: #00D2DF;
+        text-shadow: 0 0 16px rgba(0, 210, 223, 0.5);
+      }
+      .cta-btn {
+        display: inline-block;
+        background: #00D2DF;
+        color: #0B192C;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        padding: 12px 24px;
+        border-radius: 30px;
+        box-shadow: 0 4px 16px rgba(0, 210, 223, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="slot_13"
+      data-start="0"
+      data-duration="7"
+      data-width="720"
+      data-height="1280"
+    >
+      <div id="cta-card" class="clip card" data-start="0" data-duration="7" data-track-index="0">
+        <div class="tag">THE TAKEAWAY</div>
+        <div class="subhead">No need for a giant dashboard.</div>
+        <div class="headline">Just never let any area <span>quietly drop to zero</span>.</div>
+        <div class="cta-btn" id="cta-btn">AUDIT YOUR LIFE THIS SUNDAY</div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cta-card", 
+        { y: -40, opacity: 0, scale: 0.95 }, 
+        { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 
+        0.2
+      );
+      tl.fromTo("#cta-btn", 
+        { scale: 0.9, opacity: 0 }, 
+        { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }, 
+        1.5
+      );
+      tl.to("#cta-btn", {
+        scale: 1.05,
+        boxShadow: "0 6px 24px rgba(0, 210, 223, 0.6)",
+        repeat: -1,
+        yoyo: true,
+        duration: 0.8,
+        ease: "sine.inOut"
+      }, 2.0);
+      window.__timelines["slot_13"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

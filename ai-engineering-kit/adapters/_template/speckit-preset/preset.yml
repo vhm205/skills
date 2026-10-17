@@ -1,0 +1,29 @@
+schema_version: "1.0"
+
+# Optional project-specific Spec Kit preset. Install it with a LOWER priority number than the
+# kit preset (aiek-core, priority 10) so it takes precedence, e.g.:
+#   specify preset add --dev adapters/<name>/speckit-preset --priority 5
+# Delete this directory if the project needs no Spec Kit customization.
+
+preset:
+  id: "change-me-project"
+  name: "CHANGE-ME project rules"
+  version: "0.1.0"
+  description: "Project-specific Spec Kit additions for CHANGE-ME (layered on aiek-core)."
+  author: "CHANGE-ME"
+  repository: "https://example.com/CHANGE-ME"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  templates:
+    # Example: append project-specific sections to the spec template.
+    - type: "template"
+      name: "spec-template"
+      file: "templates/spec-template.md"
+      description: "Adds project-specific spec sections"
+      strategy: "append"
+
+tags: ["project"]

@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=720, height=1280" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #0B192C;
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .bg-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.85;
+      }
+      .overlay-gradient {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 30%, rgba(19, 32, 67, 0.75), rgba(11, 25, 44, 0.95));
+      }
+      .container {
+        position: absolute;
+        inset: 0;
+        padding: 90px 44px 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #00D2DF;
+        background: rgba(0, 210, 223, 0.15);
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 223, 0.35);
+        margin-bottom: 12px;
+      }
+      .title {
+        color: #F8F9FA;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .title span {
+        color: #00D2DF;
+      }
+      .grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+      .field-card {
+        background: rgba(15, 30, 54, 0.85);
+        border: 1.5px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      }
+      .field-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .field-num {
+        font-size: 14px;
+        font-weight: 800;
+        color: #00D2DF;
+        background: rgba(0, 210, 223, 0.12);
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .field-name {
+        color: #F8F9FA;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .field-sub {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .field-status {
+        font-size: 12px;
+        font-weight: 600;
+        color: #00D2DF;
+        background: rgba(0, 210, 223, 0.1);
+        padding: 4px 10px;
+        border-radius: 12px;
+      }
+      .field-card.active {
+        border-color: #00D2DF;
+        background: rgba(0, 210, 223, 0.18);
+        box-shadow: 0 0 20px rgba(0, 210, 223, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="slot_04_05"
+      data-start="0"
+      data-duration="10"
+      data-width="720"
+      data-height="1280"
+    >
+      <img src="bg.jpg" class="bg-img" alt="blurred background" />
+      <div class="overlay-gradient"></div>
+      
+      <div id="content" class="clip container" data-start="0" data-duration="10" data-track-index="0">
+        <div id="header" class="header">
+          <div class="tag">DAN MARTELL'S SYSTEM</div>
+          <h1 class="title">THE <span>7 PILLARS</span></h1>
+        </div>
+
+        <div class="grid">
+          <div class="field-card" id="card-1">
+            <div class="field-left">
+              <div class="field-num">1</div>
+              <div>
+                <div class="field-name">Mission</div>
+                <div class="field-sub">Purpose & True Direction</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 1</div>
+          </div>
+
+          <div class="field-card" id="card-2">
+            <div class="field-left">
+              <div class="field-num">2</div>
+              <div>
+                <div class="field-name">Health</div>
+                <div class="field-sub">Energy & Physical Body</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 2</div>
+          </div>
+
+          <div class="field-card" id="card-3">
+            <div class="field-left">
+              <div class="field-num">3</div>
+              <div>
+                <div class="field-name">Love</div>
+                <div class="field-sub">Family & Intimate Bonds</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 3</div>
+          </div>
+
+          <div class="field-card" id="card-4">
+            <div class="field-left">
+              <div class="field-num">4</div>
+              <div>
+                <div class="field-name">Friends</div>
+                <div class="field-sub">Inner Circle & Tribe</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 4</div>
+          </div>
+
+          <div class="field-card" id="card-5">
+            <div class="field-left">
+              <div class="field-num">5</div>
+              <div>
+                <div class="field-name">Fun</div>
+                <div class="field-sub">Joy, Play & Recreation</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 5</div>
+          </div>
+
+          <div class="field-card" id="card-6">
+            <div class="field-left">
+              <div class="field-num">6</div>
+              <div>
+                <div class="field-name">Inner Life</div>
+                <div class="field-sub">Mindfulness & Gratitude</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 6</div>
+          </div>
+
+          <div class="field-card" id="card-7">
+            <div class="field-left">
+              <div class="field-num">7</div>
+              <div>
+                <div class="field-name">Money</div>
+                <div class="field-sub">Wealth & Financial Freedom</div>
+              </div>
+            </div>
+            <div class="field-status">Pillar 7</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#header", 
+        { y: -30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 
+        0.2
+      );
+      tl.fromTo(".field-card", 
+        { x: -40, opacity: 0 }, 
+        { x: 0, opacity: 1, duration: 0.4, stagger: 0.12, ease: "power2.out" }, 
+        0.4
+      );
+      // Highlight Love & Friends when voiceover discusses them
+      tl.to("#card-3", { scale: 1.03, borderColor: "#00D2DF", backgroundColor: "rgba(0, 210, 223, 0.2)", duration: 0.4 }, 3.5);
+      tl.to("#card-3", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.08)", backgroundColor: "rgba(15, 30, 54, 0.85)", duration: 0.4 }, 5.5);
+      tl.to("#card-4", { scale: 1.03, borderColor: "#00D2DF", backgroundColor: "rgba(0, 210, 223, 0.2)", duration: 0.4 }, 6.0);
+      tl.to("#card-4", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.08)", backgroundColor: "rgba(15, 30, 54, 0.85)", duration: 0.4 }, 8.5);
+
+      tl.to("#content", { opacity: 0, duration: 0.5, ease: "power2.in" }, 9.3);
+
+      window.__timelines["slot_04_05"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

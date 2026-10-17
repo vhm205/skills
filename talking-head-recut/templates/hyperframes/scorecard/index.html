@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=720, height=1280" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #0B192C;
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .bg-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.85;
+      }
+      .overlay-gradient {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 30%, rgba(19, 32, 67, 0.78), rgba(11, 25, 44, 0.95));
+      }
+      .container {
+        position: absolute;
+        inset: 0;
+        padding: 85px 40px 65px;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #00D2DF;
+        background: rgba(0, 210, 223, 0.15);
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 223, 0.35);
+        margin-bottom: 10px;
+      }
+      .title {
+        color: #F8F9FA;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .title span {
+        color: #00D2DF;
+      }
+      .score-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+      .row {
+        background: rgba(15, 30, 54, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(8px);
+      }
+      .row.highlight-lowest {
+        border-color: #EF4444;
+        background: rgba(239, 68, 68, 0.15);
+        box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+      }
+      .row-title {
+        color: #F8F9FA;
+        font-size: 16px;
+        font-weight: 700;
+        width: 110px;
+      }
+      .bar-container {
+        flex: 1;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        margin: 0 16px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        background: #00D2DF;
+        border-radius: 6px;
+        width: 0%;
+      }
+      .bar-fill.lowest {
+        background: #EF4444;
+      }
+      .score-num {
+        font-size: 16px;
+        font-weight: 800;
+        color: #F8F9FA;
+        width: 32px;
+        text-align: right;
+      }
+      .badge-focus {
+        font-size: 11px;
+        font-weight: 700;
+        color: #EF4444;
+        background: rgba(239, 68, 68, 0.2);
+        padding: 3px 8px;
+        border-radius: 8px;
+        margin-left: 10px;
+        display: none;
+      }
+      .footer-tip {
+        margin-top: 14px;
+        background: rgba(0, 210, 223, 0.12);
+        border: 1px solid rgba(0, 210, 223, 0.3);
+        border-radius: 12px;
+        padding: 12px 18px;
+        text-align: center;
+        color: #F8F9FA;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .footer-tip span {
+        color: #00D2DF;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="slot_09"
+      data-start="0"
+      data-duration="6"
+      data-width="720"
+      data-height="1280"
+    >
+      <img src="bg.jpg" class="bg-img" alt="blurred background" />
+      <div class="overlay-gradient"></div>
+
+      <div id="content" class="clip container" data-start="0" data-duration="6" data-track-index="0">
+        <div id="header" class="header">
+          <div class="tag">SUNDAY AUDIT</div>
+          <h1 class="title">THE <span>SCORECARD</span> (1 - 5)</h1>
+        </div>
+
+        <div class="score-list">
+          <div class="row">
+            <div class="row-title">Mission</div>
+            <div class="bar-container"><div class="bar-fill" style="width: 80%"></div></div>
+            <div class="score-num">4/5</div>
+          </div>
+          <div class="row">
+            <div class="row-title">Health</div>
+            <div class="bar-container"><div class="bar-fill" style="width: 60%"></div></div>
+            <div class="score-num">3/5</div>
+          </div>
+          <div class="row">
+            <div class="row-title">Love</div>
+            <div class="bar-container"><div class="bar-fill" style="width: 80%"></div></div>
+            <div class="score-num">4/5</div>
+          </div>
+          <div class="row" id="row-friends">
+            <div class="row-title">Friends</div>
+            <div class="bar-container"><div class="bar-fill" id="bar-friends" style="width: 40%"></div></div>
+            <div class="score-num" id="num-friends">2/5</div>
+            <div class="badge-focus" id="badge-friends">LOWEST</div>
+          </div>
+          <div class="row" id="row-fun">
+            <div class="row-title">Fun</div>
+            <div class="bar-container"><div class="bar-fill" id="bar-fun" style="width: 40%"></div></div>
+            <div class="score-num" id="num-fun">2/5</div>
+            <div class="badge-focus" id="badge-fun">LOWEST</div>
+          </div>
+          <div class="row">
+            <div class="row-title">Inner Life</div>
+            <div class="bar-container"><div class="bar-fill" style="width: 60%"></div></div>
+            <div class="score-num">3/5</div>
+          </div>
+          <div class="row">
+            <div class="row-title">Money</div>
+            <div class="bar-container"><div class="bar-fill" style="width: 80%"></div></div>
+            <div class="score-num">4/5</div>
+          </div>
+        </div>
+
+        <div class="footer-tip" id="footer-tip">
+          🎯 RULE: <span>PICK THE 2 LOWEST</span> TO FOCUS ON NEXT WEEK
+        </div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, 0.2);
+      tl.fromTo(".row", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, stagger: 0.08 }, 0.4);
+      tl.fromTo("#footer-tip", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, 1.2);
+
+      // Highlight the two lowest scores (Friends & Fun)
+      tl.to(["#row-friends", "#row-fun"], {
+        borderColor: "#00D2DF",
+        backgroundColor: "rgba(0, 210, 223, 0.2)",
+        boxShadow: "0 0 20px rgba(0, 210, 223, 0.35)",
+        duration: 0.4
+      }, 2.5);
+      tl.set(["#badge-friends", "#badge-fun"], { display: "block" }, 2.5);
+
+      tl.to("#content", { opacity: 0, duration: 0.4 }, 5.5);
+      window.__timelines["slot_09"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

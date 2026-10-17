@@ -1,0 +1,69 @@
+schema_version: "1.0"
+workflow:
+  id: "aiek-large"
+  name: "AI Engineering Kit: Large / Risky lane"
+  version: "0.1.0"
+  author: "ai-engineering-kit"
+  description: "specify → clarify → plan → human decision gate → tasks → analyze → READY TO BUILD gate → implement (verify + independent review via hooks)."
+
+requires:
+  speckit_version: ">=1.0.0"
+
+inputs:
+  request:
+    type: string
+    required: true
+    prompt: "Feature request or Feature Brief (text or path)"
+  integration:
+    type: string
+    default: "auto"
+    prompt: "Integration to use ('auto' uses the project's initialized integration)"
+
+steps:
+  - id: specify
+    command: speckit.specify
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"
+
+  - id: clarify
+    command: speckit.clarify
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Large/risky feature: resolve every critical ambiguity before planning."
+
+  - id: plan
+    command: speckit.plan
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Large/risky feature. Research unknowns first (research.md). Mark the lane in plan.md and surface open trade-offs under 'Decisions Needed'."
+
+  - id: decision
+    type: gate
+    message: "Review plan.md, especially 'Decisions Needed' and the lane. Record your decisions in plan.md, then approve to generate tasks. Reject stops the run."
+    options: [approve, reject]
+    on_reject: abort
+
+  - id: tasks
+    command: speckit.tasks
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.request }}"
+
+  - id: analyze
+    command: speckit.analyze
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Report inconsistencies between spec.md, plan.md and tasks.md before implementation."
+
+  - id: ready
+    type: gate
+    message: "READY TO BUILD? Check the aiek READY TO BUILD report and the analyze findings. Approve to start implementation in an isolated worktree."
+    options: [approve, reject]
+    on_reject: abort
+
+  - id: implement
+    command: speckit.implement
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Large lane: use an isolated worktree; review must be independent."

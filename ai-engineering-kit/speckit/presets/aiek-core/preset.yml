@@ -1,0 +1,38 @@
+schema_version: "1.0"
+
+preset:
+  id: "aiek-core"
+  name: "AI Engineering Kit Core"
+  version: "0.1.0"
+  description: "Feature Brief intake for specify, a decision gate in plan, verifiable tasks, and kit execution discipline in implement."
+  author: "ai-engineering-kit"
+  repository: "https://github.com/CHANGE-ME/ai-engineering-kit"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  templates:
+    - type: "command"
+      name: "speckit.specify"
+      file: "commands/speckit.specify.md"
+      description: "Accept a Feature Brief from shaping-feature as structured input"
+      strategy: "wrap"
+    - type: "command"
+      name: "speckit.plan"
+      file: "commands/speckit.plan.md"
+      description: "Surface unresolved trade-offs as a NEEDS DECISION gate before tasks"
+      strategy: "wrap"
+    - type: "command"
+      name: "speckit.tasks"
+      file: "commands/speckit.tasks.md"
+      description: "Require per-phase verification and strict [P] independence"
+      strategy: "wrap"
+    - type: "command"
+      name: "speckit.implement"
+      file: "commands/speckit.implement.md"
+      description: "Execute tasks with the kit's executing-task, parallel-development and debugging discipline"
+      strategy: "wrap"
+
+tags: ["workflow", "process", "verification", "ai-engineering-kit"]

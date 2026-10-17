@@ -1,0 +1,30 @@
+{
+  "name": "ai-engineering-kit",
+  "version": "0.1.0",
+  "description": "Project-agnostic AI engineering workflow: discovery, Spec Kit planning, disciplined execution, mandatory verification, three human handoffs.",
+  "license": "MIT",
+  "core": "core/WORKFLOW.md",
+  "skills": [
+    { "name": "shaping-feature", "path": "skills/shaping-feature", "role": "discovery" },
+    { "name": "executing-task", "path": "skills/executing-task", "role": "execution" },
+    { "name": "verifying-change", "path": "skills/verifying-change", "role": "verification", "mandatory": true },
+    { "name": "reviewing-change", "path": "skills/reviewing-change", "role": "review" },
+    { "name": "systematic-debugging", "path": "skills/systematic-debugging", "role": "execution" },
+    { "name": "using-worktrees", "path": "skills/using-worktrees", "role": "execution" },
+    { "name": "parallel-development", "path": "skills/parallel-development", "role": "execution" },
+    { "name": "test-driven-development", "path": "skills/test-driven-development", "role": "execution", "optional": true },
+    { "name": "finishing-branch", "path": "skills/finishing-branch", "role": "integration", "optional": true }
+  ],
+  "speckit": {
+    "requires": ">=1.0.0",
+    "extensions": ["speckit/extensions/aiek"],
+    "presets": ["speckit/presets/aiek-core"],
+    "workflows": ["speckit/workflows/aiek-normal", "speckit/workflows/aiek-large"],
+    "recommended_upstream_extensions": ["assess"]
+  },
+  "adapters": ["adapters/default", "adapters/_template"],
+  "upstream": {
+    "spec-kit": { "repo": "https://github.com/github/spec-kit", "reviewed": "c6a4c18 (1.2.2.dev0)" },
+    "superpowers": { "repo": "https://github.com/obra/superpowers", "reviewed": "bb92a77 (v7.0.0)" }
+  }
+}
