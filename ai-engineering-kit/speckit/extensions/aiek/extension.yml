@@ -19,6 +19,15 @@ provides:
     - name: speckit.aiek.route
       file: commands/speckit.aiek.route.md
       description: "Classify a change request (shape / assess / Small / Normal / Large) and name the next step"
+    - name: speckit.aiek.project-brief
+      file: commands/speckit.aiek.project-brief.md
+      description: "Shape a new project's BRD into a Project Brief without planning"
+    - name: speckit.aiek.project-roadmap
+      file: commands/speckit.aiek.project-roadmap.md
+      description: "Create the project roadmap and MVP slices from an approved Project Brief"
+    - name: speckit.aiek.project-first-slice
+      file: commands/speckit.aiek.project-first-slice.md
+      description: "After roadmap approval, classify and complete the first MVP slice"
     - name: speckit.aiek.ready
       file: commands/speckit.aiek.ready.md
       description: "READY TO BUILD gate: check spec, plan and tasks are complete and consistent before implement"

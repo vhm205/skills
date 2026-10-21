@@ -17,6 +17,9 @@ one line, and name the next command or skill. Do **not** write a spec, plan or c
 
 1. Read `.aiek/core/classification.md` and `.aiek/adapter.md` (if present). Read just enough of
    the codebase to judge the change's reach (files, layers, risk areas).
+   If this is a new project/BRD rather than one change, route to the new-project path in
+   `.aiek/core/WORKFLOW.md`: bootstrap, `shaping-project`, constitution, roadmap, approval,
+   then classify its first slice. Stop routing; do not label the whole project LARGE.
 2. **Discovery check** (first match wins):
    - Unclear *whether* to build it (value, priority, cost) → recommend the idea assessment
      (`__SPECKIT_COMMAND_ASSESS_INTAKE__` if the `assess` extension is installed).

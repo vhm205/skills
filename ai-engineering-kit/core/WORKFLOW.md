@@ -4,7 +4,11 @@ This is the one workflow the kit follows. Skills, Spec Kit commands and adapters
 none of them define a competing flow.
 
 ```text
-Change request
+New project + BRD ──► bootstrap ──► shaping-project ──► Project Brief
+                       ──► Spec Kit constitution ──► ROADMAP.md ──► human approval
+                       ──► first MVP slice ──► classify lane below
+
+Change request / approved roadmap slice
       │
       ▼
  Unclear HOW it should work? ──yes──► shaping-feature ──► Feature Brief ──┐
@@ -30,11 +34,32 @@ Change request
 If both value and behavior are unclear, assess whether to build first. Once a spec exists,
 resolve requirement ambiguity through `clarify`; do not restart discovery for the same feature.
 
+## New projects
+
+For an empty project, use the kit's `scripts/init-project.sh` with a BRD path and agent
+integration. It initializes Spec Kit, installs the kit, and keeps the BRD under
+`docs/inputs/`. `shaping-project` then creates only a Project Brief. The upstream
+constitution command records engineering principles; `speckit.aiek.project-roadmap`
+owns `ROADMAP.md`. Its MVP boundary and phase order require explicit human approval
+before a slice is specified or built. An agent may orchestrate these stages, but a
+textual approval claim is not a machine gate; use the `aiek-project` workflow gate
+when running the supervised Spec Kit runner.
+
+The roadmap owns project sequencing: phases are product milestones, MVP slices are
+independent Spec Kit features. Only MVP slices are detailed initially. Select the first
+ready slice and classify **that slice**, using intended behavior and risk rather than
+the current file count. The selected lane follows the existing workflow. Stop after
+one slice reaches DONE; revisit later phases and slice boundaries as evidence changes.
+Each spec links to its roadmap ID, and the roadmap links back to the spec. If the
+roadmap and a spec conflict, reconcile the roadmap boundary and then amend the spec.
+
 ## Stages and owners
 
 | Stage | Owner | Output | Source of truth? |
 |---|---|---|---|
 | Discovery (how should it work?) | `shaping-feature` skill | Feature Brief | No, it is input to `specify` |
+| New-project discovery | `shaping-project` skill | Project Brief | No, it is input to roadmap |
+| Project decomposition | Spec Kit `aiek` extension | `ROADMAP.md` | **Yes, for phase/slice scope and order** |
 | Idea assessment (should we build it?) | Spec Kit `assess` extension (optional) | Assessment verdict | No, it is input to `specify` |
 | Requirements, WHAT/WHY | Spec Kit `specify` / `clarify` | `specs/<feature>/spec.md` | **Yes** |
 | Technical plan, HOW | Spec Kit `plan` | `plan.md`, `research.md`, `data-model.md`, `contracts/` | **Yes** |

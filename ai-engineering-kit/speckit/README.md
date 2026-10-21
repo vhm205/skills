@@ -10,6 +10,7 @@ Spec Kit.
 | Preset `aiek-core` | `presets/aiek-core/` | Wraps `specify` (Feature Brief intake), `plan` (decision gate), `tasks` (strict `[P]`, `Verify:` lines), `implement` (kit execution discipline) |
 | Workflow `aiek-normal` | `workflows/aiek-normal/` | specify → clarify → plan → tasks → implement, no human gates |
 | Workflow `aiek-large` | `workflows/aiek-large/` | specify → clarify → plan → **decision gate** → tasks → analyze → **ready gate** → implement |
+| Workflow `aiek-project` | `workflows/aiek-project/` | BRD → Project Brief → constitution → roadmap → **human gate** → first MVP slice (supervised) |
 
 Requires Spec Kit ≥ 1.0 (preset composition and workflows). Tested against 1.2.2.dev0.
 
@@ -22,6 +23,7 @@ specify extension add --dev /path/to/ai-engineering-kit/speckit/extensions/aiek
 specify preset add   --dev /path/to/ai-engineering-kit/speckit/presets/aiek-core --priority 10
 specify workflow add --dev /path/to/ai-engineering-kit/speckit/workflows/aiek-normal
 specify workflow add --dev /path/to/ai-engineering-kit/speckit/workflows/aiek-large
+specify workflow add --dev /path/to/ai-engineering-kit/speckit/workflows/aiek-project
 # optional, for "should we build this?":
 specify extension add assess
 ```
@@ -43,6 +45,7 @@ use interactive commands for the canonical conditional checkpoint path.
 ```bash
 specify workflow run aiek-normal --input request="docs/briefs/2026-10-17-export.md"
 specify workflow run aiek-large  --input request="Move billing to usage-based pricing"
+specify workflow run aiek-project --input brd="docs/inputs/requirements.md"
 specify workflow resume <run_id>       # after approving a gate
 ```
 

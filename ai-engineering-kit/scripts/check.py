@@ -1,5 +1,6 @@
 """Static kit contracts. No optional validation or network access here."""
 import json
+import os
 import pathlib
 import re
 import sys
@@ -43,8 +44,19 @@ def exists(source, target):
         errors.append(f"{source.relative_to(kit)}: missing {target}")
 
 
+IGNORED = {'.git', '.worktrees', 'node_modules', 'dist', 'coverage', 'test-results', 'playwright-report', '__pycache__', '.cache'}
+
+
+def source_files(suffix):
+    for root, dirs, files in os.walk(kit, followlinks=False):
+        dirs[:] = [d for d in dirs if d not in IGNORED]
+        for name in files:
+            if name.endswith(suffix):
+                yield pathlib.Path(root) / name
+
+
 known = {p.parent.name for p in kit.glob("skills/*/SKILL.md")}
-for path in sorted(kit.rglob("*.md")):
+for path in sorted(source_files(".md")):
     text = path.read_text()
     if text.startswith("---\n"):
         match = re.match(r"^---\n(.*?)\n---(?:\n|$)", text, re.S)
@@ -89,7 +101,7 @@ except (ValueError, KeyError, TypeError, AttributeError) as exc:
     errors.append(f"manifest.json: {exc}")
     manifest = {}
 
-for path in sorted(kit.rglob("*.yml")):
+for path in sorted(source_files(".yml")):
     data = parse_yaml(path.read_text(), path)
     if path.name not in ("extension.yml", "preset.yml", "workflow.yml"):
         continue

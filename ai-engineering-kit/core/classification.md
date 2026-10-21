@@ -1,6 +1,8 @@
 # Lane Classification
 
 Classify **after** any discovery (Feature Brief or assessment) and **before** writing code.
+For a new project, classify each approved roadmap slice when selected. Estimate scope from
+intended behavior, contracts, services and risks; zero existing files does not mean Small.
 State the lane and the one-line reason at the start of the work, for example:
 `Lane: NORMAL (new user-visible behavior across API + UI, reversible)`.
 

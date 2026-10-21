@@ -6,6 +6,7 @@
   "core": "core/WORKFLOW.md",
   "skills": [
     { "name": "shaping-feature", "path": "skills/shaping-feature", "role": "discovery" },
+    { "name": "shaping-project", "path": "skills/shaping-project", "role": "discovery" },
     { "name": "executing-task", "path": "skills/executing-task", "role": "execution" },
     { "name": "verifying-change", "path": "skills/verifying-change", "role": "verification", "mandatory": true },
     { "name": "reviewing-change", "path": "skills/reviewing-change", "role": "review" },
@@ -19,7 +20,7 @@
     "requires": ">=1.0.0",
     "extensions": ["speckit/extensions/aiek"],
     "presets": ["speckit/presets/aiek-core"],
-    "workflows": ["speckit/workflows/aiek-normal", "speckit/workflows/aiek-large"],
+    "workflows": ["speckit/workflows/aiek-normal", "speckit/workflows/aiek-large", "speckit/workflows/aiek-project"],
     "recommended_upstream_extensions": ["assess"]
   },
   "adapters": ["adapters/default", "adapters/_template"],

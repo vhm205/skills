@@ -15,7 +15,7 @@
 set -euo pipefail
 
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SKILLS=(shaping-feature executing-task verifying-change reviewing-change systematic-debugging
+SKILLS=(shaping-feature shaping-project executing-task verifying-change reviewing-change systematic-debugging
         using-worktrees parallel-development test-driven-development finishing-branch)
 MARK_BEGIN="<!-- ai-engineering-kit:begin -->"
 MARK_END="<!-- ai-engineering-kit:end -->"
@@ -102,7 +102,7 @@ copy_one() {
 upsert_block() {
   local file="$1" body="$2"
   if [[ $DRY -eq 1 ]]; then echo "  [dry-run] update kit block in ${file#"$TARGET"/}"; return; fi
-  local tmp; tmp="$(mktemp)"
+  local tmp; tmp="$(mktemp "$TARGET/.aiek-kit.XXXXXX")"
   { echo "$MARK_BEGIN"; cat "$body"; echo "$MARK_END"; } > "$tmp.block"
   if [[ -f "$file" ]] && grep -qF "$MARK_BEGIN" "$file"; then
     awk -v b="$MARK_BEGIN" -v e="$MARK_END" -v blk="$tmp.block" '
@@ -162,6 +162,7 @@ else
     fi
     run specify workflow add --dev "$KIT_DIR/speckit/workflows/aiek-normal"
     run specify workflow add --dev "$KIT_DIR/speckit/workflows/aiek-large"
+    run specify workflow add --dev "$KIT_DIR/speckit/workflows/aiek-project"
   )
 fi
 

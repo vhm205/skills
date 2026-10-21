@@ -3,7 +3,12 @@
 This project uses the AI Engineering Kit workflow (`.aiek/core/WORKFLOW.md`). Project facts and
 commands are in `.aiek/adapter.md`.
 
-For every change request (feature, bug, refactor):
+For a new project with a BRD and no codebase: use `.aiek/core/WORKFLOW.md`'s New projects
+path. Shape a Project Brief, run Spec Kit constitution and project roadmap, obtain explicit
+roadmap approval, then classify and complete the first MVP slice. Do not classify the
+whole project as one change.
+
+For every change request (feature, bug, refactor) or approved roadmap slice:
 
 1. **Discovery.** Unclear *how* it should work → `shaping-feature` skill → Feature Brief → stop.
    Unclear *whether* to build it → Spec Kit `assess` extension, if installed.

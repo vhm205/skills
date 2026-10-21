@@ -1,0 +1,51 @@
+schema_version: "1.0"
+workflow:
+  id: "aiek-project"
+  name: "AI Engineering Kit: New project from BRD"
+  version: "0.1.0"
+  author: "ai-engineering-kit"
+  description: "Project Brief → constitution → MVP roadmap → human gate → first slice. Run after init-project.sh."
+
+requires:
+  speckit_version: ">=1.0.0"
+
+inputs:
+  brd:
+    type: string
+    required: true
+    prompt: "Project-relative BRD path, for example docs/inputs/requirements.md"
+  integration:
+    type: string
+    default: "auto"
+    prompt: "Initialized agent integration"
+
+steps:
+  - id: brief
+    command: speckit.aiek.project-brief
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.brd }}"
+
+  - id: constitution
+    command: speckit.constitution
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Read docs/briefs/project-brief.md and the source BRD. Establish only durable engineering principles; do not choose an unspecified stack or generate a feature spec."
+
+  - id: roadmap
+    command: speckit.aiek.project-roadmap
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "docs/briefs/project-brief.md"
+
+  - id: approve-roadmap
+    type: gate
+    message: "Review ROADMAP.md: MVP boundary, phases, slices, dependencies, exclusions, and open decisions. Approve to start the first slice; reject stops the run."
+    options: [approve, reject]
+    on_reject: abort
+
+  - id: first-slice
+    command: speckit.aiek.project-first-slice
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "Roadmap gate approved. Complete only the first eligible MVP slice."

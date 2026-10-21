@@ -20,8 +20,10 @@ bb92a77), and how. Categories:
 | Templates (`spec-`, `plan-`, `tasks-template.md`) | Reuse | Projects override them via their adapter's `speckit-preset/` |
 | Hook system (`after_tasks`, `after_implement`) | Reuse | Extension `aiek` registers READY TO BUILD, verify, review as mandatory hooks |
 | `assess` extension (idea assessment) | Reuse (optional) | The "should we build this?" path. Install with `specify extension add assess` |
+| Project roadmap | Extend (`aiek` extension) | BRD/Project Brief → shallow `ROADMAP.md`; each approved MVP slice returns to the core SDD commands |
 | `bug` extension | Reuse (optional) | May replace `specify` for bug reports; the kit does not require it |
 | Workflow engine and `gate` steps | Reuse | Kit workflows `aiek-normal`, `aiek-large` |
+| New-project workflow | Reuse | `aiek-project` supervises Project Brief → constitution → roadmap approval → first slice |
 | Bundles | Exclude (v0) | A local bundle cannot carry its own extension/workflow payloads; components must come from a catalog. `install.sh --speckit` registers them with `--dev` instead |
 | `taskstoissues` | Exclude | Deprecated upstream; tracker sync is an adapter concern |
 | Agent integrations (skills rendering per agent) | Reuse | `specify init --integration <agent>` renders Spec Kit commands; the kit only installs its own skills |

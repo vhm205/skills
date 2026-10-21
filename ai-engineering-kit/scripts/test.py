@@ -86,7 +86,41 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((self.project / '.agents').exists())
 
 
+class BootstrapTests(unittest.TestCase):
+    def test_nonempty_target_and_missing_brd_leave_existing_files_untouched(self):
+        with tempfile.TemporaryDirectory(prefix='aiek-bootstrap-') as temp:
+            root = Path(temp)
+            target = root / 'existing'
+            target.mkdir()
+            existing = target / 'keep.txt'
+            existing.write_text('keep')
+            brd = root / 'requirements.md'
+            brd.write_text('# Requirements')
+            script = KIT / 'scripts/init-project.sh'
+            for args in ((str(target), '--brd', str(brd), '--integration', 'codex'),
+                         (str(root / 'new'), '--brd', str(root / 'missing.md'), '--integration', 'codex')):
+                result = subprocess.run(['bash', str(script), *args], capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertEqual(existing.read_text(), 'keep')
+            self.assertFalse((root / 'new').exists())
+
+
 class ValidationTests(unittest.TestCase):
+    def test_generated_trees_are_not_kit_sources(self):
+        with tempfile.TemporaryDirectory(prefix='aiek-check-') as temp:
+            copy = Path(temp) / KIT.name
+            shutil.copytree(KIT, copy, ignore=shutil.ignore_patterns(
+                '.git', '__pycache__', '.worktrees', 'node_modules', 'dist',
+                'coverage', 'test-results', 'playwright-report', '.cache'))
+            for directory in ('node_modules/dependency', 'dist', 'test-results', '.worktrees'):
+                target = copy / directory
+                target.mkdir(parents=True, exist_ok=True)
+                (target / 'SKILL.md').write_text('invalid generated skill')
+                (target / 'extension.yml').write_text('schema_version: wrong')
+            result = subprocess.run([sys.executable, str(copy / 'scripts/check.py'), str(copy)],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_rejects_broken_contracts(self):
         cases = [
             ('skills/executing-task/SKILL.md', lambda s: s.replace(s.splitlines()[2], 'description: Broken YAML: unquoted colon')),
@@ -98,8 +132,8 @@ class ValidationTests(unittest.TestCase):
         ]
         for name, mutate in cases:
             with self.subTest(name=name), tempfile.TemporaryDirectory(prefix='aiek-check-') as temp:
-                copy = Path(temp) / 'kit'
-                shutil.copytree(KIT, copy, ignore=shutil.ignore_patterns('.git', '__pycache__'))
+                copy = Path(temp) / KIT.name
+                shutil.copytree(KIT, copy, ignore=shutil.ignore_patterns('.git', '__pycache__', '.worktrees', 'node_modules', 'dist', 'coverage', 'test-results', 'playwright-report', '.cache'))
                 path = copy / name
                 path.write_text(mutate(path.read_text()))
                 result = subprocess.run([sys.executable, str(copy / 'scripts/check.py'), str(copy)],
