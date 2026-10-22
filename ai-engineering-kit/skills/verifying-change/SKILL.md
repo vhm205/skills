@@ -9,6 +9,17 @@ description: "Checks evidence when claiming a change is fixed, passing or comple
 If you did not run the check in this session after the last edit affecting its scope, you
 cannot say it passes.
 
+## What counts as passing
+
+If the adapter names a `baseline`, passing means **no failures beyond that baseline**, not zero
+failures. Read the baseline, say in the evidence which failures you matched against it, and
+treat anything outside it as a regression — however unrelated it looks. Never widen the
+baseline to absorb a new failure, and never weaken a check to reach green.
+
+Where behavior cannot be expressed as a test — infrastructure, deployment, capacity — observed
+system state and measured thresholds are valid evidence, on the same terms: a command, its real
+output, and what it proves. See `shipping-infrastructure`.
+
 ## The gate
 
 1. **Identify** which commands prove the claim. Take them from the adapter

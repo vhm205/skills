@@ -19,6 +19,11 @@ documentation does not trigger Large; changing its contract or operational proce
 - A meaningful product or architecture trade-off with no clear default
 - The adapter lists the touched area under `risk_areas`
 
+Infrastructure, build pipeline, deployment, release process and capacity work are Large **and**
+use `shipping-infrastructure` instead of the ordinary execution path: their proof is an observed
+system state or a measured threshold, not a failing test. A small diff does not make them
+smaller.
+
 ## Step 2: otherwise, score the change
 
 | Signal | Small | Normal | Large |
@@ -38,6 +43,11 @@ Take the **highest** column that any row lands in.
 | **SMALL** | `executing-task` → `verifying-change` → self-review via `reviewing-change` → DONE | TDD, worktree |
 | **NORMAL** | Spec Kit `specify` → `clarify` (if the spec has `[NEEDS CLARIFICATION]`) → `plan` → `tasks` → `executing-task` → `verifying-change` → `reviewing-change` → DONE | `checklist`, `analyze`, worktree, parallel tasks |
 | **LARGE** | research → `specify` → `clarify` → `plan` → **NEEDS DECISION if a trade-off remains** → `tasks` → `analyze` → `using-worktrees` → `executing-task` → `verifying-change` → `reviewing-change` by an **independent reviewer** (subagent or human) → DONE | TDD (often required by adapter), `checklist` |
+| **INFRA** | recorded decision → `shipping-infrastructure` → `verifying-change` → `reviewing-change` (independent) → `accepting-change` (ops mode) → DONE | `using-worktrees` |
+
+Two stages apply to every lane when the project uses them: `authoring-pr` before reviewers are
+asked to look (whenever the adapter names a `pr_template` or required sections), and
+`accepting-change` before release.
 
 ## Changing lane mid-flight
 

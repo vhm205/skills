@@ -36,7 +36,14 @@ verify:                      # used by verifying-change, using-worktrees, execut
   typecheck: pnpm typecheck
   build: pnpm build
   e2e: null                  # null = not available; say so in DONE
+  uat: null                  # full scenario/acceptance suite, for accepting-change
+  deploy_check: null         # proves a deployed environment is in the intended state
   run: pnpm dev              # how to observe the app, for UI verification
+
+baseline: null               # where known-accepted failures are listed; see below
+output_language: null        # language for PR bodies, reports and acceptance sheets
+pr_template: null            # path to the project's PR template; null = kit default sections
+pr_required_sections: []     # section titles authoring-pr must not leave out
 
 tdd: optional                # optional | required
 tdd_required_paths: []       # globs where TDD is required even if tdd: optional
@@ -59,6 +66,14 @@ tracker_notes: ""            # how tasks map to tickets, if at all
 ---
 ```
 
+## `baseline`
+
+A project with known, accepted failures sets `baseline` to where that list lives. "Green" then
+means *no failures beyond the baseline*, not zero failures, for `verifying-change` and
+`test-driven-development`. Say whether the list is machine-readable (a file a script compares
+against) or prose a person must read, because the two cost very different amounts of attention.
+A baseline may shrink. It may never be widened to absorb a new failure.
+
 ## Prose section
 
 Below the frontmatter, write short, imperative project rules the skills should respect:
@@ -71,10 +86,13 @@ domain glossary. Keep it under ~150 lines. Link to longer project docs instead o
    stages, rename handoffs, or introduce a second planning artifact.
 2. **Risk can only go up.** An adapter may add `risk_areas` or require TDD or human review;
    it may not exempt changes from verification.
-3. **Spec Kit customization goes through a preset.** Project-specific spec/plan/tasks
+3. **Routing is allowed; redefining stages is not.** An adapter may say "symptom X is already
+   covered by the project's own playbook Y" and send the agent there. It may not add a stage,
+   rename a handoff, or introduce a second planning artifact.
+4. **Spec Kit customization goes through a preset.** Project-specific spec/plan/tasks
    template changes or a constitution template belong in `speckit-preset/`, installed with a
    lower priority number (= higher precedence) than the kit preset.
-4. **Secrets never go in an adapter.** Reference env var names, not values.
+5. **Secrets never go in an adapter.** Reference env var names, not values.
 
 ## Spec Kit constitution vs. adapter
 

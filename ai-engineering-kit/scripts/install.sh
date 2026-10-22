@@ -15,8 +15,10 @@
 set -euo pipefail
 
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SKILLS=(shaping-feature shaping-project executing-task verifying-change reviewing-change systematic-debugging
-        using-worktrees parallel-development test-driven-development finishing-branch)
+SKILLS=(exploring-idea shaping-feature intaking-ticket shaping-project executing-task
+        shipping-infrastructure verifying-change accepting-change reviewing-change authoring-pr
+        systematic-debugging using-worktrees parallel-development test-driven-development
+        finishing-branch)
 MARK_BEGIN="<!-- ai-engineering-kit:begin -->"
 MARK_END="<!-- ai-engineering-kit:end -->"
 
