@@ -2,7 +2,9 @@
 
 A single, project-agnostic workflow for small teams using coding agents (Claude Code, Codex, Antigravity, DeepSeek-based agents, …).
 
-- **Discovery** (`shaping-feature`): Turns vague ideas into a Feature Brief, then stops.
+- **Discovery** (`exploring-idea`, `shaping-feature`, `intaking-ticket`): Decides whether to
+  build it, shapes how it should work, or turns a tracker's acceptance criteria into criteria
+  somebody can actually check — then stops.
 - **New project** (`shaping-project` + Spec Kit roadmap): Turns a BRD into an approved MVP roadmap, then runs the first slice through an existing lane.
 - **Spec Kit**: Owns requirements, plans, and tasks. Once specified, it is the only source of truth.
 - **Execution skills** (adapted from Superpowers): Own discipline: isolation, debugging, parallelism, verification, and review.
@@ -31,15 +33,20 @@ ai-engineering-kit/
 │  ├─ adapter-contract.md, command-discovery.md
 │  └─ router.md          block inserted into the project's AGENTS.md
 ├─ skills/               Agent Skills (SKILL.md), harness-neutral
+│  ├─ exploring-idea     should we build it? → Idea Note → drop / shape / assess / decide
 │  ├─ shaping-feature    discovery → Feature Brief → stop
+│  ├─ intaking-ticket    criteria from a tracker → checkable criteria + traceability → stop
 │  ├─ shaping-project    BRD discovery → Project Brief → stop
 │  ├─ executing-task     task loop over Spec Kit tasks.md (or a Small change)
+│  ├─ shipping-infrastructure  infra/pipeline/deploy/capacity: ops evidence, not tests
 │  ├─ verifying-change   mandatory evidence gate
 │  ├─ reviewing-change   lane-appropriate review + receiving feedback
+│  ├─ authoring-pr       PR description from evidence + author self-review
+│  ├─ accepting-change   acceptance pass: scenario re-run, sign-off sheet, ops evidence
 │  ├─ systematic-debugging, using-worktrees, parallel-development
 │  └─ test-driven-development, finishing-branch   (optional)
 ├─ speckit/              Spec Kit extension (aiek), preset (aiek-core), workflows
-├─ adapters/             default (auto-discovers commands) and _template
+├─ adapters/             default (auto-discovers commands), orchexa, and _template
 ├─ scripts/install.sh    installs into an existing project
 ├─ scripts/init-project.sh  creates an empty project from a BRD
 └─ docs/                 upstream mapping, adding an adapter
@@ -85,6 +92,12 @@ skill discovery follows the [official customization docs](https://learn.chatgpt.
 
 Skills use only the open Agent Skills fields (`name`, `description`). Nothing is harness-specific except the install path.
 
+## Guide
+
+A narrative walkthrough of all 15 skills — what each is for, when to reach for it, where it
+stops, and five end-to-end scenarios — is in
+[docs/huong-dan-workflow.md](docs/huong-dan-workflow.md) (Vietnamese).
+
 ## Using it day to day
 
 | You say | What happens |
@@ -93,7 +106,11 @@ Skills use only the open Agent Skills fields (`name`, `description`). Nothing is
 | "Users want to export reports somehow" | `shaping-feature` asks questions → Feature Brief → you run `specify` with it |
 | "Add CSV export to the reports page" | NORMAL: specify → plan → tasks → READY TO BUILD → implement → verify/review hooks → DONE |
 | "Move billing to usage-based pricing" | LARGE: research, spec, plan → NEEDS DECISION → tasks → analyze → worktree → implement → independent review → DONE |
-| "Should we build offline mode?" | Spec Kit `assess` → go / needs-clarification / kill |
+| "Should we build offline mode?" | `exploring-idea` → Idea Note → drop, shape, or Spec Kit `assess` |
+| "Here is ticket ABC-123 with its acceptance criteria" | `intaking-ticket` → checkable criteria + traceability, or BLOCKED with questions for the requester |
+| "Move staging onto the new cluster" | INFRA: decision recorded → `shipping-infrastructure` → ops evidence → rehearsed rollback → `accepting-change` |
+| "Open the PR for this" | `authoring-pr` → description built from the verification evidence, author self-review first |
+| "Is this ready to release?" | `accepting-change` → scenario re-run + acceptance sheet + sign-off |
 
 For supervised workflow runs (see [runner limits](speckit/README.md)):
 `specify workflow run aiek-normal --input request="..."`
@@ -101,7 +118,8 @@ For supervised workflow runs (see [runner limits](speckit/README.md)):
 ## Principles
 
 - One workflow, one planner (Spec Kit), and one source of truth (`specs/<feature>/`).
-- Verification before DONE is mandatory. TDD is adapter-controlled.
+- Verification before DONE is mandatory. TDD is adapter-controlled. Where behavior cannot be
+  tested, observed system state and measured thresholds carry the same burden of proof.
 - Parallel only when five independence rules hold.
 - Project specifics live in adapters and presets, never in skills.
 - No ceremony for trivial changes.

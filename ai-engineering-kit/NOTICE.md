@@ -15,6 +15,10 @@ subagent-driven-development), `skills/reviewing-change` (requesting-code-review,
 receiving-code-review), `skills/test-driven-development`, `skills/finishing-branch`
 (finishing-a-development-branch).
 
+`skills/exploring-idea`, `skills/intaking-ticket`, `skills/authoring-pr`,
+`skills/accepting-change` and `skills/shipping-infrastructure` are original to this kit and
+carry no upstream attribution.
+
 ```text
 MIT License
 

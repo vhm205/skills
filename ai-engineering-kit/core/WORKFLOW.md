@@ -11,12 +11,18 @@ New project + BRD ──► bootstrap ──► shaping-project ──► Projec
 Change request / approved roadmap slice
       │
       ▼
- Unclear HOW it should work? ──yes──► shaping-feature ──► Feature Brief ──┐
-      │ no                                                               │
- Unclear WHETHER to build it? ─yes──► Spec Kit assess (idea assessment) ─┤
-      │ no                                                               │
-      ▼◄─────────────────────────────────────────────────────────────────┘
+ Arrived as a ticket with acceptance criteria? ─yes─► intaking-ticket ─► criteria + traceability ─┐
+      │ no                                             └─ not checkable ─► BLOCKED (questions)    │
+      ▼                                                                                           │
+ Unclear WHETHER to build it? ─yes──► exploring-idea ──► Idea Note ──► DROP / ASSESS / ...────────┤
+      │ no                                                                                        │
+ Unclear HOW it should work? ──yes──► shaping-feature ──► Feature Brief ──────────────────────────┤
+      │ no                                                                                        │
+      ▼◄────────────────────────────────────────────────────────────────────────────────────────┘
  Classify lane (core/classification.md)
+      │
+      ├─ INFRA ─────► shipping-infrastructure (always Large) ─► verifying-change
+      │                 ─► reviewing-change ─► accepting-change (ops) ─► DONE
       │
       ├─ SMALL ─────► executing-task ─► verifying-change ─► reviewing-change ─► DONE
       │
@@ -29,10 +35,16 @@ Change request / approved roadmap slice
                         ─► tasks ─► analyze ─► READY TO BUILD
                         ─► using-worktrees ─► executing-task / parallel-development
                         ─► verifying-change ─► reviewing-change (independent reviewer) ─► DONE
+
+Before handing a change to reviewers, `authoring-pr` writes the description from the
+verification evidence. Before release, `accepting-change` runs the acceptance pass.
 ```
 
-If both value and behavior are unclear, assess whether to build first. Once a spec exists,
-resolve requirement ambiguity through `clarify`; do not restart discovery for the same feature.
+If both value and behavior are unclear, explore whether to build it first (`exploring-idea`,
+which may hand on to the Spec Kit `assess` extension). Once a spec exists, resolve requirement
+ambiguity through `clarify`; do not restart discovery for the same feature. When the work
+arrives from a tracker with acceptance criteria, `intaking-ticket` runs first and blocks on
+criteria nobody can check.
 
 ## New projects
 
@@ -57,16 +69,21 @@ roadmap and a spec conflict, reconcile the roadmap boundary and then amend the s
 
 | Stage | Owner | Output | Source of truth? |
 |---|---|---|---|
+| Discovery (should we build it?) | `exploring-idea` skill | Idea Note + a named exit | No, it is input to shaping or assessment |
 | Discovery (how should it work?) | `shaping-feature` skill | Feature Brief | No, it is input to `specify` |
+| Ticket intake (can each criterion be checked?) | `intaking-ticket` skill | Checkable criteria + traceability table | No, it is input to `specify` or to the Small lane |
 | New-project discovery | `shaping-project` skill | Project Brief | No, it is input to roadmap |
 | Project decomposition | Spec Kit `aiek` extension | `ROADMAP.md` | **Yes, for phase/slice scope and order** |
-| Idea assessment (should we build it?) | Spec Kit `assess` extension (optional) | Assessment verdict | No, it is input to `specify` |
+| Idea assessment (is it worth it?) | Spec Kit `assess` extension (optional) | Assessment verdict | No, it is input to `specify` |
 | Requirements, WHAT/WHY | Spec Kit `specify` / `clarify` | `specs/<feature>/spec.md` | **Yes** |
 | Technical plan, HOW | Spec Kit `plan` | `plan.md`, `research.md`, `data-model.md`, `contracts/` | **Yes** |
 | Task breakdown | Spec Kit `tasks` (+ `analyze` for Large) | `tasks.md` | **Yes** |
 | Execution | `executing-task` (+ `using-worktrees`, `parallel-development`, `systematic-debugging`, `test-driven-development`) | Code, commits, execution log | Code only |
+| Execution (infrastructure) | `shipping-infrastructure` | Recorded decision + ops evidence | Code and configuration only |
 | Verification | `verifying-change` | Evidence (command, exit code, output) | — |
 | Review | `reviewing-change` | Findings by severity | — |
+| Pull request | `authoring-pr` (when the project uses PRs) | Description + author self-review | — |
+| Acceptance | `accepting-change` | Acceptance sheet + sign-off, or ops evidence | — |
 | Integration | `finishing-branch` (optional) | Merge / PR / keep | — |
 
 Once `specify` has run, the Spec Kit artifacts are the **only** plan. Execution skills read them
