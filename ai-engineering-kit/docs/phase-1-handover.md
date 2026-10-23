@@ -24,7 +24,8 @@ gained `core` / `discovery` / `full` profiles and four optional helper scripts, 
 has a harness-agnostic trigger/behavior eval harness with CI.
 
 Nothing in Orchexa was touched (Phase 1 boundary). Measured gates: trigger PASS on the real
-harness, behaviour NOT demonstrated by the real sample (documented gap — §4.3).
+harness; behaviour PASS on the final per-scenario real evidence (7/7, 0 critical), with the raw
+uninterrupted one-pass 3/7 preserved and the calibration history in §4.3.
 
 ---
 
