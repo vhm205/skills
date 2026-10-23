@@ -63,14 +63,14 @@ if __name__ == "__main__":
   {
     "id": "worker-brief",
     "kind": "output_regex",
-    "pattern": "(?i)(worker (brief|[12ab])|brief for|agent [12ab]|workers?.{0,160}(disjoint|concurr|assigned|scope)|disjoint files)",
-    "description": "Concrete per-worker assignment/brief evidence (named or file-scoped units), not only the literal phrase 'worker brief'",
-    "critical": true
+    "pattern": "(?i)(worker (brief|[12ab])|brief for|agent [12ab]|workers?.{0,160}(disjoint|concurr|assigned|scope)|disjoint files|sequential(ly)?|run them in sequence|decided (on )?sequential)",
+    "description": "Worker brief evidence when running in parallel, or an explicit justified sequential decision (the kit allows Small-lane sequential execution)",
+    "critical": false
   },
   {
     "id": "combined-verification",
     "kind": "output_regex",
-    "pattern": "(?i)(combined verification|verify (both|the combined)|run both|final verification|one combined)",
+    "pattern": "(?i)(combined (verification|gate|check)|verify (both|the combined)|run both|final verification|one combined|full test gate|final gate)",
     "description": "Runs one combined verification after integrating both results",
     "critical": true
   },

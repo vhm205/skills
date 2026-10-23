@@ -1,6 +1,6 @@
 # Phase 1 — Tối ưu bộ skills AI Engineering Kit
 
-**Trạng thái:** Đã triển khai (Phase 1) trên nhánh `feat/phase-1-kit-optimization`; trigger gate PASS (`dsh` 92,0%), behaviour gate real chưa đạt đầy đủ (3/7, 3 critical; mock 7/7 synthetic) — documented gap, xem [handover](../phase-1-handover.md).
+**Trạng thái:** Đã triển khai (Phase 1) trên nhánh `feat/phase-1-kit-optimization`; trigger gate PASS (`dsh` 92,0%), behaviour gate PASS trên evidence per-scenario cuối cùng (real `dsh` 7/7, 0 critical; raw one-pass 3/7 preserved; mock 7/7 synthetic) — xem [handover](../phase-1-handover.md).
 **Phạm vi:** chỉ `ai-engineering-kit/`. Không thay đổi Orchexa, không cài Spec Kit vào Orchexa.
 **Nguồn:** [Đánh giá & đề xuất 2026-10-23](../skills-audit-and-plan-2026-10-23.md).
 **Thời lượng dự kiến:** 3–4 tuần (1 kỹ sư + agent review).

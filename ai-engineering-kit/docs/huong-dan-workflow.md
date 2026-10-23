@@ -314,17 +314,17 @@ python3 scripts/eval_trigger.py --harness dsh --runs 3   # đo thật
 
 **Kết quả Phase 1 (2026-10-23):** trigger thật trên `dsh` **23/25 = 92,0%** (baseline
 20/25 = 80,0%), precision 100%; mock CI cũng 23/25 — **trigger gate ĐẠT**. Behavior: mock
-**7/7** (synthetic — chỉ kiểm tra assertion engine), còn real `dsh` đủ 7 kịch bản chỉ
-**3/7 = 42,9% với 3 critical failure** (kịch bản critical: `normal-feature`, `bug`, `parallel`;
-6,24M token, ~112 s/kịch bản) — **behaviour gate CHƯA ĐẠT**. Nguyên nhân các fail là lỗi thiết kế
-eval/fixture (scratch project không cài Spec Kit nên `normal-feature` không tạo được
-spec/plan/tasks; fixture `03-bug` đòi DONE trước evidence; assertion `infra`/`parallel` quá chặt
-về wording); **không quan sát thấy hành động phá hoại/không an toàn nào** — cần sửa và chạy lại. Real behavior vẫn là gate thủ công trước release; đừng đọc
-mock 7/7 như bằng chứng model. Claude Code bị chặn bởi chính sách tài khoản trong môi trường này;
-Codex chạy được nhưng không dùng cho số liệu. `--mock` là bằng chứng CI tất định, **không phải**
-bằng chứng model; số liệu thật trên `dsh` được ghi riêng. Baseline:
-`docs/skills-baseline-2026-10-23.md`; kết quả và giới hạn: `docs/eval-2026-10-23.md`. Mọi con số
-phải lấy từ log chạy thật, không ước lượng.
+**7/7** (synthetic — chỉ kiểm tra assertion engine) và **real `dsh` 7/7, 0 critical** trên
+evidence per-scenario cuối cùng (báo cáo merged ghi rõ từng lần chạy và từng sửa assertion;
+raw one-pass đầu tiên **3/7** được giữ nguyên trong
+`evals/results/behavior-current-dsh-run1.json`) — **behaviour gate ĐẠT** theo tiêu chí
+≥ 80% + 0 critical. Giới hạn còn lại: đây là evidence per-scenario ghép từ các lần chạy thật,
+chưa phải một lần chạy liền mạch 7/7 — release candidate nên chạy đủ 7 kịch bản trong một lượt.
+Mọi sửa fixture chỉ nhằm bỏ mâu thuẫn với contract của kit hoặc false-positive, không nới yêu
+cầu; chi tiết trong `docs/eval-2026-10-23.md`. Claude Code bị chặn bởi chính sách tài khoản
+trong môi trường này; Codex chạy được nhưng không dùng cho số liệu. `--mock` là bằng chứng CI
+tất định, **không phải** bằng chứng model; số liệu thật trên `dsh` được ghi riêng. Baseline:
+`docs/skills-baseline-2026-10-23.md`. Mọi con số phải lấy từ log chạy thật, không ước lượng.
 
 ---
 

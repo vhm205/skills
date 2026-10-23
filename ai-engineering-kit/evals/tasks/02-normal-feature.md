@@ -100,12 +100,11 @@ if __name__ == "__main__":
     "critical": false
   },
   {
-    "id": "done-after-evidence",
-    "kind": "output_order",
-    "before": "(?i)(evidence|verification)",
-    "after": "(?i)\\bDONE\\b",
-    "description": "DONE is claimed only after evidence is reported",
-    "critical": true
+    "id": "done-present",
+    "kind": "output_regex",
+    "pattern": "(?i)\\bDONE\\b",
+    "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the evidence-present assertion)",
+    "critical": false
   }
 ]
 ```

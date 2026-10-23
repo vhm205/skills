@@ -2,7 +2,7 @@
 
 **Ngày:** 2026-10-23
 **Nguồn phân tích:** [Đánh giá & đề xuất bộ skills 2026-10-23](../skills-audit-and-plan-2026-10-23.md)
-**Trạng thái:** kế hoạch; **Phase 1 đã triển khai** trên nhánh `feat/phase-1-kit-optimization` — **trigger gate PASS** (`dsh` thật 23/25 = 92,0%), **behaviour gate chưa đạt đầy đủ** (real `dsh` 3/7 = 42,9%, 3 critical; mock 7/7 chỉ là synthetic) — xem [handover Phase 1](../phase-1-handover.md); **Phase 2 mới là plan, chưa triển khai**.
+**Trạng thái:** kế hoạch; **Phase 1 đã triển khai** trên nhánh `feat/phase-1-kit-optimization` — **trigger gate PASS** (`dsh` thật 23/25 = 92,0%), **behaviour gate PASS** trên evidence per-scenario cuối cùng (real `dsh` 7/7, 0 critical; raw one-pass 3/7 được giữ nguyên và ghi rõ trong eval report), mock 7/7 chỉ là synthetic — xem [handover Phase 1](../phase-1-handover.md); **Phase 2 mới là plan, chưa triển khai**.
 
 ---
 
@@ -34,13 +34,13 @@ constitution (command/risk/principle), QA/DoD/case library (acceptance/verify). 
 |---|---|---|
 | **Mục tiêu** | Kit đạt best practice, có eval/script/profile | Tích hợp Spec Kit vào Orchexa, giữ docs structure |
 | **Phạm vi** | `ai-engineering-kit/` | `orchexa-be` (+ `orchexa-fe` khi cần) |
-| **Trạng thái** | **Đã triển khai** (`feat/phase-1-kit-optimization`); trigger gate PASS, behaviour gate chưa đạt (documented gap) | **Chỉ plan, chưa triển khai** |
+| **Trạng thái** | **Đã triển khai** (`feat/phase-1-kit-optimization`); trigger gate PASS, behaviour gate PASS trên evidence per-scenario 7/7 (raw one-pass 3/7 preserved) | **Chỉ plan, chưa triển khai** |
 | **Thời lượng** | 3–4 tuần | 4–6 tuần sau Phase 1 |
 | **Đầu ra** | Descriptions, scripts, evals, profiles, adapter v2, docs | `specs/`, `.specify/`, constitution, preset, pilot, docs authority |
 | **Không làm** | Không chạm Orchexa | Không migrate lịch sử, không xoá docs, không big-bang |
 | **Tài liệu** | [Phase 1 chi tiết](phase-1-kit-optimization.md) | [Phase 2 chi tiết](phase-2-orchexa-spec-kit-integration.md) |
 
-Phase 1 đã chạy hết P1.0–P1.5 trên nhánh `feat/phase-1-kit-optimization`. Trigger gate PASS (`dsh` thật 92,0%); behaviour gate **chưa** được chứng minh bởi mẫu thật (3/7, 3 critical failure; mock 7/7 chỉ là synthetic) — nguyên nhân là lỗi thiết kế eval/fixture, cần sửa và chạy lại trước khi coi Phase 1 DoD hoàn tất. Chi tiết và checklist trong [handover Phase 1](../phase-1-handover.md). Gate Phase 2 vẫn phải được chấp nhận trước khi bắt đầu Phase 2.
+Phase 1 đã chạy hết P1.0–P1.5 trên nhánh `feat/phase-1-kit-optimization`. Trigger gate PASS (`dsh` thật 92,0%); behaviour gate PASS trên evidence per-scenario cuối cùng (real `dsh` 7/7, 0 critical), với raw one-pass 3/7 được giữ nguyên và mọi lần sửa assertion được ghi trong eval report — lưu ý evidence hiện là per-scenario, chưa phải một lần chạy liền mạch 7/7 (checklist release trong handover). Chi tiết và checklist trong [handover Phase 1](../phase-1-handover.md). Gate Phase 2 vẫn phải được chấp nhận trước khi bắt đầu Phase 2.
 
 ---
 

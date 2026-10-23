@@ -162,7 +162,7 @@ These tests do not invoke coding agents.
 The eval harness is harness-agnostic: `python3 scripts/eval_trigger.py --mock` and
 `python3 scripts/eval_tasks.py --mock` run deterministic trigger/behavior checks offline
 (the primary real harness is DeepSeek Harness, with Claude Code and Codex as optional smoke
-harnesses). Results and limitations — including the documented behaviour-eval gap — are in
+harnesses). Results and limitations — including the per-scenario behaviour evidence and the preserved raw one-pass — are in
 [docs/eval-2026-10-23.md](docs/eval-2026-10-23.md).
 
 See [the workflow audit](docs/audit-2026-10-17.md) for fixes, evidence and remaining limits.
