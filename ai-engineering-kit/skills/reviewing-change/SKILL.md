@@ -1,6 +1,6 @@
 ---
 name: reviewing-change
-description: "Reviews implemented, verified changes before completion or integration, and evaluates incoming review feedback. Does not replace verification."
+description: "Use when reviewing an implemented change or diff before DONE, merge or integration - 'review the code', 'check this PR for security issues', 'look over this diff', 'is this safe?' - or when evaluating incoming review feedback. Reviews requirements, correctness, security, tests, design and operability against the diff, reports findings by severity with file:line and a suggested fix, and runs the scoped re-review after fixes. Not for producing verification evidence or running checks (use verifying-change), writing the PR description (use authoring-pr), or release acceptance and sign-off (use accepting-change)."
 ---
 
 # Reviewing a Change
@@ -56,6 +56,14 @@ See `references/receiving-feedback.md`. In short: verify each point against the 
 acting, push back with evidence when it is wrong for this codebase, clarify unclear
 items while continuing independent, understood fixes. Check each affected behavior.
 No performative agreement.
+
+## Gotchas
+
+- Reviewing the author's summary or PR text instead of the diff itself.
+- Reading only committed changes; uncommitted and untracked task files can be the whole change.
+- Marking a finding addressed because the code moved, without re-running the check that caught it.
+- Demanding behavior the spec never asked for; judge silence by user expectation, not taste.
+- A self-review reported as independent, or "all tests pass" accepted without a command and result.
 
 _Adapted from `requesting-code-review` and `receiving-code-review` of obra/superpowers (MIT, © 2025 Jesse Vincent).
 License in the kit's `NOTICE.md`._

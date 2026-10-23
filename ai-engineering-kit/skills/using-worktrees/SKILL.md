@@ -1,6 +1,6 @@
 ---
 name: using-worktrees
-description: "Prepares isolation when the canonical workflow requires it or the user requests a separate checkout. Reuses existing isolation; not required for every task."
+description: "Use when work needs its own isolated checkout - the canonical workflow requires isolation for Large work, the user says 'use a worktree' or 'work in a separate checkout', or concurrent work would collide in the main tree. Reuses existing isolation, prefers the harness's native workspace, falls back to a git worktree using the adapter's worktree_dir and branch_pattern, and finishes with setup plus a baseline run (verify.test_fast). Not for merging or cleaning up a branch (use finishing-branch), deciding which tasks can run concurrently (use parallel-development), or ordinary work that can safely use the current checkout."
 ---
 
 # Using Worktrees
@@ -23,6 +23,17 @@ If the agent harness provides an isolated checkout or per-task workspace, use it
 a second worktree with git underneath it confuses the harness.
 
 ## Step 2: git fallback
+
+If the kit installed `.aiek/scripts/worktree.py`, it selects the directory, name and branch from
+the adapter and creates the checkout, then optionally runs setup and baseline:
+
+```bash
+python .aiek/scripts/worktree.py --adapter .aiek/adapter.md --slug <slug> --ticket <ticket-id> --setup --baseline --dry-run
+```
+
+Drop `--dry-run` to execute; it prints every git and setup command before running it, refuses an
+existing path and never removes another worktree. Without the script, or when the adapter
+overrides the layout, do it by hand:
 
 1. **Directory**, first match wins:
    1. the adapter's `worktree_dir`
@@ -47,10 +58,19 @@ If isolation is unavailable, use the fallback policy in `.aiek/core/WORKFLOW.md`
 
 1. Resolve `verify.setup` with `.aiek/core/command-discovery.md` when missing or `auto`.
    Run it if available; `null` means unavailable. Never overwrite an existing environment file.
-2. Run the adapter's baseline checks (`verify.test`, at minimum).
+2. Run the adapter's baseline checks (`verify.test_fast`, at minimum). This is the fast
+   baseline; the full gate (`verify.test_full`) still belongs to verification before DONE.
 3. Report one line: `Worktree ready at <path> on <branch>; baseline: <N passed, M failed>`.
    If the baseline has failures, list them. They are pre-existing, not yours. Continue
    unless they block the task, in which case report BLOCKED.
+
+## Gotchas
+
+- Creating a git worktree underneath a harness-provided workspace, which gives nested isolation.
+- Reusing a branch already checked out elsewhere, silently borrowing another session's state.
+- Assuming untracked spec/plan artifacts follow the branch; they must be copied deliberately.
+- A new in-repo worktree directory missing from local excludes, polluting git status everywhere.
+- Reading baseline failures as own regressions, or ignoring them without recording them.
 
 ## Cleanup
 

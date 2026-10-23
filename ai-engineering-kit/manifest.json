@@ -1,36 +1,164 @@
 {
   "name": "ai-engineering-kit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Project-agnostic AI engineering workflow: discovery, Spec Kit planning, disciplined execution, mandatory verification, three human handoffs.",
   "license": "MIT",
   "core": "core/WORKFLOW.md",
   "skills": [
-    { "name": "shaping-feature", "path": "skills/shaping-feature", "role": "discovery" },
-    { "name": "shaping-project", "path": "skills/shaping-project", "role": "discovery" },
-    { "name": "exploring-idea", "path": "skills/exploring-idea", "role": "discovery" },
-    { "name": "intaking-ticket", "path": "skills/intaking-ticket", "role": "discovery" },
-    { "name": "executing-task", "path": "skills/executing-task", "role": "execution" },
-    { "name": "verifying-change", "path": "skills/verifying-change", "role": "verification", "mandatory": true },
-    { "name": "accepting-change", "path": "skills/accepting-change", "role": "verification" },
-    { "name": "reviewing-change", "path": "skills/reviewing-change", "role": "review" },
-    { "name": "systematic-debugging", "path": "skills/systematic-debugging", "role": "execution" },
-    { "name": "shipping-infrastructure", "path": "skills/shipping-infrastructure", "role": "execution" },
-    { "name": "using-worktrees", "path": "skills/using-worktrees", "role": "execution" },
-    { "name": "parallel-development", "path": "skills/parallel-development", "role": "execution" },
-    { "name": "test-driven-development", "path": "skills/test-driven-development", "role": "execution", "optional": true },
-    { "name": "finishing-branch", "path": "skills/finishing-branch", "role": "integration", "optional": true },
-    { "name": "authoring-pr", "path": "skills/authoring-pr", "role": "integration" }
+    {
+      "name": "shaping-feature",
+      "path": "skills/shaping-feature",
+      "role": "discovery"
+    },
+    {
+      "name": "shaping-project",
+      "path": "skills/shaping-project",
+      "role": "discovery"
+    },
+    {
+      "name": "exploring-idea",
+      "path": "skills/exploring-idea",
+      "role": "discovery"
+    },
+    {
+      "name": "intaking-ticket",
+      "path": "skills/intaking-ticket",
+      "role": "discovery"
+    },
+    {
+      "name": "executing-task",
+      "path": "skills/executing-task",
+      "role": "execution"
+    },
+    {
+      "name": "verifying-change",
+      "path": "skills/verifying-change",
+      "role": "verification",
+      "mandatory": true
+    },
+    {
+      "name": "accepting-change",
+      "path": "skills/accepting-change",
+      "role": "verification"
+    },
+    {
+      "name": "reviewing-change",
+      "path": "skills/reviewing-change",
+      "role": "review"
+    },
+    {
+      "name": "systematic-debugging",
+      "path": "skills/systematic-debugging",
+      "role": "execution"
+    },
+    {
+      "name": "shipping-infrastructure",
+      "path": "skills/shipping-infrastructure",
+      "role": "execution"
+    },
+    {
+      "name": "using-worktrees",
+      "path": "skills/using-worktrees",
+      "role": "execution"
+    },
+    {
+      "name": "parallel-development",
+      "path": "skills/parallel-development",
+      "role": "execution"
+    },
+    {
+      "name": "test-driven-development",
+      "path": "skills/test-driven-development",
+      "role": "execution",
+      "optional": true
+    },
+    {
+      "name": "finishing-branch",
+      "path": "skills/finishing-branch",
+      "role": "integration",
+      "optional": true
+    },
+    {
+      "name": "authoring-pr",
+      "path": "skills/authoring-pr",
+      "role": "integration"
+    }
+  ],
+  "profiles": {
+    "core": [
+      "executing-task",
+      "verifying-change",
+      "accepting-change",
+      "reviewing-change",
+      "systematic-debugging",
+      "shipping-infrastructure",
+      "using-worktrees",
+      "parallel-development",
+      "test-driven-development",
+      "finishing-branch",
+      "authoring-pr"
+    ],
+    "discovery": [
+      "exploring-idea",
+      "shaping-feature",
+      "shaping-project",
+      "intaking-ticket"
+    ],
+    "full": [
+      "exploring-idea",
+      "shaping-feature",
+      "intaking-ticket",
+      "shaping-project",
+      "executing-task",
+      "shipping-infrastructure",
+      "verifying-change",
+      "accepting-change",
+      "reviewing-change",
+      "authoring-pr",
+      "systematic-debugging",
+      "using-worktrees",
+      "parallel-development",
+      "test-driven-development",
+      "finishing-branch"
+    ]
+  },
+  "scripts": [
+    "scripts/resolve_adapter.py",
+    "scripts/verify.py",
+    "scripts/worktree.py",
+    "scripts/traceability.py",
+    "scripts/_adapter_yaml.py"
   ],
   "speckit": {
     "requires": ">=1.0.0",
-    "extensions": ["speckit/extensions/aiek"],
-    "presets": ["speckit/presets/aiek-core"],
-    "workflows": ["speckit/workflows/aiek-normal", "speckit/workflows/aiek-large", "speckit/workflows/aiek-project"],
-    "recommended_upstream_extensions": ["assess"]
+    "extensions": [
+      "speckit/extensions/aiek"
+    ],
+    "presets": [
+      "speckit/presets/aiek-core"
+    ],
+    "workflows": [
+      "speckit/workflows/aiek-normal",
+      "speckit/workflows/aiek-large",
+      "speckit/workflows/aiek-project"
+    ],
+    "recommended_upstream_extensions": [
+      "assess"
+    ]
   },
-  "adapters": ["adapters/default", "adapters/orchexa", "adapters/_template"],
+  "adapters": [
+    "adapters/default",
+    "adapters/orchexa",
+    "adapters/_template"
+  ],
   "upstream": {
-    "spec-kit": { "repo": "https://github.com/github/spec-kit", "reviewed": "c6a4c18 (1.2.2.dev0)" },
-    "superpowers": { "repo": "https://github.com/obra/superpowers", "reviewed": "bb92a77 (v7.0.0)" }
+    "spec-kit": {
+      "repo": "https://github.com/github/spec-kit",
+      "reviewed": "1.2.3.dev0"
+    },
+    "superpowers": {
+      "repo": "https://github.com/obra/superpowers",
+      "reviewed": "bb92a77 (v7.0.0)"
+    }
   }
 }

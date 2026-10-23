@@ -90,6 +90,13 @@ Once `specify` has run, the Spec Kit artifacts are the **only** plan. Execution 
 and never write a second plan. If the plan turns out to be wrong, fix it in the artifact
 (re-run or edit `spec.md`/`plan.md`/`tasks.md`), not in chat or in a side document.
 
+The planner itself is selected by the adapter's `planning.mode`: `speckit` (default) means
+`specs/<feature>/` owns the plan; `external` means the adapter's `planning.plan_path` and
+`planning.task_source` do; `none` means no planning artifacts and only Small/infra work.
+Whichever mode applies, exactly one artifact set owns the plan and every other document links
+to it. Fact ownership (docs vs planner vs tracker vs evidence) is in
+[documentation.md](documentation.md).
+
 ## Lanes in one line each
 
 - **Small**: obvious change, 1–2 files, no new behavior worth specifying. Go straight to execution.
@@ -129,7 +136,7 @@ Several agents may run at once. Humans review their work one report at a time.
 |---|---|
 | Verification before claiming DONE | **Mandatory, every lane** |
 | Review before DONE | Mandatory; reviewer policy below |
-| Spec Kit artifacts | Mandatory for Normal and Large |
+| Spec Kit artifacts | Mandatory for Normal and Large; `planning.mode` selects Spec Kit or the external planner |
 | TDD | Optional. Adapters or presets may require it per project |
 | Isolation | Required for Large; native isolated workspace or worktree. Parallel work may use disjoint files per [parallelism.md](parallelism.md). Otherwise optional |
 | Parallel execution | Only when [parallelism.md](parallelism.md) says the tasks are independent |
@@ -149,6 +156,10 @@ is impossible, report BLOCKED.
   only the coordinator reports combined completion.
 - Reuse checks from the same unchanged state and scope. Targeted checks prove a task;
   the final gate covers the combined change. Re-run affected checks after review fixes.
+- **Pull request ownership.** When a PR is the integration path, `authoring-pr` writes the
+  description from verification evidence. `finishing-branch` chooses the disposition and reuses
+  that description; it does not re-author the body, and no skill opens, pushes or merges a PR
+  unless the person asked or the adapter's `integration` policy authorizes it.
 
 ## Reviewer policy
 
@@ -165,4 +176,5 @@ for review; do not label the work DONE. Review includes relevant uncommitted and
 ## Project specifics
 
 This file never names a language, test command, tracker or deploy target. Those come from the
-active adapter: `.aiek/adapter.md` in an installed project (copied from `adapters/<name>/`). See [adapter-contract.md](adapter-contract.md).
+active adapter: `.aiek/adapter.md` in an installed project (copied from `adapters/<name>/`). See [adapter-contract.md](adapter-contract.md)
+for the machine-readable keys and [documentation.md](documentation.md) for who owns which fact.

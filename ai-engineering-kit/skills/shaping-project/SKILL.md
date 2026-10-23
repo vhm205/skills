@@ -1,6 +1,6 @@
 ---
 name: shaping-project
-description: "Shapes a Project Brief when a new project's users, outcomes, MVP boundary or BRD requirements need discovery before a roadmap. Use for a project without an established codebase."
+description: "Use when a new project arrives as a BRD or requirements document with no established codebase - 'create a new project from this BRD', 'shape the project', 'write the project brief' - before any roadmap or feature specification exists. Reads the BRD, identifies users, outcomes, success signals, constraints and exclusions, and writes one Project Brief that maps every material requirement to an outcome, exclusion or open question. Not for feature shaping in an existing codebase (use shaping-feature), assessing whether an idea is worth doing (use exploring-idea), or writing the roadmap, constitution, specs or plans (Spec Kit owns those)."
 ---
 
 # Shape a New Project

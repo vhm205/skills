@@ -1,17 +1,22 @@
 ---
 name: test-driven-development
-description: "Applies test-first development when required by the adapter, task or user, or selected for a regression fix. Covers choosing the layer that can actually prove the behavior, proving the test can fail, and keeping the red/green record as evidence. Optional otherwise; debugging owns root-cause investigation."
+description: "Use when a behavior should be proven by a test written first - 'write the test first', 'TDD this', a regression fix - or when the adapter or preset requires TDD (tdd: required, globally or for listed paths). Chooses the lowest layer that can prove the behavior, proves the test fails for the right reason before the fix, keeps the red/green record as evidence, and defines green against the project baseline. Not for behavior that cannot be expressed as a test (infrastructure, deployment and capacity use shipping-infrastructure), for claiming completion from existing evidence (use verifying-change), or for investigating a failure whose cause is not proven (use systematic-debugging)."
 ---
 
-# Test-Driven Development (optional)
+# Test-Driven Development (adapter-controlled)
 
 Write the test first, watch it fail for the right reason, then write the least code that makes
 it pass.
 
 ## When it applies
 
-- **Required** when the adapter sets `tdd: required` (globally or for listed paths), or a task
-  says so.
+The adapter or preset decides. `tdd: required`, globally or for listed paths, makes the cycle
+mandatory for those paths; when the adapter leaves TDD optional, a task, the user or a regression
+fix may still choose it. An adapter or preset that changes this policy changes the default, so
+read the policy before deciding to skip.
+
+- **Required** when the adapter or preset sets `tdd: required` (globally or for listed paths), or
+  a task says so.
 - **Recommended** for bug fixes (the failing test *is* the reproduction) and for logic-heavy code.
 - **Usually skip** for config, copy, generated code, throwaway spikes, and pure wiring. In a
   `tdd: required` project, skipping needs the person's OK. Record it as a ruling.
@@ -68,9 +73,9 @@ redo it test-first, rather than keeping it "as reference".
 
 ## What "green" means
 
-If the adapter names a `baseline` of known failures, green means **no failures beyond that
-baseline** — not zero failures. A failure outside the baseline is a regression, however
-unrelated it looks.
+If the adapter names `baselines` (or the v1 `baseline` alias) of known failures, green means
+**no failures beyond the listed baseline** — not zero failures. A failure outside it is a
+regression, however unrelated it looks.
 
 **Never weaken an assertion to reach green.** Narrowing a check, loosening a comparison, or
 marking a test skipped to clear a run destroys the only thing the test was for. If a test is

@@ -1,0 +1,238 @@
+{
+  "version": 1,
+  "created": "2026-10-23",
+  "description": "Trigger eval set for the AI Engineering Kit. 15 should-trigger queries + 10 near-miss queries (7 near-miss positives, 3 near-miss negatives). Derived from docs/skills-audit-and-plan-2026-10-23.md §8.1.",
+  "rules": {
+    "pass": "A query passes when at least one skill in expected_skills is used. A query with expected_skills == [] passes only when no skill is used. Skill names are matched case-insensitively; multi-skill answers pass when any acceptable skill appears.",
+    "runs": "Default 3 runs per query for real harnesses; majority of runs decides the observed skill set. Mock mode ignores runs (deterministic).",
+    "acceptable_sets": "Some prompts accept more than one skill; the set is expected_skills, not a ranking. preferred_skills is only used for the wrong-skill matrix.",
+    "threshold": "Overall accuracy must be >= 0.90 (25 queries => at most 2 failures)."
+  },
+  "queries": [
+    {
+      "id": "T01",
+      "kind": "should-trigger",
+      "skill_family": "executing-task",
+      "prompt": "The signup email has a typo — fix it.",
+      "expected_skills": ["executing-task"],
+      "preferred_skills": ["executing-task"],
+      "reason": "Small authorized change in the ordinary execution path; smoke-test lane classification + execution discipline."
+    },
+    {
+      "id": "T02",
+      "kind": "should-trigger",
+      "skill_family": "executing-task",
+      "prompt": "Implement T012 in tasks.md.",
+      "expected_skills": ["executing-task"],
+      "preferred_skills": ["executing-task"],
+      "reason": "Ready task from the canonical planning artifact; executing-task owns the task loop."
+    },
+    {
+      "id": "T03",
+      "kind": "should-trigger",
+      "skill_family": "systematic-debugging",
+      "prompt": "Tests are failing and I don't know why.",
+      "expected_skills": ["systematic-debugging"],
+      "preferred_skills": ["systematic-debugging"],
+      "reason": "Cause not proven yet; debugging owns investigation before a fix."
+    },
+    {
+      "id": "T04",
+      "kind": "should-trigger",
+      "skill_family": "systematic-debugging",
+      "prompt": "The test is flaky on CI.",
+      "expected_skills": ["systematic-debugging"],
+      "preferred_skills": ["systematic-debugging"],
+      "reason": "Flaky test = unknown cause, reproduces the systematic-debugging trigger."
+    },
+    {
+      "id": "T05",
+      "kind": "should-trigger",
+      "skill_family": "reviewing-change",
+      "prompt": "Review this diff before I merge.",
+      "expected_skills": ["reviewing-change"],
+      "preferred_skills": ["reviewing-change"],
+      "reason": "Implemented change awaiting review; reviewing-change, not verification or merge."
+    },
+    {
+      "id": "T06",
+      "kind": "should-trigger",
+      "skill_family": "authoring-pr",
+      "prompt": "Write the PR description for this branch.",
+      "expected_skills": ["authoring-pr"],
+      "preferred_skills": ["authoring-pr"],
+      "reason": "PR body is authoring-pr's artifact; excludes merging and evidence production."
+    },
+    {
+      "id": "T07",
+      "kind": "should-trigger",
+      "skill_family": "accepting-change",
+      "prompt": "Is this ready to release?",
+      "expected_skills": ["accepting-change"],
+      "preferred_skills": ["accepting-change"],
+      "reason": "Release-readiness acceptance pass, not verification or authoring."
+    },
+    {
+      "id": "T08",
+      "kind": "should-trigger",
+      "skill_family": "exploring-idea",
+      "prompt": "Should we build offline mode?",
+      "expected_skills": ["exploring-idea"],
+      "preferred_skills": ["exploring-idea"],
+      "reason": "Whether to build is undecided; exploring-idea produces an Idea Note and stops."
+    },
+    {
+      "id": "T09",
+      "kind": "should-trigger",
+      "skill_family": "shaping-feature",
+      "prompt": "Users want export but we haven't decided how.",
+      "expected_skills": ["shaping-feature"],
+      "preferred_skills": ["shaping-feature"],
+      "reason": "Outcome is decided, behavior is not; shaping-feature ends at a Feature Brief."
+    },
+    {
+      "id": "T10",
+      "kind": "should-trigger",
+      "skill_family": "intaking-ticket",
+      "prompt": "Ticket OSA-123 has acceptance criteria; start it.",
+      "expected_skills": ["intaking-ticket"],
+      "preferred_skills": ["intaking-ticket"],
+      "reason": "Tracker work with AC arrives; intaking-ticket builds the checkable criteria table first."
+    },
+    {
+      "id": "T11",
+      "kind": "should-trigger",
+      "skill_family": "using-worktrees",
+      "prompt": "Work on this in a separate worktree.",
+      "expected_skills": ["using-worktrees"],
+      "preferred_skills": ["using-worktrees"],
+      "reason": "Explicit isolation request; using-worktrees owns worktree preparation."
+    },
+    {
+      "id": "T12",
+      "kind": "should-trigger",
+      "skill_family": "parallel-development",
+      "prompt": "These three tasks are independent; run them in parallel.",
+      "expected_skills": ["parallel-development"],
+      "preferred_skills": ["parallel-development"],
+      "reason": "Concurrent work with independent units; parallel-development owns the decision."
+    },
+    {
+      "id": "T13",
+      "kind": "should-trigger",
+      "skill_family": "shipping-infrastructure",
+      "prompt": "Deploy the new image to staging.",
+      "expected_skills": ["shipping-infrastructure"],
+      "preferred_skills": ["shipping-infrastructure"],
+      "reason": "Infra/deploy class of change whose proof is observed system state."
+    },
+    {
+      "id": "T14",
+      "kind": "should-trigger",
+      "skill_family": "test-driven-development",
+      "prompt": "Write the test first for this validator.",
+      "expected_skills": ["test-driven-development"],
+      "preferred_skills": ["test-driven-development"],
+      "reason": "Explicit test-first request; TDD owns the red/green evidence."
+    },
+    {
+      "id": "T15",
+      "kind": "should-trigger",
+      "skill_family": "finishing-branch",
+      "prompt": "Merge this branch.",
+      "expected_skills": ["finishing-branch"],
+      "preferred_skills": ["finishing-branch"],
+      "reason": "Integration/branch disposition; finishing-branch owns merge vs PR vs keep."
+    },
+    {
+      "id": "N01",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Explain this function.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "reason": "General explanation, not an engineering workflow task; must not trigger any skill."
+    },
+    {
+      "id": "N02",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Write a SQL query for this report.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "reason": "Ordinary coding help with no workflow stage; must not trigger any skill."
+    },
+    {
+      "id": "N03",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Review my essay.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "reason": "Lexical near-miss for reviewing-change; content review is not code review."
+    },
+    {
+      "id": "N04",
+      "kind": "near-miss",
+      "skill_family": "verifying-change",
+      "prompt": "Run the tests.",
+      "expected_skills": ["verifying-change"],
+      "preferred_skills": ["verifying-change"],
+      "reason": "Near-miss for executing-task: running checks to prove a claim belongs to verifying-change."
+    },
+    {
+      "id": "N05",
+      "kind": "near-miss",
+      "skill_family": "executing-task",
+      "prompt": "Update the README.",
+      "expected_skills": ["executing-task"],
+      "preferred_skills": ["executing-task"],
+      "reason": "Small, authorized change; execution path, not discovery or docs-specific skill."
+    },
+    {
+      "id": "N06",
+      "kind": "near-miss",
+      "skill_family": "finishing-branch",
+      "prompt": "Open the PR.",
+      "expected_skills": ["finishing-branch", "authoring-pr"],
+      "preferred_skills": ["finishing-branch"],
+      "reason": "Ambiguous by design: opening a PR is finishing-branch's disposition, but writing its body is authoring-pr; both accepted."
+    },
+    {
+      "id": "N07",
+      "kind": "near-miss",
+      "skill_family": "intaking-ticket",
+      "prompt": "The AC says 'fast' — is that testable?",
+      "expected_skills": ["intaking-ticket"],
+      "preferred_skills": ["intaking-ticket"],
+      "reason": "Near-miss for debugging/execution: uncheckable acceptance criterion is intake work."
+    },
+    {
+      "id": "N08",
+      "kind": "near-miss",
+      "skill_family": "shaping-project",
+      "prompt": "Create a new project from this BRD.",
+      "expected_skills": ["shaping-project"],
+      "preferred_skills": ["shaping-project"],
+      "reason": "New project without a codebase; shaping-project, not feature shaping."
+    },
+    {
+      "id": "N09",
+      "kind": "near-miss",
+      "skill_family": "exploring-idea",
+      "prompt": "Should we migrate to Postgres?",
+      "expected_skills": ["exploring-idea"],
+      "preferred_skills": ["exploring-idea"],
+      "reason": "Decision question, not a ready task; exploring-idea assesses direction."
+    },
+    {
+      "id": "N10",
+      "kind": "near-miss",
+      "skill_family": "executing-task",
+      "prompt": "Migrate the database to Postgres.",
+      "expected_skills": ["executing-task"],
+      "preferred_skills": ["executing-task"],
+      "reason": "Decided change request that is also a hard LARGE-risk area (data migration); execution path must classify it, not discover or deploy. Near-miss for shipping-infrastructure."
+    }
+  ]
+}

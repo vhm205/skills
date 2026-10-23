@@ -1,6 +1,6 @@
 ---
 name: intaking-ticket
-description: "Turns a ticket or user story that already carries acceptance criteria into criteria a machine or a person can actually check, and into a traceability table linking each criterion to the test layer and acceptance case that will prove it. Use before classifying the lane when work arrives from a tracker. Excludes vague ideas with no criteria and requests already covered by a spec."
+description: "Use when a ticket, user story or tracker item already carries acceptance criteria and arrives before any lane is chosen - 'ticket TICKET-123 has acceptance criteria; start it', 'check whether these criteria are testable', 'the AC says fast'. Classifies every criterion as machine-checkable, person-checkable or not checkable as written, turns qualities like fast into thresholds with units, builds the traceability table that the rest of the workflow reads, and blocks with questions instead of guessing. Not for ideas with no criteria (use exploring-idea), deciding how a feature should work (use shaping-feature), or a feature that already has a spec (use the upstream clarification command)."
 ---
 
 # Taking In a Ticket
@@ -74,6 +74,20 @@ Rules:
 Check each criterion against `references/ac-quality-checklist.md` before accepting it. The
 common failures: no stated expected result, two behaviors in one criterion, a boundary value
 nobody named, and no error path.
+
+If the kit installed `.aiek/scripts/traceability.py`, it checks the written table for criteria
+with no row, duplicate rows and rows with no proof. Point `--file` at the markdown artifact that
+carries the criteria and the table (the saved ticket or intake note first, `spec.md` once it
+exists):
+
+```bash
+python .aiek/scripts/traceability.py --file spec.md --json
+```
+
+It is read-only and names each missing or duplicate criterion in its error. The script cannot
+judge whether a criterion is checkable - that stays this skill's analysis - and it is optional:
+without it, walk every criterion against the table by hand. A green script run does not replace
+the table itself.
 
 ## Rules
 

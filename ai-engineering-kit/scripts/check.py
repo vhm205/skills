@@ -92,12 +92,49 @@ try:
     installed = re.search(r"SKILLS=\((.*?)\)", installer, re.S).group(1).split()
     if set(installed) != known or len(installed) != len(known):
         errors.append("scripts/install.sh: skill inventory differs from skills/")
+    package = json.loads((kit / "package.json").read_text())
+    if manifest.get("version") != package.get("version"):
+        errors.append(
+            "manifest.json: version differs from package.json "
+            f"({manifest.get('version')} != {package.get('version')})")
+    profiles = manifest.get("profiles")
+    if not isinstance(profiles, dict) or not profiles:
+        errors.append("manifest.json: profiles must be a non-empty mapping")
+    else:
+        roles = {item["name"]: item.get("role") for item in entries}
+        discovery = {name for name, role in roles.items() if role == "discovery"}
+        expected = {
+            "core": known - discovery,
+            "discovery": discovery,
+            "full": set(known),
+        }
+        for profile_name, members in profiles.items():
+            if not isinstance(members, list) or not members:
+                errors.append(
+                    f"manifest.json: profile '{profile_name}' must be a non-empty list")
+                continue
+            if len(members) != len(set(members)):
+                errors.append(f"manifest.json: profile '{profile_name}' has duplicate entries")
+            unknown = set(members) - known
+            if unknown:
+                errors.append(
+                    f"manifest.json: profile '{profile_name}' has unknown skills: {sorted(unknown)}")
+            if profile_name in expected and set(members) != expected[profile_name]:
+                errors.append(
+                    f"manifest.json: profile '{profile_name}' must be exactly "
+                    f"{len(expected[profile_name])} skills "
+                    f"({', '.join(sorted(expected[profile_name]))})")
+        for required_profile in ("core", "discovery", "full"):
+            if required_profile not in profiles:
+                errors.append(f"manifest.json: missing profile '{required_profile}'")
+    for script in manifest.get("scripts", []):
+        exists(kit / "manifest.json", kit / script)
     for entry in entries:
         exists(kit / "manifest.json", kit / entry["path"] / "SKILL.md")
     for group in ("extensions", "presets", "workflows"):
         for ref in manifest["speckit"][group]:
             exists(kit / "manifest.json", kit / ref)
-except (ValueError, KeyError, TypeError, AttributeError) as exc:
+except (ValueError, KeyError, TypeError, AttributeError, OSError) as exc:
     errors.append(f"manifest.json: {exc}")
     manifest = {}
 

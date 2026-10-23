@@ -1,0 +1,820 @@
+{
+  "schema": "aiek-trigger-eval/1",
+  "generated_at": "2026-10-23T07:45:42+00:00",
+  "kit_root": "/private/tmp/aiek-baseline/ai-engineering-kit",
+  "kit_label": "baseline-main-85f27c7",
+  "kit_commit": null,
+  "harness": {
+    "requested": "dsh",
+    "resolved": "dsh",
+    "probe": [
+      {
+        "harness": "dsh",
+        "ok": true,
+        "source": "none",
+        "detail": "probe returned PROBE_OK"
+      }
+    ],
+    "fallback": null
+  },
+  "mock": false,
+  "runs_per_query": 1,
+  "timeout_s": 300,
+  "mocked": false,
+  "queries_file": "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/evals/trigger.json",
+  "install": {
+    "command": [
+      "/private/tmp/aiek-baseline/ai-engineering-kit/scripts/install.sh",
+      "<scratch>"
+    ],
+    "returncode": 0,
+    "duration_s": 0.36,
+    "ok": true,
+    "stdout_excerpt": "oject\n  installed: .agents/skills/executing-task\n  installed: .agents/skills/shipping-infrastructure\n  installed: .agents/skills/verifying-change\n  installed: .agents/skills/accepting-change\n  installed: .agents/skills/reviewing-change\n  installed: .agents/skills/authoring-pr\n  installed: .agents/skills/systematic-debugging\n  installed: .agents/skills/using-worktrees\n  installed: .agents/skills/parallel-development\n  installed: .agents/skills/test-driven-development\n  installed: .agents/skills/finishing-branch\n3. Agent instructions\n  updated kit block: AGENTS.md\n  created: CLAUDE.md (imports AGENTS.md)\n4. Spec Kit\n  skipped (pass --speckit to register the extension, preset and workflows)\nDone. Next: review .aiek/adapter.md and fill in project commands (see .aiek/core/adapter-contract.md).\n",
+    "stderr_excerpt": ""
+  },
+  "description_coverage": {
+    "skills": 15,
+    "with_use_when": 0,
+    "with_negative_trigger": 5
+  },
+  "summary": {
+    "total": 25,
+    "passed": 20,
+    "failed": 5,
+    "accuracy": 0.8,
+    "precision": 1.0,
+    "recall": 0.7727,
+    "tp": 17,
+    "fp": 0,
+    "tn": 3,
+    "fn": 5,
+    "should_trigger": {
+      "total": 15,
+      "passed": 12
+    },
+    "near_miss": {
+      "total": 10,
+      "passed": 8
+    },
+    "negative": {
+      "total": 3,
+      "passed": 3
+    },
+    "avg_duration_s": 6.23,
+    "total_tokens": 423696
+  },
+  "wrong_skill_matrix": [
+    {
+      "id": "T01",
+      "prompt": "The signup email has a typo — fix it.",
+      "category": "missed (no skill)",
+      "expected": [
+        "executing-task"
+      ],
+      "observed": [],
+      "preferred": [
+        "executing-task"
+      ]
+    },
+    {
+      "id": "T06",
+      "prompt": "Write the PR description for this branch.",
+      "category": "missed (no skill)",
+      "expected": [
+        "authoring-pr"
+      ],
+      "observed": [],
+      "preferred": [
+        "authoring-pr"
+      ]
+    },
+    {
+      "id": "T12",
+      "prompt": "These three tasks are independent; run them in parallel.",
+      "category": "missed (no skill)",
+      "expected": [
+        "parallel-development"
+      ],
+      "observed": [],
+      "preferred": [
+        "parallel-development"
+      ]
+    },
+    {
+      "id": "N05",
+      "prompt": "Update the README.",
+      "category": "missed (no skill)",
+      "expected": [
+        "executing-task"
+      ],
+      "observed": [],
+      "preferred": [
+        "executing-task"
+      ]
+    },
+    {
+      "id": "N10",
+      "prompt": "Migrate the database to Postgres.",
+      "category": "wrong skill",
+      "expected": [
+        "executing-task"
+      ],
+      "observed": [
+        "shipping-infrastructure"
+      ],
+      "preferred": [
+        "executing-task"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "T01",
+      "kind": "should-trigger",
+      "skill_family": "executing-task",
+      "prompt": "The signup email has a typo — fix it.",
+      "expected_skills": [
+        "executing-task"
+      ],
+      "preferred_skills": [
+        "executing-task"
+      ],
+      "observed_skills": [],
+      "passed": false,
+      "reason": "Small authorized change in the ordinary execution path; smoke-test lane classification + execution discipline.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 10.91
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T02",
+      "kind": "should-trigger",
+      "skill_family": "executing-task",
+      "prompt": "Implement T012 in tasks.md.",
+      "expected_skills": [
+        "executing-task"
+      ],
+      "preferred_skills": [
+        "executing-task"
+      ],
+      "observed_skills": [
+        "executing-task"
+      ],
+      "passed": true,
+      "reason": "Ready task from the canonical planning artifact; executing-task owns the task loop.",
+      "runs": [
+        {
+          "skills_used": [
+            "executing-task"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 7.55
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T03",
+      "kind": "should-trigger",
+      "skill_family": "systematic-debugging",
+      "prompt": "Tests are failing and I don't know why.",
+      "expected_skills": [
+        "systematic-debugging"
+      ],
+      "preferred_skills": [
+        "systematic-debugging"
+      ],
+      "observed_skills": [
+        "systematic-debugging"
+      ],
+      "passed": true,
+      "reason": "Cause not proven yet; debugging owns investigation before a fix.",
+      "runs": [
+        {
+          "skills_used": [
+            "systematic-debugging"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 3.56
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T04",
+      "kind": "should-trigger",
+      "skill_family": "systematic-debugging",
+      "prompt": "The test is flaky on CI.",
+      "expected_skills": [
+        "systematic-debugging"
+      ],
+      "preferred_skills": [
+        "systematic-debugging"
+      ],
+      "observed_skills": [
+        "systematic-debugging"
+      ],
+      "passed": true,
+      "reason": "Flaky test = unknown cause, reproduces the systematic-debugging trigger.",
+      "runs": [
+        {
+          "skills_used": [
+            "systematic-debugging"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 3.77
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T05",
+      "kind": "should-trigger",
+      "skill_family": "reviewing-change",
+      "prompt": "Review this diff before I merge.",
+      "expected_skills": [
+        "reviewing-change"
+      ],
+      "preferred_skills": [
+        "reviewing-change"
+      ],
+      "observed_skills": [
+        "reviewing-change"
+      ],
+      "passed": true,
+      "reason": "Implemented change awaiting review; reviewing-change, not verification or merge.",
+      "runs": [
+        {
+          "skills_used": [
+            "reviewing-change"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 7.36
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T06",
+      "kind": "should-trigger",
+      "skill_family": "authoring-pr",
+      "prompt": "Write the PR description for this branch.",
+      "expected_skills": [
+        "authoring-pr"
+      ],
+      "preferred_skills": [
+        "authoring-pr"
+      ],
+      "observed_skills": [],
+      "passed": false,
+      "reason": "PR body is authoring-pr's artifact; excludes merging and evidence production.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 3.85
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T07",
+      "kind": "should-trigger",
+      "skill_family": "accepting-change",
+      "prompt": "Is this ready to release?",
+      "expected_skills": [
+        "accepting-change"
+      ],
+      "preferred_skills": [
+        "accepting-change"
+      ],
+      "observed_skills": [
+        "accepting-change"
+      ],
+      "passed": true,
+      "reason": "Release-readiness acceptance pass, not verification or authoring.",
+      "runs": [
+        {
+          "skills_used": [
+            "accepting-change"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 7.48
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T08",
+      "kind": "should-trigger",
+      "skill_family": "exploring-idea",
+      "prompt": "Should we build offline mode?",
+      "expected_skills": [
+        "exploring-idea"
+      ],
+      "preferred_skills": [
+        "exploring-idea"
+      ],
+      "observed_skills": [
+        "exploring-idea"
+      ],
+      "passed": true,
+      "reason": "Whether to build is undecided; exploring-idea produces an Idea Note and stops.",
+      "runs": [
+        {
+          "skills_used": [
+            "exploring-idea"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 5.23
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T09",
+      "kind": "should-trigger",
+      "skill_family": "shaping-feature",
+      "prompt": "Users want export but we haven't decided how.",
+      "expected_skills": [
+        "shaping-feature"
+      ],
+      "preferred_skills": [
+        "shaping-feature"
+      ],
+      "observed_skills": [
+        "shaping-feature"
+      ],
+      "passed": true,
+      "reason": "Outcome is decided, behavior is not; shaping-feature ends at a Feature Brief.",
+      "runs": [
+        {
+          "skills_used": [
+            "shaping-feature"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 5.81
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T10",
+      "kind": "should-trigger",
+      "skill_family": "intaking-ticket",
+      "prompt": "Ticket OSA-123 has acceptance criteria; start it.",
+      "expected_skills": [
+        "intaking-ticket"
+      ],
+      "preferred_skills": [
+        "intaking-ticket"
+      ],
+      "observed_skills": [
+        "intaking-ticket"
+      ],
+      "passed": true,
+      "reason": "Tracker work with AC arrives; intaking-ticket builds the checkable criteria table first.",
+      "runs": [
+        {
+          "skills_used": [
+            "intaking-ticket"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 4.71
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T11",
+      "kind": "should-trigger",
+      "skill_family": "using-worktrees",
+      "prompt": "Work on this in a separate worktree.",
+      "expected_skills": [
+        "using-worktrees"
+      ],
+      "preferred_skills": [
+        "using-worktrees"
+      ],
+      "observed_skills": [
+        "using-worktrees"
+      ],
+      "passed": true,
+      "reason": "Explicit isolation request; using-worktrees owns worktree preparation.",
+      "runs": [
+        {
+          "skills_used": [
+            "using-worktrees"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 4.71
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T12",
+      "kind": "should-trigger",
+      "skill_family": "parallel-development",
+      "prompt": "These three tasks are independent; run them in parallel.",
+      "expected_skills": [
+        "parallel-development"
+      ],
+      "preferred_skills": [
+        "parallel-development"
+      ],
+      "observed_skills": [],
+      "passed": false,
+      "reason": "Concurrent work with independent units; parallel-development owns the decision.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 4.32
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T13",
+      "kind": "should-trigger",
+      "skill_family": "shipping-infrastructure",
+      "prompt": "Deploy the new image to staging.",
+      "expected_skills": [
+        "shipping-infrastructure"
+      ],
+      "preferred_skills": [
+        "shipping-infrastructure"
+      ],
+      "observed_skills": [
+        "shipping-infrastructure"
+      ],
+      "passed": true,
+      "reason": "Infra/deploy class of change whose proof is observed system state.",
+      "runs": [
+        {
+          "skills_used": [
+            "shipping-infrastructure"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 5.26
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T14",
+      "kind": "should-trigger",
+      "skill_family": "test-driven-development",
+      "prompt": "Write the test first for this validator.",
+      "expected_skills": [
+        "test-driven-development"
+      ],
+      "preferred_skills": [
+        "test-driven-development"
+      ],
+      "observed_skills": [
+        "test-driven-development"
+      ],
+      "passed": true,
+      "reason": "Explicit test-first request; TDD owns the red/green evidence.",
+      "runs": [
+        {
+          "skills_used": [
+            "test-driven-development"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 4.87
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "T15",
+      "kind": "should-trigger",
+      "skill_family": "finishing-branch",
+      "prompt": "Merge this branch.",
+      "expected_skills": [
+        "finishing-branch"
+      ],
+      "preferred_skills": [
+        "finishing-branch"
+      ],
+      "observed_skills": [
+        "finishing-branch"
+      ],
+      "passed": true,
+      "reason": "Integration/branch disposition; finishing-branch owns merge vs PR vs keep.",
+      "runs": [
+        {
+          "skills_used": [
+            "finishing-branch"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 8.14
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N01",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Explain this function.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "observed_skills": [],
+      "passed": true,
+      "reason": "General explanation, not an engineering workflow task; must not trigger any skill.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 4.95
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N02",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Write a SQL query for this report.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "observed_skills": [],
+      "passed": true,
+      "reason": "Ordinary coding help with no workflow stage; must not trigger any skill.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 3.2
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N03",
+      "kind": "near-miss",
+      "skill_family": "none",
+      "prompt": "Review my essay.",
+      "expected_skills": [],
+      "preferred_skills": [],
+      "observed_skills": [],
+      "passed": true,
+      "reason": "Lexical near-miss for reviewing-change; content review is not code review.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 2.68
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N04",
+      "kind": "near-miss",
+      "skill_family": "verifying-change",
+      "prompt": "Run the tests.",
+      "expected_skills": [
+        "verifying-change"
+      ],
+      "preferred_skills": [
+        "verifying-change"
+      ],
+      "observed_skills": [
+        "verifying-change"
+      ],
+      "passed": true,
+      "reason": "Near-miss for executing-task: running checks to prove a claim belongs to verifying-change.",
+      "runs": [
+        {
+          "skills_used": [
+            "verifying-change"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 10.46
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N05",
+      "kind": "near-miss",
+      "skill_family": "executing-task",
+      "prompt": "Update the README.",
+      "expected_skills": [
+        "executing-task"
+      ],
+      "preferred_skills": [
+        "executing-task"
+      ],
+      "observed_skills": [],
+      "passed": false,
+      "reason": "Small, authorized change; execution path, not discovery or docs-specific skill.",
+      "runs": [
+        {
+          "skills_used": [],
+          "source": "none",
+          "error": null,
+          "duration_s": 7.47
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N06",
+      "kind": "near-miss",
+      "skill_family": "finishing-branch",
+      "prompt": "Open the PR.",
+      "expected_skills": [
+        "finishing-branch",
+        "authoring-pr"
+      ],
+      "preferred_skills": [
+        "finishing-branch"
+      ],
+      "observed_skills": [
+        "finishing-branch"
+      ],
+      "passed": true,
+      "reason": "Ambiguous by design: opening a PR is finishing-branch's disposition, but writing its body is authoring-pr; both accepted.",
+      "runs": [
+        {
+          "skills_used": [
+            "finishing-branch"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 5.92
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N07",
+      "kind": "near-miss",
+      "skill_family": "intaking-ticket",
+      "prompt": "The AC says 'fast' — is that testable?",
+      "expected_skills": [
+        "intaking-ticket"
+      ],
+      "preferred_skills": [
+        "intaking-ticket"
+      ],
+      "observed_skills": [
+        "intaking-ticket"
+      ],
+      "passed": true,
+      "reason": "Near-miss for debugging/execution: uncheckable acceptance criterion is intake work.",
+      "runs": [
+        {
+          "skills_used": [
+            "intaking-ticket"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 4.66
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N08",
+      "kind": "near-miss",
+      "skill_family": "shaping-project",
+      "prompt": "Create a new project from this BRD.",
+      "expected_skills": [
+        "shaping-project"
+      ],
+      "preferred_skills": [
+        "shaping-project"
+      ],
+      "observed_skills": [
+        "shaping-project"
+      ],
+      "passed": true,
+      "reason": "New project without a codebase; shaping-project, not feature shaping.",
+      "runs": [
+        {
+          "skills_used": [
+            "shaping-project"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 8.01
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N09",
+      "kind": "near-miss",
+      "skill_family": "exploring-idea",
+      "prompt": "Should we migrate to Postgres?",
+      "expected_skills": [
+        "exploring-idea"
+      ],
+      "preferred_skills": [
+        "exploring-idea"
+      ],
+      "observed_skills": [
+        "exploring-idea"
+      ],
+      "passed": true,
+      "reason": "Decision question, not a ready task; exploring-idea assesses direction.",
+      "runs": [
+        {
+          "skills_used": [
+            "exploring-idea"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 5.24
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    },
+    {
+      "id": "N10",
+      "kind": "near-miss",
+      "skill_family": "executing-task",
+      "prompt": "Migrate the database to Postgres.",
+      "expected_skills": [
+        "executing-task"
+      ],
+      "preferred_skills": [
+        "executing-task"
+      ],
+      "observed_skills": [
+        "shipping-infrastructure"
+      ],
+      "passed": false,
+      "reason": "Decided change request that is also a hard LARGE-risk area (data migration); execution path must classify it, not discover or deploy. Near-miss for shipping-infrastructure.",
+      "runs": [
+        {
+          "skills_used": [
+            "shipping-infrastructure"
+          ],
+          "source": "tool_call",
+          "error": null,
+          "duration_s": 15.52
+        }
+      ],
+      "error": null,
+      "all_runs_failed": false
+    }
+  ],
+  "limitations": []
+}

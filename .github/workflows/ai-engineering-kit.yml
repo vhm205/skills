@@ -1,0 +1,160 @@
+# CI for the AI Engineering Kit (monorepo path filter: ai-engineering-kit/**).
+#
+# Two jobs:
+#   quick   — PR/push/manual: static checks + installer/script tests + a small
+#             deterministic eval smoke (10 trigger queries, 2 behaviour fixtures).
+#   nightly — schedule: full 25-query trigger eval + all 7 behaviour fixtures,
+#             all in deterministic --mock mode, plus the with/without benchmark.
+#
+# No secrets are required or used. The real agent harnesses (dsh, Claude Code,
+# Codex) need model credentials and are NOT run in GitHub CI; the mock mode is a
+# deterministic proxy that exercises the fixture/assertion/plumbing path, and the
+# real-harness results are recorded manually in ai-engineering-kit/docs/eval-*.md.
+name: AI Engineering Kit
+
+on:
+  pull_request:
+    paths:
+      - 'ai-engineering-kit/**'
+      - '.github/workflows/ai-engineering-kit.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'ai-engineering-kit/**'
+      - '.github/workflows/ai-engineering-kit.yml'
+  schedule:
+    # Nightly full eval, 03:17 UTC.
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aiek-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: ai-engineering-kit
+
+jobs:
+  quick:
+    name: Quick checks + eval smoke
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install PyYAML for the checkers
+        run: python -m pip install --upgrade pip pyyaml
+
+      - name: Static kit checks (skills, references, manifests, metadata parity)
+        run: bash scripts/check.sh
+
+      - name: Skill metadata and trigger-phrase check
+        run: python3 scripts/check_skills.py . --kit . --require-trigger
+
+      - name: Installer, adapter and helper-script tests
+        run: |
+          python3 scripts/test.py
+          python3 scripts/test_scripts.py
+
+      - name: Trigger eval smoke (10 deterministic mock queries)
+        run: python3 scripts/eval_trigger.py --mock --runs 1 --limit 10 --out evals/results/trigger-quick.json
+
+      - name: Behaviour eval smoke (2 deterministic mock fixtures)
+        run: >
+          python3 scripts/eval_tasks.py --mock
+          --scenario small-fix --scenario vague-ticket
+          --out evals/results/behavior-quick.json
+
+      - name: Upload eval smoke reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aiek-eval-quick
+          path: ai-engineering-kit/evals/results/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  nightly:
+    name: Nightly full eval (mock)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install PyYAML for the checkers
+        run: python -m pip install --upgrade pip pyyaml
+
+      - name: Static kit checks
+        run: bash scripts/check.sh
+
+      - name: Skill metadata and trigger-phrase check
+        run: python3 scripts/check_skills.py . --kit . --require-trigger
+
+      - name: Kit tests
+        run: |
+          python3 scripts/test.py
+          python3 scripts/test_scripts.py
+
+      - name: Full trigger eval (25 deterministic mock queries)
+        run: python3 scripts/eval_trigger.py --mock --runs 1 --out evals/results/trigger-nightly.json
+
+      - name: Full behaviour eval + with/without benchmark (deterministic mock)
+        run: >
+          python3 scripts/eval_tasks.py --mock --both
+          --out evals/results/behavior-nightly.json
+          --benchmark evals/results/benchmark-mock.json
+
+      - name: Upload nightly eval reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aiek-eval-nightly
+          path: ai-engineering-kit/evals/results/
+          if-no-files-found: ignore
+          retention-days: 30
+
+# Notes:
+# - test-speckit.py is intentionally skipped: it needs the `specify` CLI on PATH and
+#   is exercised locally / in the release checklist (docs/plan-2-phases-2026-10-23).
+# - Real-harness eval instructions are in ai-engineering-kit/docs/eval-2026-10-23.md
+#   (primary: `dsh headless`; optional: Claude Code, Codex). Those runs cost model
+#   tokens and need credentials, so they are a manual pre-release gate, not CI.
