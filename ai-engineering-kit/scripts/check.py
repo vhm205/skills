@@ -80,7 +80,13 @@ for path in sorted(source_files(".md")):
         exists(path, kit / "core" / name)
     for ref in re.findall(r"\[[^\]]*\]\(([^)]+)\)", text):
         if not re.match(r"(?:[a-z]+:|#|/)", ref) and "<" not in ref:
-            exists(path, path.parent / ref.split("#", 1)[0])
+            target = (path.parent / ref.split("#", 1)[0]).resolve()
+            try:
+                target.relative_to(kit)
+            except ValueError:
+                errors.append(f"{path.relative_to(kit)}: link escapes the kit: {ref}")
+                continue
+            exists(path, target)
 
 try:
     manifest = json.loads((kit / "manifest.json").read_text())
