@@ -60,15 +60,25 @@ loaded as if it were one meta-skill. `KIT.md` has no frontmatter and is never in
 
 ## Install into a project
 
-Run these commands:
+From npm (no checkout, no bash required):
 
 ```bash
 cd /path/to/project
 specify init --here --integration claude     # once; or codex, agy, copilot, ...
-/path/to/ai-engineering-kit/scripts/install.sh . --speckit
+npx @moment/aiek install . --speckit
 # options: --harness claude,codex,agy  --adapter <name|path>  --profile core|discovery|full
-#          --only <skills>  --skip <skills>  --link  --force  --dry-run
+#          --only <skills>  --skip <skills>  --prefix <p|none>
+#          --link  --force  --dry-run
 ```
+
+From a checkout (kit development, CI):
+
+```bash
+/path/to/ai-engineering-kit/scripts/install.sh . --speckit
+```
+
+Both installers produce the same tree; `tests/install.test.ts` asserts it byte for byte. The
+Node CLI has no bash dependency, so it also works on Windows.
 
 This installs:
 
@@ -84,6 +94,14 @@ execution/verification/integration skills, or `--profile discovery` for the 4 di
 `--only` and `--skip` tune the selection. Adapter `references/` and `scripts/` are copied to
 `.aiek/adapter/` when the adapter has them.
 
+Skills are installed under the `aiek-` namespace by default (`aiek-executing-task`,
+`aiek-verifying-change`, …), so a project or another kit can keep a bare `executing-task` without
+the two colliding. The prefix is applied to the skill directory, the `SKILL.md` `name`, the
+router text in `AGENTS.md` and every skill reference inside the installed copies. Pass
+`--prefix none` for the bare names, or `--prefix <ns>` for a different namespace. Skills
+installed before this default existed keep their bare names; delete those directories after
+installing with a prefix. `--prefix` cannot be combined with `--link`.
+
 Next steps:
 
 - Fill in `.aiek/adapter.md` (see [docs/adding-an-adapter.md](docs/adding-an-adapter.md)).
@@ -95,6 +113,12 @@ installer writes: `.aiek/core/*.md` (the canonical workflow and policies) and `.
 (this project's commands, paths, risk areas and conventions). Both are resolved at the installed
 paths, not from the kit checkout. If `.aiek/` is missing, the skills have no rules or project
 facts to follow: re-run `scripts/install.sh` for the project instead of working around it.
+
+**Agent Skills ecosystem.** The tarball ships `skills/<name>/SKILL.md` at its root, so
+`npm i -D @moment/aiek && npx skills experimental_sync` also discovers the skills for
+[`npx skills`](https://github.com/vercel-labs/skills) users. That path installs bare names and
+does not write `.aiek/`; use `npx @moment/aiek install` when you want the workflow files,
+profiles, adapter and `aiek-` namespace.
 
 **Do not install Superpowers alongside this kit** in the same active session, including globally enabled plugins/skills. Its bootstrap and brainstorming → writing-plans chain duplicate the responsibilities this kit gives to Spec Kit.
 

@@ -223,6 +223,9 @@ def normalize_skill_names(raw: str) -> list[str]:
         token = token.strip().strip("`\"'.").lower()
         token = token.replace("_", "-").replace(" ", "-")
         token = re.sub(r"^(skill|skills)[:-]", "", token)
+        # Installed skills carry the installer's namespace (default `aiek-`); the evals
+        # compare against bare kit names, so strip it before matching.
+        token = re.sub(r"^aiek-", "", token)
         if not token or token in NONE_WORDS:
             continue
         if SKILL_NAME_RE.fullmatch(token):

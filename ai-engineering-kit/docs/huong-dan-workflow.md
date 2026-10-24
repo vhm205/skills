@@ -269,8 +269,13 @@ scripts/install.sh . --profile discovery   # 4 skill khám phá
 scripts/install.sh . --profile full        # cả 15 skill (mặc định)
 scripts/install.sh . --profile core --only verifying-change,authoring-pr
 scripts/install.sh . --profile full --skip parallel-development
+scripts/install.sh . --prefix none         # tên trần, như trước khi có mặc định aiek-
 ```
 
+- Mặc định skill được cài dưới namespace `aiek-` (`aiek-executing-task`, ...) để không đụng
+  skill cùng tên của project hay kit khác; prefix áp cho cả thư mục, `name` trong `SKILL.md`,
+  khối router trong `AGENTS.md` và mọi tham chiếu bên trong bản cài. `--prefix <ns>` để đổi
+  namespace, `--prefix none` để cài tên trần. Không dùng `--prefix` cùng `--link`.
 - `core` = 11 skill non-discovery (`executing-task`, `verifying-change`, `accepting-change`,
   `reviewing-change`, `systematic-debugging`, `shipping-infrastructure`, `using-worktrees`,
   `parallel-development`, `test-driven-development`, `finishing-branch`, `authoring-pr`).

@@ -3,9 +3,9 @@
 #
 # Usage: scripts/install.sh <target-dir> [options]    (run with --help for details)
 #
-# Options: --harness, --adapter, --profile, --only, --skip, --speckit, --link, --force,
-#          --dry-run. Defaults keep the previous behavior: all harnesses, adapter "default",
-#          all 15 skills, no Spec Kit changes.
+# Options: --harness, --adapter, --profile, --only, --skip, --prefix, --speckit, --link,
+#          --force, --dry-run. Defaults: all harnesses, adapter "default", all 15 skills
+#          installed as "aiek-<name>" (pass --prefix none for bare names), no Spec Kit changes.
 set -euo pipefail
 
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -46,6 +46,10 @@ Options:
                         full       all 15 skills
   --only <a,b>        Install only these skills; overrides --profile
   --skip <a,b>        Remove these skills from the selection (combines with --profile)
+  --prefix <p|none>   Install skills as "<p>-<name>" so they cannot collide with the
+                      project's own skills (default: aiek-). Applies to the directory,
+                      the SKILL.md name and every skill reference in the installed
+                      copies. "none" installs bare names. Not compatible with --link.
   --speckit           Also register the Spec Kit extension, preset and workflows
                       (needs `specify` on PATH and an initialized .specify/ in the target)
   --link              Symlink skills instead of copying them (for kit development)
@@ -62,8 +66,9 @@ never overwritten without --force.
 Exit codes: 0 = success, 1 = invalid usage or target, 2 = internal failure.
 
 Examples:
-  scripts/install.sh ~/code/app --harness codex                    # full, all skills
+  scripts/install.sh ~/code/app --harness codex                    # aiek-* names, all skills
   scripts/install.sh ~/code/app --profile core --harness codex     # execution only
+  scripts/install.sh ~/code/app --prefix none --harness codex      # bare names
   scripts/install.sh /tmp/aiek-fixture --profile discovery --dry-run
   scripts/install.sh /tmp/aiek-fixture --only executing-task,verifying-change
 EOF
@@ -98,6 +103,7 @@ parse_skill_list() {
 
 TARGET="" HARNESS="all" ADAPTER="default" PROFILE="full"
 ONLY="" SKIP="" ONLY_SET=0 SKIP_SET=0 SPECKIT=0 LINK=0 FORCE=0 DRY=0
+PREFIX="aiek-"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --harness) [[ $# -ge 2 ]] || die "--harness needs a value"; HARNESS="$2"; shift 2 ;;
@@ -105,6 +111,7 @@ while [[ $# -gt 0 ]]; do
     --profile) [[ $# -ge 2 ]] || die "--profile needs a value"; PROFILE="$2"; shift 2 ;;
     --only) [[ $# -ge 2 ]] || die "--only needs a value"; ONLY="$2"; ONLY_SET=1; shift 2 ;;
     --skip) [[ $# -ge 2 ]] || die "--skip needs a value"; SKIP="$2"; SKIP_SET=1; shift 2 ;;
+    --prefix) [[ $# -ge 2 ]] || die "--prefix needs a value (a name or 'none')"; PREFIX="$2"; PREFIX_SET=1; shift 2 ;;
     --speckit) SPECKIT=1; shift ;;
     --link) LINK=1; shift ;;
     --force) FORCE=1; shift ;;
@@ -118,6 +125,21 @@ done
 [[ -d "$TARGET" ]] || die "target dir not found: $TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
 [[ "$TARGET" != "$KIT_DIR" ]] || die "refusing to install the kit into itself"
+
+# --prefix: normalize to "<ns>-" (or empty for none) and validate before touching anything.
+PREFIX_RAW="$PREFIX"
+case "$PREFIX" in
+  none|"") PREFIX="" ;;
+  *)
+    PREFIX="$(printf '%s' "$PREFIX" | tr '[:upper:]' '[:lower:]')"
+    PREFIX="${PREFIX%-}-"
+    [[ "$PREFIX" =~ ^[a-z0-9]+(-[a-z0-9]+)*-$ ]] \
+      || die "invalid --prefix '$PREFIX_RAW' (use lowercase letters, digits and hyphens, e.g. aiek-)"
+    ;;
+esac
+if [[ -n "$PREFIX" && $LINK -eq 1 ]]; then
+  die "--link cannot be combined with --prefix: a symlink cannot carry a renamed skill (use --prefix none)"
+fi
 
 # Validate the skill selection before touching anything.
 case "$PROFILE" in
@@ -156,6 +178,12 @@ for s in "${SKILLS[@]}"; do
   SELECTED+=("$s")
 done
 [[ ${#SELECTED[@]} -gt 0 ]] || die "no skills selected (profile '$PROFILE' with the given --only/--skip)"
+if [[ -n "$PREFIX" ]]; then
+  for s in "${SELECTED[@]}"; do
+    [[ $(( ${#PREFIX} + ${#s} )) -le 64 ]] \
+      || die "prefixed skill name '${PREFIX}${s}' exceeds the 64-character skill-name limit"
+  done
+fi
 
 if [[ "$HARNESS" == "all" ]]; then HARNESS="claude,codex,agy"; fi
 declare -a SKILL_ROOTS=()
@@ -221,6 +249,59 @@ copy_one() {
   fi
 }
 
+# installed_name <skill>: directory / frontmatter name the skill gets under --prefix.
+installed_name() { printf '%s%s' "$PREFIX" "$1"; }
+
+# remap_skill_names <names-csv> <path...>: rewrite bare skill names to "<prefix><name>" in
+# the installed copies only (directories are walked, single files are edited in place).
+remap_skill_names() {
+  [[ -n "$PREFIX" ]] || return 0
+  local names_csv="$1"; shift
+  [[ $# -gt 0 ]] || return 0
+  local dry=0; [[ $DRY -eq 1 ]] && dry=1
+  python3 - "$PREFIX" "$names_csv" "$dry" "$@" <<'PY'
+import pathlib
+import re
+import sys
+
+prefix, names_csv, dry, roots = sys.argv[1], sys.argv[2], sys.argv[3] == "1", sys.argv[4:]
+names = [name for name in names_csv.split(",") if name]
+pattern = re.compile(
+    r"(?<![a-z0-9-])("
+    + "|".join(re.escape(name) for name in sorted(names, key=len, reverse=True))
+    + r")(?![a-z0-9-])")
+suffixes = {".md", ".json", ".yml", ".yaml", ".txt"}
+
+def rewrite(path):
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (UnicodeDecodeError, OSError):
+        return False
+    new = pattern.sub(lambda match: prefix + match.group(1), text)
+    if new == text:
+        return False
+    if not dry:
+        path.write_text(new, encoding="utf-8")
+    return True
+
+changed = 0
+for root in roots:
+    base = pathlib.Path(root)
+    if base.is_file():
+        candidates = [base]
+    elif base.is_dir():
+        candidates = sorted(p for p in base.rglob("*") if p.is_file() and p.suffix in suffixes)
+    else:
+        continue
+    for path in candidates:
+        if rewrite(path):
+            changed += 1
+if changed:
+    verb = "[dry-run] would rewrite" if dry else "rewrote"
+    print(f"  {verb} {changed} file(s) to {prefix}* names")
+PY
+}
+
 # upsert_block <file> <content-file>: insert or replace the marked kit block
 upsert_block() {
   local file="$1" body="$2"
@@ -275,19 +356,37 @@ for script in "${SCRIPTS[@]}"; do
 done
 
 echo "3. Skills (${#SELECTED[@]} selected)"
+SKILL_NAMES_CSV="$(IFS=,; echo "${SKILLS[*]}")"  # all names: refs must stay stable across profiles
 for root in "${SKILL_ROOTS[@]}"; do
-  for s in "${SELECTED[@]}"; do copy_one "$KIT_DIR/skills/$s" "$TARGET/$root/$s"; done
+  for s in "${SELECTED[@]}"; do
+    copy_one "$KIT_DIR/skills/$s" "$TARGET/$root/$(installed_name "$s")"
+  done
 done
+if [[ -n "$PREFIX" ]]; then
+  REMAP_ROOTS=("$TARGET/.aiek")
+  for root in "${SKILL_ROOTS[@]}"; do
+    for s in "${SELECTED[@]}"; do REMAP_ROOTS+=("$TARGET/$root/$(installed_name "$s")"); done
+  done
+  remap_skill_names "$SKILL_NAMES_CSV" "${REMAP_ROOTS[@]}"
+fi
 
 echo "4. Agent instructions"
-upsert_block "$TARGET/AGENTS.md" "$KIT_DIR/core/router.md"
+ROUTER_BODY="$KIT_DIR/core/router.md"
+if [[ -n "$PREFIX" && $DRY -eq 0 ]]; then
+  # The router text names skills, so the installed block must use the prefixed names too.
+  ROUTER_BODY="$(mktemp "$TARGET/.aiek-router.XXXXXX")"
+  trap 'rm -f "$ROUTER_BODY"' EXIT
+  cp "$KIT_DIR/core/router.md" "$ROUTER_BODY"
+  remap_skill_names "$SKILL_NAMES_CSV" "$ROUTER_BODY"
+fi
+upsert_block "$TARGET/AGENTS.md" "$ROUTER_BODY"
 if [[ ",$HARNESS," == *",claude,"* ]]; then
   CLAUDE_MD="$TARGET/CLAUDE.md"
   if [[ ! -f "$CLAUDE_MD" ]]; then
     if [[ $DRY -eq 1 ]]; then echo "  [dry-run] create CLAUDE.md importing AGENTS.md"
     else printf '@AGENTS.md\n' > "$CLAUDE_MD"; say "created: CLAUDE.md (imports AGENTS.md)"; fi
   elif ! grep -qE '^@AGENTS\.md' "$CLAUDE_MD"; then
-    upsert_block "$CLAUDE_MD" "$KIT_DIR/core/router.md"
+    upsert_block "$CLAUDE_MD" "$ROUTER_BODY"
   else
     say "CLAUDE.md already imports AGENTS.md"
   fi

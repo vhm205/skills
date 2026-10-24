@@ -34,7 +34,8 @@ commands. The narrative walkthrough of every skill is
 ```bash
 cd /path/to/project
 specify init --here --integration claude     # once; or codex, agy, copilot, ...
-/path/to/ai-engineering-kit/scripts/install.sh . --speckit
+npx @moment/aiek install . --speckit
+# from a checkout: /path/to/ai-engineering-kit/scripts/install.sh . --speckit
 ```
 
 See [README.md](README.md#install-into-a-project) for options (harness, adapter, link, profile,

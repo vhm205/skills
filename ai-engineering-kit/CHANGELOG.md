@@ -5,6 +5,39 @@ All notable changes to the AI Engineering Kit. The version source is `manifest.j
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] — 2026-10-24
+
+First npm release under the scoped name `@moment/aiek` (`ai-engineering-kit` on npm belongs to
+another project). The kit is now installable with one `npx` command, without a checkout or bash.
+
+### Added
+
+- `aiek install [dir]` — Node port of the installer (`src/install.ts`): harness roots, profiles,
+  `--only`/`--skip`, adapter selection, the `aiek-` skill namespace, `AGENTS.md`/`CLAUDE.md`
+  router block, Spec Kit registration and `--dry-run`. Works on Windows; no shell dependency.
+- `--prefix` namespacing in both installers: skill directory, `SKILL.md` `name`, router block and
+  every skill reference inside the installed copies are rewritten, so a project can keep its own
+  `executing-task` without a collision.
+- `tests/install.test.ts` asserts the Node installer produces a byte-identical tree to
+  `scripts/install.sh` for the same options.
+- npm package metadata: scoped public package, keywords, and helper scripts included in the
+  tarball; `scripts/test-package.mjs` now installs from the packed tarball with `aiek install`.
+
+### Changed
+
+- `scripts/test-package.mjs` verifies both `aiek install` and `aiek web` from the tarball.
+
+## [Unreleased]
+
+### Added
+
+- `scripts/install.sh --prefix <p|none>`: install skills under a namespace (`aiek-` by default)
+  so they cannot collide with a project's own skills or another kit. The prefix is applied to
+  the skill directory, the `SKILL.md` `name`, the router block in `AGENTS.md`/`CLAUDE.md` and
+  every skill reference inside the installed copies. `--prefix none` restores bare names.
+  `--prefix` cannot be combined with `--link`. Existing installations keep their bare names
+  until reinstalled; remove the old directories after switching.
+
 ## [0.2.0] — 2026-10-23
 
 Phase 1 of the kit optimization plan: bring the 15 skills up to Agent Skills best practice and

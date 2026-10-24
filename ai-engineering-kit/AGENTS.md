@@ -30,10 +30,22 @@ Projects that install the kit get `core/router.md` instead.
 ## Installed layout
 
 - `scripts/install.sh` copies `core/`, the selected skills (profile), the adapter, and the
-  helper scripts to `.aiek/scripts/`.
+  helper scripts to `.aiek/scripts/`. Skills are installed as `<prefix><name>` (default prefix
+  `aiek-`, `--prefix none` for bare names); the prefix also rewrites the `name` field and every
+  skill reference in the installed copies.
 - `.aiek/adapter.md` is project-owned: reinstall never overwrites it without `--force`.
 - `.agents/skills/` is the canonical installed skills root (D4). `.claude/skills/` is an
   optional mirror and must stay in parity.
+
+## Installers and the npm package
+
+- `scripts/install.sh` (bash) and `src/install.ts` (`aiek install`, npm) are two front ends for the
+  same contract: same options, same output tree. `tests/install.test.ts` asserts byte identity for
+  a fixture install; change both together and keep that test passing.
+- The package is `@moment/aiek` (the unscoped `ai-engineering-kit` name is taken on npm). Every
+  path the installer copies must be listed in `package.json#files`; `scripts/test-package.mjs`
+  installs from the packed tarball and fails if one is missing.
+- Release steps and rollback live in `docs/PUBLISHING.md`.
 
 ## Before claiming a change works
 

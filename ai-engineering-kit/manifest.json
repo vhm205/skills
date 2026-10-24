@@ -1,6 +1,6 @@
 {
   "name": "ai-engineering-kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Project-agnostic AI engineering workflow: discovery, Spec Kit planning, disciplined execution, mandatory verification, three human handoffs.",
   "license": "MIT",
   "core": "core/WORKFLOW.md",

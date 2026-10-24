@@ -10,6 +10,7 @@ import unittest
 KIT = Path(__file__).resolve().parent.parent
 BEGIN = '<!-- ai-engineering-kit:begin -->'
 END = '<!-- ai-engineering-kit:end -->'
+PREFIX = 'aiek-'
 
 
 class InstallerTests(unittest.TestCase):
@@ -21,6 +22,12 @@ class InstallerTests(unittest.TestCase):
 
     def install(self, *args, ok=True):
         result = subprocess.run(['bash', str(KIT / 'scripts/install.sh'), str(self.project), *args],
+                                text=True, capture_output=True)
+        self.assertEqual(result.returncode == 0, ok, result.stdout + result.stderr)
+        return result
+
+    def install_into(self, project, *args, ok=True):
+        result = subprocess.run(['bash', str(KIT / 'scripts/install.sh'), str(project), *args],
                                 text=True, capture_output=True)
         self.assertEqual(result.returncode == 0, ok, result.stdout + result.stderr)
         return result
@@ -59,12 +66,12 @@ class InstallerTests(unittest.TestCase):
             self.assertEqual(text.count(END), 1)
 
     def test_link_mode_copies_adapter_and_force_refreshes_skill(self):
-        self.install('--harness', 'codex,agy', '--link')
+        self.install('--harness', 'codex,agy', '--link', '--prefix', 'none')
         skill = self.project / '.agents/skills/executing-task'
         self.assertTrue(skill.is_symlink())
         self.assertFalse((self.project / '.aiek/adapter.md').is_symlink())
         self.assertFalse((self.project / '.claude').exists())
-        self.install('--harness', 'codex', '--force')
+        self.install('--harness', 'codex', '--prefix', 'none', '--force')
         self.assertFalse(skill.is_symlink())
         self.assertTrue((skill / 'SKILL.md').exists())
 
@@ -108,8 +115,12 @@ class ProfileTests(unittest.TestCase):
         return result
 
     def installed_skills(self, project):
+        """Installed skill names with the default namespace stripped."""
         root = project / '.agents/skills'
-        return {path.name for path in root.iterdir() if path.is_dir()} if root.is_dir() else set()
+        if not root.is_dir():
+            return set()
+        return {path.name[len(PREFIX):] if path.name.startswith(PREFIX) else path.name
+                for path in root.iterdir() if path.is_dir()}
 
     def test_manifest_profiles_are_consistent(self):
         profiles = self.manifest['profiles']
@@ -173,6 +184,47 @@ class ProfileTests(unittest.TestCase):
                 project = self.new_project('dry-' + profile)
                 self.install(project, '--harness', 'codex', '--profile', profile, '--dry-run')
                 self.assertEqual(list(project.iterdir()), [])
+
+    def test_prefix_applies_to_dirs_frontmatter_references_and_router(self):
+        project = self.new_project('prefix')
+        self.install(project, '--harness', 'codex', '--only', 'executing-task,verifying-change')
+        root = project / '.agents/skills'
+        self.assertEqual({path.name for path in root.iterdir() if path.is_dir()},
+                         {PREFIX + 'executing-task', PREFIX + 'verifying-change'})
+        front = (root / (PREFIX + 'executing-task') / 'SKILL.md').read_text()
+        self.assertIn('name: ' + PREFIX + 'executing-task', front)
+        self.assertNotIn(PREFIX + PREFIX, front)
+        everything = front + (root / (PREFIX + 'verifying-change') / 'SKILL.md').read_text()
+        everything += (project / '.aiek/core/WORKFLOW.md').read_text()
+        everything += (project / 'AGENTS.md').read_text()
+        for name in ('executing-task', 'verifying-change', 'reviewing-change'):
+            self.assertNotRegex(everything, r'(?<![a-z0-9-])' + name + r'(?![a-z0-9-])')
+
+    def test_prefix_none_and_custom_prefix(self):
+        bare = self.new_project('bare')
+        self.install(bare, '--harness', 'codex', '--only', 'executing-task', '--prefix', 'none')
+        self.assertTrue((bare / '.agents/skills/executing-task/SKILL.md').exists())
+        self.assertIn('name: executing-task',
+                      (bare / '.agents/skills/executing-task/SKILL.md').read_text())
+
+        custom = self.new_project('custom')
+        self.install(custom, '--harness', 'codex', '--only', 'executing-task', '--prefix', 'TEAM')
+        skill = custom / '.agents/skills/team-executing-task/SKILL.md'
+        self.assertTrue(skill.exists())
+        self.assertIn('name: team-executing-task', skill.read_text())
+
+    def test_prefix_rejects_bad_values_and_link_mode(self):
+        cases = [('--prefix', 'Bad Prefix'), ('--prefix', '-dash'), ('--prefix', 'a_b'),
+                 ('--prefix', 'x' * 60)]
+        for index, args in enumerate(cases):
+            with self.subTest(args=args):
+                project = self.new_project('bad-%d' % index)
+                self.install(project, '--harness', 'codex', *args, ok=False)
+                self.assertEqual(list(project.iterdir()), [])
+        project = self.new_project('link-prefixed')
+        result = self.install(project, '--harness', 'codex', '--link', '--prefix', PREFIX, ok=False)
+        self.assertIn('--link', result.stderr)
+        self.assertEqual(list(project.iterdir()), [])
 
     def test_adapter_never_overwritten_without_force(self):
         project = self.new_project('adapter')

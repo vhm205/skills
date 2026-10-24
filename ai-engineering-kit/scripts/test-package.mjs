@@ -1,6 +1,6 @@
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,11 +23,22 @@ try {
   const { stdout } = await exec('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', temp], { cwd: kit });
   const pack = JSON.parse(stdout)[0];
   const paths = pack.files.map(file => file.path);
-  for (const path of ['dist/server/cli.js', 'dist/ui/index.html', 'manifest.json', 'core/WORKFLOW.md', 'skills/executing-task/SKILL.md', 'skills/shaping-project/SKILL.md', 'speckit/workflows/aiek-project/workflow.yml', 'scripts/install.sh', 'scripts/init-project.sh']) assert(paths.includes(path), `Missing ${path}`);
+  for (const path of ['dist/server/cli.js', 'dist/server/install.js', 'dist/ui/index.html', 'manifest.json', 'core/WORKFLOW.md', 'skills/executing-task/SKILL.md', 'skills/shaping-project/SKILL.md', 'speckit/workflows/aiek-project/workflow.yml', 'scripts/install.sh', 'scripts/init-project.sh']) assert(paths.includes(path), `Missing ${path}`);
   assert(!paths.some(path => /^(node_modules|tests|src|ui|specs)\//.test(path)), 'Package contains development sources');
   await mkdir(join(project, 'specs', '001-smoke'), { recursive: true });
   await writeFile(join(project, 'specs', '001-smoke', 'spec.md'), '# Packaged feature\n');
   const packed = join(temp, pack.filename);
+
+  // The packaged CLI must install the kit into a project without a bash dependency.
+  const installed = join(temp, 'installed project');
+  await mkdir(installed);
+  const install = await exec('npm', ['exec', '--yes', `--package=${packed}`, '--', 'aiek', 'install', installed, '--harness', 'codex', '--profile', 'discovery'], { cwd: temp });
+  assert.match(install.stdout, /Installed 4 skill\(s\)/);
+  const installedSkills = (await readdir(join(installed, '.agents/skills'))).sort();
+  assert.deepEqual(installedSkills, ['aiek-exploring-idea', 'aiek-intaking-ticket', 'aiek-shaping-feature', 'aiek-shaping-project']);
+  assert.match(await readFile(join(installed, '.agents/skills/aiek-exploring-idea/SKILL.md'), 'utf8'), /^name: aiek-exploring-idea$/m);
+  assert.match(await readFile(join(installed, 'AGENTS.md'), 'utf8'), /`aiek-intaking-ticket`/);
+  assert.equal((await readdir(join(installed, '.aiek/scripts'))).length, 5);
   // npm exec selects the package from the tarball, never the repository checkout.
   child = spawn('npm', ['exec', '--yes', `--package=${packed}`, '--', 'aiek', 'web', '--project', project, '--no-open'], {
     cwd: temp, env: { ...process.env, AIEK_DATA_DIR: join(temp, 'state') }, stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32',
@@ -60,5 +71,5 @@ try {
   if (process.platform !== 'win32') process.kill(-child.pid, 'SIGTERM'); else child.kill('SIGTERM');
   await stop();
   await assert.rejects(fetch(origin));
-  console.log(`PASS: npm tarball (${pack.size} bytes), npx launch, JS/CSS, authenticated feature read, unchanged project and clean shutdown`);
+  console.log(`PASS: npm tarball (${pack.size} bytes), npx install + prefixed skills, npx launch, JS/CSS, authenticated feature read, unchanged project and clean shutdown`);
 } finally { await stop(); await rm(temp, { recursive: true, force: true }); }
