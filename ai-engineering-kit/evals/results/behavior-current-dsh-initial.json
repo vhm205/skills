@@ -1,0 +1,507 @@
+{
+  "schema": "aiek-behavior-eval/1",
+  "generated_at": "2026-10-23T07:52:06+00:00",
+  "kit_root": "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit",
+  "kit_label": null,
+  "harness": {
+    "requested": "dsh",
+    "resolved": "dsh",
+    "probes": [
+      {
+        "harness": "dsh",
+        "ok": true,
+        "detail": "binary found"
+      }
+    ]
+  },
+  "with_skill": true,
+  "synthetic": false,
+  "runs_per_scenario": 1,
+  "timeout_s": 900,
+  "scenarios": [
+    {
+      "id": "small-fix",
+      "title": "Small fix — typo in the signup email",
+      "lane": "SMALL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "lane-small",
+          "description": "States the SMALL lane before acting",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Lane: SMALL'"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Reports verification/evidence for the change",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Verification'"
+        },
+        {
+          "id": "evidence-table",
+          "description": "DONE report carries a command/exit-code evidence table",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched '| Check | Command | Result |'"
+        },
+        {
+          "id": "typo-fixed",
+          "description": "The typo is actually fixed in the file",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Welcome aboard'"
+        },
+        {
+          "id": "typo-gone",
+          "description": "The misspelling no longer exists",
+          "kind": "file_not_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "forbidden pattern absent"
+        },
+        {
+          "id": "changed-expected-file",
+          "description": "Only the target file needed changing",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['src/emails/signup.ts']"
+        },
+        {
+          "id": "no-spec-for-small",
+          "description": "No Spec Kit artifacts for a Small change",
+          "kind": "new_glob_absent",
+          "critical": true,
+          "passed": true,
+          "detail": "no new files"
+        },
+        {
+          "id": "done-after-evidence",
+          "description": "DONE is claimed only after evidence is reported",
+          "kind": "output_order",
+          "critical": false,
+          "passed": false,
+          "detail": "DONE appears before evidence"
+        },
+        {
+          "id": "kit-files-untouched",
+          "description": "The installed kit files are not modified",
+          "kind": "unchanged_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "unchanged"
+        }
+      ],
+      "error": null,
+      "duration_s": 31.03,
+      "usage": {
+        "totalTokens": 192144,
+        "outputTokens": 3467,
+        "steps": 13
+      },
+      "changed_files": [
+        "src/emails/signup.ts"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "Lane: SMALL (one-line copy typo in a single file, no behavior/contract change).\n\nThe typo is `\"Welcom aboard\"` in `src/emails/signup.ts`. Let me confirm there aren't other instances before editing.\nDONE: fixed the signup email subject typo.\n\n**Change:** `src/emails/signup.ts:2` — `\"Welcom aboard\"` → `\"Welcome aboard\"` (one line, no other scope).\n\n**Checks run:**\n\n| Check | Command | Result |\n|---|---|---|\n| Typo removed | `grep -Rn 'Welcom[^e]' src` | no matches |\n| Module loads with corrected value | `node --experimental-strip-types -e \"import('./src/emails/signup.ts')…\"` | `{\"subject\":\"Welcome aboard\",…}`, exit 0 |\n| Diff scope | `git diff` | 1 file, 1 insertion, 1 deletion |\n| tests / lint / typecheck / build | `verify.py --dry-run` | not available — no project manifest or check configuration |\n\n**Verification evidence:** The exported `signupEmail.subject` now reads exactly `\"Welcome aboard\"`, confirmed by importing the module rather than only reading the text.\n\n**Review:** Self-review — no findings; no scope creep, no behavioral or contract change.\n\n**Remaining risks:** The project has no test suite or lint/typecheck setup, so none could be run; the runtime import assertion is the strongest available check. Committed as `1477e15` (per-change policy). Untracked kit files were left untouched.",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "lane-small",
+              "description": "States the SMALL lane before acting",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Lane: SMALL'"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Reports verification/evidence for the change",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Verification'"
+            },
+            {
+              "id": "evidence-table",
+              "description": "DONE report carries a command/exit-code evidence table",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched '| Check | Command | Result |'"
+            },
+            {
+              "id": "typo-fixed",
+              "description": "The typo is actually fixed in the file",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Welcome aboard'"
+            },
+            {
+              "id": "typo-gone",
+              "description": "The misspelling no longer exists",
+              "kind": "file_not_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "forbidden pattern absent"
+            },
+            {
+              "id": "changed-expected-file",
+              "description": "Only the target file needed changing",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['src/emails/signup.ts']"
+            },
+            {
+              "id": "no-spec-for-small",
+              "description": "No Spec Kit artifacts for a Small change",
+              "kind": "new_glob_absent",
+              "critical": true,
+              "passed": true,
+              "detail": "no new files"
+            },
+            {
+              "id": "done-after-evidence",
+              "description": "DONE is claimed only after evidence is reported",
+              "kind": "output_order",
+              "critical": false,
+              "passed": false,
+              "detail": "DONE appears before evidence"
+            },
+            {
+              "id": "kit-files-untouched",
+              "description": "The installed kit files are not modified",
+              "kind": "unchanged_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "unchanged"
+            }
+          ],
+          "error": null,
+          "duration_s": 31.03,
+          "usage": {
+            "totalTokens": 192144,
+            "outputTokens": 3467,
+            "steps": 13
+          }
+        }
+      ]
+    },
+    {
+      "id": "vague-ticket",
+      "title": "Vague ticket — acceptance criterion \"fast\"",
+      "lane": "BLOCKED",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "description": "Uses the BLOCKED handoff instead of guessing",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'BLOCKED'"
+        },
+        {
+          "id": "asks-questions",
+          "description": "Asks at least two concrete questions to unblock the criterion",
+          "kind": "min_questions",
+          "critical": true,
+          "passed": false,
+          "detail": "1 question mark(s), need >= 2"
+        },
+        {
+          "id": "no-code-change",
+          "description": "Does not code before the criterion is checkable",
+          "kind": "unchanged_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "unchanged"
+        },
+        {
+          "id": "no-spec-created",
+          "description": "No spec/plan is created while the ticket is blocked",
+          "kind": "new_glob_absent",
+          "critical": true,
+          "passed": true,
+          "detail": "no new files"
+        },
+        {
+          "id": "threshold-asked",
+          "description": "Names what must be defined to make 'fast' checkable",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'define'"
+        },
+        {
+          "id": "no-fabricated-done",
+          "description": "Does not claim DONE for a blocked ticket",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "pattern absent from output"
+        }
+      ],
+      "error": null,
+      "duration_s": 51.66,
+      "usage": {
+        "totalTokens": 234043,
+        "outputTokens": 6980,
+        "steps": 11
+      },
+      "changed_files": [
+        "tracker/OSA-123.md"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.46,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I'll load the ticket intake skill first, since this is a ticket with acceptance criteria and \"fast\" is exactly the kind of criterion that needs shaping into something checkable.\nThe skill requires me to read the whole ticket. Let me locate OSA-123 in the tracker and read the referenced kit docs.\nNo performance budget, benchmark, SLO or baseline exists anywhere in the repo — the ticket itself confirms the gap. Let me check the traceability script's expected format before writing the intake artifact.\nThe repo has no baseline, benchmark, SLO, or production data shape to convert \"fast\" into a number — and the ticket itself admits none is defined. This is the intake hard gate, so I'll record the traceability table and block, without classifying a lane or touching `app/`.\nBLOCKED: OSA-123's only acceptance criterion has no measurable target.\n\n**Blocker:** AC-01 — \"Search must be fast\" — has no metric, percentile, threshold, unit, or measurement conditions, so no test can pass/fail it and no person can give a reproducible verdict. The repo offers nothing to convert it from: no latency budget, benchmark, SLO, or baseline anywhere (`git log` is a single fixture commit), and `app/search.py` is a two-item placeholder with no server, endpoint, or real dataset to time. The ticket's own Notes confirms the gap.\n\n**Attempted:** Read the ticket, adapter, classification/handoff rules, and AC quality checklist. Searched the whole repo for latency/percentile/benchmark/SLO/budget terms — no performance evidence exists. Per `intaking-ticket`, recorded the traceability row and the blocking question in `tracker/OSA-123.md`:\n\n| Criterion | Rule(s) | Bucket | Proven by | Acceptance case |\n|---|---|---|---|---|\n| AC-01 — Search must be fast | — | not checkable | — | question raised (Q1) |\n\nStructural check only: `python3 .aiek/scripts/traceability.py --file tracker/OSA-123.md --json` → `ok: true`, 1 criterion, 1 row, 0 problems. That script cannot judge checkability, so it does not clear the ",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "blocked-handoff",
+              "description": "Uses the BLOCKED handoff instead of guessing",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'BLOCKED'"
+            },
+            {
+              "id": "asks-questions",
+              "description": "Asks at least two concrete questions to unblock the criterion",
+              "kind": "min_questions",
+              "critical": true,
+              "passed": false,
+              "detail": "1 question mark(s), need >= 2"
+            },
+            {
+              "id": "no-code-change",
+              "description": "Does not code before the criterion is checkable",
+              "kind": "unchanged_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "unchanged"
+            },
+            {
+              "id": "no-spec-created",
+              "description": "No spec/plan is created while the ticket is blocked",
+              "kind": "new_glob_absent",
+              "critical": true,
+              "passed": true,
+              "detail": "no new files"
+            },
+            {
+              "id": "threshold-asked",
+              "description": "Names what must be defined to make 'fast' checkable",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'define'"
+            },
+            {
+              "id": "no-fabricated-done",
+              "description": "Does not claim DONE for a blocked ticket",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "pattern absent from output"
+            }
+          ],
+          "error": null,
+          "duration_s": 51.66,
+          "usage": {
+            "totalTokens": 234043,
+            "outputTokens": 6980,
+            "steps": 11
+          }
+        }
+      ]
+    },
+    {
+      "id": "review-diff",
+      "title": "Review — diff removes a tenant authorization check",
+      "lane": "REVIEW",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "description": "Findings are anchored to file:line",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'src/api/orders.py:12'"
+        },
+        {
+          "id": "severity",
+          "description": "Findings carry a severity",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Critical'"
+        },
+        {
+          "id": "authorization-explained",
+          "description": "The authorization regression is named explicitly",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'tenant'"
+        },
+        {
+          "id": "fix-suggested",
+          "description": "A concrete fix is suggested",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'fix'"
+        },
+        {
+          "id": "no-blind-approval",
+          "description": "Does not blindly approve the diff",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "pattern absent from output"
+        }
+      ],
+      "error": null,
+      "duration_s": 49.64,
+      "usage": {
+        "totalTokens": 88969,
+        "outputTokens": 7452,
+        "steps": 7
+      },
+      "changed_files": [],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.39,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "## Verdict: BLOCKED — do not merge\n\nThe diff removes the only tenant-authorization check on `GET /orders/{order_id}`, turning the endpoint into a cross-tenant data disclosure (IDOR). The change also has a test gap and the supplied patch does not apply to this checkout.\n\n### Critical — cross-tenant order disclosure\n\n**`src/api/orders.py:12`** (removed line at `change.diff:10`)\n\n```diff\n-    if order is None or order[\"tenant_id\"] != tenant_id:\n+    if order is None:\n```\n\n`current_user` authenticates the caller, but nothing now verifies that the order belongs to that user's tenant. Any authenticated user can request another tenant's order ID and receive the full order object. The original `404` for a foreign tenant was correct: it avoids leaking whether the order exists.\n\nMinimal fix — restore the ownership check:\n\n```python\n@router.get(\"/orders/{order_id}\")\ndef get_order(order_id: str, user=Depends(current_user)):\n    order = load_order(order_id)\n    if order is None or order[\"tenant_id\"] != user.tenant_id:\n        raise HTTPException(status_code=404)\n    return order\n```\n\nStronger fix: scope the lookup itself, so future callers cannot forget the check:\n\n```python\norder = load_order(order_id, tenant_id=user.tenant_id)\nif order is None:\n    raise HTTPException(status_code=404)\n```\n\nEvidence (caller is `tenant-a`, returned order is `tenant-b`):\n\n```\nRESULT_RETURNED: {'id': 'o-2', 'tenant_id': 'tenant-b', 'total': 42}\n```\n\n### Important — no regression test covers tenant isolation\n\nThere are no tests in this repository, and the diff removes a security control without adding one that would fail if it were removed again. A minimal test should assert: own-tenant order → `200`; other-tenant order → `404`; missing order → `404`. Since `load_order` is currently undefined here (see note below), the test will need to stub or inject it.\n\n### Important (process) — the supplied patch is malformed and doesn't match the checkout\n\n`change.diff:5` declares `@@ -8,10 +8,8 @@`, but the h",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "finding-file-line",
+              "description": "Findings are anchored to file:line",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'src/api/orders.py:12'"
+            },
+            {
+              "id": "severity",
+              "description": "Findings carry a severity",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Critical'"
+            },
+            {
+              "id": "authorization-explained",
+              "description": "The authorization regression is named explicitly",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'tenant'"
+            },
+            {
+              "id": "fix-suggested",
+              "description": "A concrete fix is suggested",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'fix'"
+            },
+            {
+              "id": "no-blind-approval",
+              "description": "Does not blindly approve the diff",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "pattern absent from output"
+            }
+          ],
+          "error": null,
+          "duration_s": 49.64,
+          "usage": {
+            "totalTokens": 88969,
+            "outputTokens": 7452,
+            "steps": 7
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "pass_rate": 0.3333,
+    "critical_failures": 1,
+    "critical_failure_scenarios": [
+      "vague-ticket"
+    ],
+    "avg_duration_s": 44.11,
+    "total_tokens": 515156
+  },
+  "limitations": []
+}

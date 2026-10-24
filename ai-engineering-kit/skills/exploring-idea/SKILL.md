@@ -1,6 +1,6 @@
 ---
 name: exploring-idea
-description: "Explores a raw idea, a complaint, or an architecture question when it is not yet clear whether anything should be built, or which direction to take. Produces an Idea Note and ends in one of: drop it, shape it, assess it, or a decision for a human. Excludes requests that are already decided (use feature shaping) and anything with an existing spec."
+description: "Use when a raw idea, complaint or architecture question has not yet become a change request - 'should this be built?', 'should the project migrate to Postgres?', 'is this worth doing?', 'the current flow feels wrong' - and it is unclear whether to build anything or which direction to take. Produces a one-page Idea Note with options including doing nothing, rough sizes and evidence, and ends in exactly one exit: DROP, SHAPE, ASSESS or NEEDS DECISION. Not for requests already decided where only the how is unclear (use shaping-feature), tickets with acceptance criteria (use intaking-ticket), or features that already have a spec (use the upstream clarification command)."
 ---
 
 # Exploring an Idea

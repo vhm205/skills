@@ -5,6 +5,8 @@ to continue authorized work or ask questions answered by the code, spec or adapt
 
 They hand off to a human in exactly three situations, using exactly these shapes. Each report
 starts with its status word on the first line so a human can triage a queue of them quickly.
+Write reports in the adapter's `output_language` (default: the language of the request); keep
+commands, identifiers, paths and spec IDs exactly as they appear in the artifacts.
 
 ## BLOCKED
 

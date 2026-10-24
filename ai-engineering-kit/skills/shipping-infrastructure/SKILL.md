@@ -1,6 +1,6 @@
 ---
 name: shipping-infrastructure
-description: "Carries out infrastructure, build-pipeline, deployment, release-process and capacity work, where the proof of correctness is an observed system state or a measured threshold rather than a failing test. Records the architecture decision, collects ops evidence, and rehearses rollback before anything irreversible. Use for this class of change instead of the ordinary execution path."
+description: "Use when the change is infrastructure, build pipeline, deployment, release process, configuration or capacity work, where proof is an observed system state or a measured threshold rather than a failing test - 'deploy the new image to staging', 'move staging to the new cluster', 'change the CI pipeline', 'make the endpoint faster'. Records the decision before building, states the evidence up front, works in reversible order, proves the running system is in the new state, and hands to acceptance in ops mode. Not for ordinary product behavior changes proven by tests (use executing-task), investigating an unknown failure (use systematic-debugging), or reviewing a diff (use reviewing-change)."
 ---
 
 # Shipping Infrastructure

@@ -1,6 +1,6 @@
 ---
 name: shaping-feature
-description: "Shapes a Feature Brief when desired users, outcomes or behavior remain unclear before specification. Excludes clear requests, value/prioritization assessment, planning and implementation."
+description: "Use when a feature request is decided in principle but how it should work is still unclear - 'users want export but nobody has decided how', 'shape this feature', 'help write a brief' - and before a specification is written. Explores users, outcomes and behavior, then writes a one-page Feature Brief as input to the Spec Kit specify command and stops without planning. Not for assessing value or priority (use exploring-idea or the assess extension), clear requests that can be classified directly, a whole new project (use shaping-project), or writing a spec, plan or tasks (Spec Kit owns planning)."
 ---
 
 # Shaping a Feature

@@ -1,0 +1,183 @@
+{
+  "schema": "aiek-behavior-eval/1",
+  "generated_at": "2026-10-23T08:40:21+00:00",
+  "kit_root": "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit",
+  "kit_label": "current-branch",
+  "harness": {
+    "requested": "dsh",
+    "resolved": "dsh",
+    "probes": [
+      {
+        "harness": "dsh",
+        "ok": true,
+        "detail": "binary found"
+      }
+    ]
+  },
+  "with_skill": true,
+  "synthetic": false,
+  "runs_per_scenario": 1,
+  "timeout_s": 900,
+  "scenarios": [
+    {
+      "id": "parallel",
+      "title": "Parallel — two independent tasks",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "parallel-decision",
+          "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Parallel'"
+        },
+        {
+          "id": "worker-brief",
+          "description": "Worker brief evidence when running in parallel, or an explicit justified sequential decision (the kit allows Small-lane sequential execution)",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'sequentially'"
+        },
+        {
+          "id": "combined-verification",
+          "description": "Runs one combined verification after integrating both results",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'verify the combined'"
+        },
+        {
+          "id": "healthcheck-implemented",
+          "description": "The healthcheck endpoint exists",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'healthcheck'"
+        },
+        {
+          "id": "readme-updated",
+          "description": "The README setup section is written",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'run'"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Combined verification evidence, including a 'Checks (...)'' table",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'Verification'"
+        }
+      ],
+      "error": null,
+      "duration_s": 61.97,
+      "usage": {
+        "totalTokens": 400658,
+        "outputTokens": 7488,
+        "steps": 18
+      },
+      "changed_files": [
+        "README.md",
+        "app/main.py",
+        "tests/test_main.py"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.42,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "Lane: SMALL (both tasks are small, reversible, and have obvious acceptance criteria). Parallel: none — the kit's `parallelism.md` reserves Small-lane parallelism for independent investigations, and these are implementation edits, so I’ll run them sequentially and verify the combined result once.\n**DONE**\n\nLane: SMALL. Parallel: not used — `.aiek/core/parallelism.md` allows Small-lane parallelism only for independent investigations, not implementation edits. The changes touch disjoint files, so the combined result was verified once.\n\n**Changes**\n- `app/main.py`: added `/healthcheck` returning `(200, \"ok\")`, matching the existing route pattern.\n- `tests/test_main.py`: added a regression test; it failed before the implementation and passes now.\n- `README.md`: added requirements, setup, virtual-environment, and test instructions.\n\n**Verification**\n\n| Check | Command | Result |\n|---|---|---|\n| Unit tests | `python3 -m unittest discover -s tests -v` | 2 passed, 0 failed |\n| Endpoint smoke | called `create_app()[\"/healthcheck\"]()` | `200 'ok'` |\n| Whitespace/diff check | `git diff --check` | exit 0 |\n\nSelf-review found no Critical or Important findings. No lint, typecheck, or build commands are configured for this project. Changes are left uncommitted; no integration action was requested.",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "parallel-decision",
+              "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Parallel'"
+            },
+            {
+              "id": "worker-brief",
+              "description": "Worker brief evidence when running in parallel, or an explicit justified sequential decision (the kit allows Small-lane sequential execution)",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'sequentially'"
+            },
+            {
+              "id": "combined-verification",
+              "description": "Runs one combined verification after integrating both results",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'verify the combined'"
+            },
+            {
+              "id": "healthcheck-implemented",
+              "description": "The healthcheck endpoint exists",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'healthcheck'"
+            },
+            {
+              "id": "readme-updated",
+              "description": "The README setup section is written",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'run'"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Combined verification evidence, including a 'Checks (...)'' table",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'Verification'"
+            }
+          ],
+          "error": null,
+          "duration_s": 61.97,
+          "usage": {
+            "totalTokens": 400658,
+            "outputTokens": 7488,
+            "steps": 18
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "critical_failures": 0,
+    "critical_failure_scenarios": [],
+    "avg_duration_s": 61.97,
+    "total_tokens": 400658
+  },
+  "limitations": []
+}

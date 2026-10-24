@@ -1,6 +1,6 @@
 ---
 name: accepting-change
-description: "Runs the acceptance pass after automated checks are green: re-runs the full scenario suite, builds the acceptance sheet for whatever only a person can confirm, and collects sign-off. Has a product mode for user-facing behavior and an ops mode for infrastructure and deployment work. Use before release or hand-off, not as a substitute for verification."
+description: "Use when automated checks are green and a change needs its acceptance pass before release or hand-off - 'is this ready to release?', 'run acceptance or UAT', 'sign this off'. Re-runs the full scenario suite, builds the acceptance sheet from the traceability table for everything only a person can confirm, and collects sign-off (product mode); for infrastructure work it records post-change smoke, before/after comparison and rehearsed rollback (ops mode). Not for replacing verification (use verifying-change) or code review (use reviewing-change), and not for writing the PR description (use authoring-pr)."
 ---
 
 # Accepting a Change

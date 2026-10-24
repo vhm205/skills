@@ -12,7 +12,14 @@ Spec Kit.
 | Workflow `aiek-large` | `workflows/aiek-large/` | specify → clarify → plan → **decision gate** → tasks → analyze → **ready gate** → implement |
 | Workflow `aiek-project` | `workflows/aiek-project/` | BRD → Project Brief → constitution → roadmap → **human gate** → first MVP slice (supervised) |
 
-Requires Spec Kit ≥ 1.0 (preset composition and workflows). Tested against 1.2.2.dev0.
+Requires Spec Kit ≥ 1.0 (preset composition and workflows). Tested against 1.2.3.dev0.
+
+An adapter may layer its own `speckit-preset/` at priority 5 (ahead of `aiek-core` at 10) for
+project-specific spec/plan/tasks/constitution sections; `install.sh --speckit` registers it
+automatically when `adapters/<name>/speckit-preset/preset.yml` exists. Verify the composition
+with `specify preset resolve spec-template`. See
+[`adapters/_template/speckit-preset/`](../adapters/_template/speckit-preset/preset.yml) and
+[`docs/adding-an-adapter.md`](../docs/adding-an-adapter.md).
 
 ## Install
 

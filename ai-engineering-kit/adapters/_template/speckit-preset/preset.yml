@@ -4,6 +4,9 @@ schema_version: "1.0"
 # kit preset (aiek-core, priority 10) so it takes precedence, e.g.:
 #   specify preset add --dev adapters/<name>/speckit-preset --priority 5
 # Delete this directory if the project needs no Spec Kit customization.
+#
+# Strategies: append (default here), prepend, replace, wrap. Keep additions small: link to
+# project docs instead of copying them (see .aiek/core/documentation.md).
 
 preset:
   id: "change-me-project"
@@ -19,11 +22,29 @@ requires:
 
 provides:
   templates:
-    # Example: append project-specific sections to the spec template.
+    # Append project-specific sections to every spec.
     - type: "template"
       name: "spec-template"
       file: "templates/spec-template.md"
-      description: "Adds project-specific spec sections"
+      description: "Adds project-specific spec sections and documentation links"
+      strategy: "append"
+    # Append fast/full verification and gate expectations to every plan.
+    - type: "template"
+      name: "plan-template"
+      file: "templates/plan-template.md"
+      description: "Adds the project verification matrix and documentation authority links"
+      strategy: "append"
+    # Append evidence/traceability requirements to every task list.
+    - type: "template"
+      name: "tasks-template"
+      file: "templates/tasks-template.md"
+      description: "Adds per-task evidence and traceability requirements"
+      strategy: "append"
+    # Append project principles to the generated constitution template.
+    - type: "template"
+      name: "constitution-template"
+      file: "templates/constitution-template.md"
+      description: "Adds project-specific engineering principles"
       strategy: "append"
 
 tags: ["project"]

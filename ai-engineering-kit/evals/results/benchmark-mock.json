@@ -1,0 +1,108 @@
+{
+  "schema": "aiek-behavior-benchmark/1",
+  "generated_at": "2026-10-23T07:47:08+00:00",
+  "harness": {
+    "requested": "mock",
+    "resolved": "mock",
+    "probes": []
+  },
+  "kit_label": null,
+  "synthetic": true,
+  "with_skill": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "critical_failures": 0,
+    "critical_failure_scenarios": [],
+    "avg_duration_s": 0.0,
+    "total_tokens": 0
+  },
+  "without_skill": {
+    "total": 7,
+    "passed": 0,
+    "failed": 7,
+    "pass_rate": 0.0,
+    "critical_failures": 7,
+    "critical_failure_scenarios": [
+      "small-fix",
+      "normal-feature",
+      "bug",
+      "vague-ticket",
+      "review-diff",
+      "infra",
+      "parallel"
+    ],
+    "avg_duration_s": 0.0,
+    "total_tokens": 0
+  },
+  "per_scenario": [
+    {
+      "id": "small-fix",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "normal-feature",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "bug",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "vague-ticket",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "review-diff",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "infra",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    },
+    {
+      "id": "parallel",
+      "with_skill_passed": true,
+      "without_skill_passed": false,
+      "with_skill_duration_s": 0.0,
+      "without_skill_duration_s": 0.0,
+      "with_skill_tokens": 0,
+      "without_skill_tokens": 0
+    }
+  ],
+  "limitations": [
+    "Mock mode returns the fixture's synthetic mock response and applies its mock changes. It validates the fixture parser, installer wiring and assertion engine only; it is NOT evidence of agent behaviour and must not be quoted as a behaviour pass rate.",
+    "Mock mode returns the fixture's synthetic mock response and applies its mock changes. It validates the fixture parser, installer wiring and assertion engine only; it is NOT evidence of agent behaviour and must not be quoted as a behaviour pass rate."
+  ]
+}

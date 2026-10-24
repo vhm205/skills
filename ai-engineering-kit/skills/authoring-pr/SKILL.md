@@ -1,6 +1,6 @@
 ---
 name: authoring-pr
-description: "Writes or updates a pull request description from verification evidence, and performs the author's own review before anyone else is asked to look. Use after verification and review, when a change is being handed to reviewers. Excludes merging and branch disposition, and excludes producing evidence, which belongs to verification."
+description: "Use when writing or updating a PR/MR description from verification evidence, or preparing a verified change for reviewers - 'write the PR description', 'prepare this branch for review'. Picks the adapter's template or the kit sections, fills every number and claim from this session's evidence, runs the author self-review, lists related changes and merge order, and makes the prose readable. Not for choosing merge/PR/keep, pushing, merging or opening the PR (use finishing-branch), producing evidence (use verifying-change), or reviewing the code as a reviewer (use reviewing-change)."
 ---
 
 # Authoring a Pull Request

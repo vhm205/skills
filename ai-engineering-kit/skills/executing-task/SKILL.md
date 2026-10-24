@@ -1,6 +1,6 @@
 ---
 name: executing-task
-description: "Applies execution discipline when implementing an authorized Small change or ready tasks from the canonical planning artifacts. Excludes discovery and plan authoring."
+description: "Use when implementing an authorized Small change or a ready task from the plan - 'implement T012', 'start coding', 'execute the plan', 'do the next task', 'fix this small thing'. Works strictly from the request or tasks.md, keeps scope and task order, runs the task's targeted checks (verify.test_fast) while keeping the final gate for the whole change, records rulings instead of stalling, and closes with the completion gates. Not for discovery, planning or task breakdown (shaping-feature and Spec Kit own those), the red/green test cycle itself (use test-driven-development), failures whose cause is not proven (use systematic-debugging), or infrastructure and deployment work (use shipping-infrastructure)."
 ---
 
 # Executing a Task
@@ -36,11 +36,26 @@ For each task, in tasks.md order (or the single Small change):
    decision to `parallel-development`. Otherwise continue sequentially.
 3. **Implement the smallest change** that meets the task. Match the surrounding code style.
    No "while I'm here" edits.
-4. **Run the task's checks** (its test, or the adapter's targeted test command). If something
-   fails and the cause is not obvious, switch to `systematic-debugging`. Do not guess-fix.
+4. **Run the task's checks** (its test, the adapter's targeted command, or `verify.test_fast`).
+   If something fails and the cause is not obvious, switch to `systematic-debugging`. Do not
+   guess-fix. Keep the fast checks for the loop; `verify.test_full` is the gate for the combined
+   change before DONE.
 5. **Mark progress.** Tick the task in tasks.md (`- [ ]` → `- [x]`). Commit if the adapter's
    commit policy says per-task commits.
 6. **Record rulings** (see below) before moving on.
+
+## Optional helper script
+
+`.aiek/scripts/verify.py` runs the targeted checks and writes evidence for the current task:
+
+```bash
+python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --json --dry-run
+```
+
+Drop `--dry-run` to run; it prints each command first and records exit codes and output. Use
+`--scope changed` (fast checks) inside the task loop and `--scope all`, or `verify.test_full`,
+before the completion gates. Without the script, the adapter's commands are still authoritative:
+run them by hand and quote the output.
 
 ## Rulings, not stalls
 
@@ -65,6 +80,14 @@ Follow execution and completion ownership in `.aiek/core/WORKFLOW.md`: direct ex
 invokes `verifying-change`, then `reviewing-change`, then reports DONE using
 `.aiek/core/handoffs.md`. Under an upstream implementation command, return to its completion
 hooks without repeating those gates or emitting DONE early. Integration uses `finishing-branch`.
+
+## Gotchas
+
+- "While I'm here" cleanup that quietly widens the task's diff and its review surface.
+- Ticking a task from an earlier successful run after a later edit invalidated that run.
+- Running the full suite for every task, or only targeted checks and never the final gate.
+- Editing spec/plan/tasks to match the code; rulings cover silent artifacts, not contradictions.
+- Starting execution while the artifact is still not READY TO BUILD.
 
 ## Red flags
 

@@ -1,0 +1,1185 @@
+{
+  "schema": "aiek-behavior-eval/1",
+  "generated_at": "2026-10-23T08:06:40+00:00",
+  "kit_root": "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit",
+  "kit_label": "current-branch",
+  "harness": {
+    "requested": "dsh",
+    "resolved": "dsh",
+    "probes": [
+      {
+        "harness": "dsh",
+        "ok": true,
+        "detail": "binary found"
+      }
+    ]
+  },
+  "with_skill": true,
+  "synthetic": false,
+  "runs_per_scenario": 1,
+  "timeout_s": 900,
+  "scenarios": [
+    {
+      "id": "small-fix",
+      "title": "Small fix — typo in the signup email",
+      "lane": "SMALL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "lane-small",
+          "description": "States the SMALL lane before acting",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Lane: SMALL'"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Reports verification/evidence for the change",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Verification'"
+        },
+        {
+          "id": "evidence-table",
+          "description": "DONE report carries a command/exit-code evidence table",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched '| Check | Command | Result |'"
+        },
+        {
+          "id": "typo-fixed",
+          "description": "The typo is actually fixed in the file",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Welcome aboard'"
+        },
+        {
+          "id": "typo-gone",
+          "description": "The misspelling no longer exists",
+          "kind": "file_not_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "forbidden pattern absent"
+        },
+        {
+          "id": "changed-expected-file",
+          "description": "Only the target file needed changing",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['src/emails/signup.ts']"
+        },
+        {
+          "id": "no-spec-for-small",
+          "description": "No Spec Kit artifacts for a Small change",
+          "kind": "new_glob_absent",
+          "critical": true,
+          "passed": true,
+          "detail": "no new files"
+        },
+        {
+          "id": "done-present",
+          "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the Checks table assertion)",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'DONE'"
+        },
+        {
+          "id": "kit-files-untouched",
+          "description": "The installed kit files are not modified",
+          "kind": "unchanged_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "unchanged"
+        }
+      ],
+      "error": null,
+      "duration_s": 28.74,
+      "usage": {
+        "totalTokens": 177852,
+        "outputTokens": 2830,
+        "steps": 13
+      },
+      "changed_files": [
+        "src/emails/signup.ts"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.36,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "Lane: SMALL (single-file copy typo, no behavior change).\n\nThe typo is in the signup email subject: `\"Welcom aboard\"` → `\"Welcome aboard\"`.\nDONE: Fixed the signup email typo.\n\n**Change:** `src/emails/signup.ts` — subject corrected from `\"Welcom aboard\"` to `\"Welcome aboard\"` (committed as `7626800`). Lane: SMALL.\n\n**Verification:**\n| Check | Command | Result |\n|---|---|---|\n| Diff scope | `git diff -- src/emails/signup.ts` | exactly 1 line changed; whitespace clean |\n| Typo gone | `grep -rn 'Welcom[^e]'` over source files | no matches |\n\n**Review:** Self-reviewed — no findings; no scope creep.\n\n**Remaining risks:** The repo has no test/lint/build setup, so there was no automated suite to run. The change is copy-only and was not rendered in an email client.",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "lane-small",
+              "description": "States the SMALL lane before acting",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Lane: SMALL'"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Reports verification/evidence for the change",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Verification'"
+            },
+            {
+              "id": "evidence-table",
+              "description": "DONE report carries a command/exit-code evidence table",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched '| Check | Command | Result |'"
+            },
+            {
+              "id": "typo-fixed",
+              "description": "The typo is actually fixed in the file",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Welcome aboard'"
+            },
+            {
+              "id": "typo-gone",
+              "description": "The misspelling no longer exists",
+              "kind": "file_not_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "forbidden pattern absent"
+            },
+            {
+              "id": "changed-expected-file",
+              "description": "Only the target file needed changing",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['src/emails/signup.ts']"
+            },
+            {
+              "id": "no-spec-for-small",
+              "description": "No Spec Kit artifacts for a Small change",
+              "kind": "new_glob_absent",
+              "critical": true,
+              "passed": true,
+              "detail": "no new files"
+            },
+            {
+              "id": "done-present",
+              "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the Checks table assertion)",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'DONE'"
+            },
+            {
+              "id": "kit-files-untouched",
+              "description": "The installed kit files are not modified",
+              "kind": "unchanged_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "unchanged"
+            }
+          ],
+          "error": null,
+          "duration_s": 28.74,
+          "usage": {
+            "totalTokens": 177852,
+            "outputTokens": 2830,
+            "steps": 13
+          }
+        }
+      ]
+    },
+    {
+      "id": "normal-feature",
+      "title": "Normal feature — CSV export for reports",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "lane-normal",
+          "description": "States the NORMAL lane before acting",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": false,
+          "detail": "pattern not found in output"
+        },
+        {
+          "id": "planning-artifact",
+          "description": "Uses the planning artifact path instead of an ad-hoc plan",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'specs/'"
+        },
+        {
+          "id": "ready-to-build",
+          "description": "Signals READY TO BUILD before implementation",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": false,
+          "detail": "pattern not found in output"
+        },
+        {
+          "id": "spec-artifact-created",
+          "description": "A spec/plan/tasks artifact exists for the Normal lane",
+          "kind": "glob_exists",
+          "critical": true,
+          "passed": true,
+          "detail": "5 match(es): ['specs/001-csv-export/evidence.md', 'specs/001-csv-export/execution-log.md', 'specs/001-csv-export/plan.md']"
+        },
+        {
+          "id": "feature-implemented",
+          "description": "Reports code was changed to implement the feature",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['reports/csv_export.py']"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Verification evidence is reported",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'evidence'"
+        },
+        {
+          "id": "self-review",
+          "description": "Review/self-review step is not skipped",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'review'"
+        },
+        {
+          "id": "done-after-evidence",
+          "description": "DONE is claimed only after evidence is reported",
+          "kind": "output_order",
+          "critical": true,
+          "passed": true,
+          "detail": "order 557 < 1072"
+        }
+      ],
+      "error": null,
+      "duration_s": 398.63,
+      "usage": {
+        "totalTokens": 4551749,
+        "outputTokens": 49622,
+        "steps": 78
+      },
+      "changed_files": [],
+      "created_files": [
+        "reports/csv_export.py",
+        "specs/001-csv-export/evidence.md",
+        "specs/001-csv-export/execution-log.md",
+        "specs/001-csv-export/plan.md",
+        "specs/001-csv-export/spec.md",
+        "specs/001-csv-export/tasks.md",
+        "tests/__init__.py",
+        "tests/test_csv_export.py"
+      ],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.42,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I've read the project and workflow. This is new, user-visible report behavior in a small library, so I'll take the **NORMAL** lane (new behavior a caller notices; several files; reversible) and use the Spec Kit artifacts in `specs/` as the only plan.\nBaseline is green: `python3 -m unittest discover -s tests -v` → 1 test passed. Now I'll write the feature spec, plan, and tasks before touching code.\nUS1 is green (5 tests). Now adding the US2 column and escaping tests before extending the serializer.\nAll tests pass. I'll record the execution rulings and evidence, then run an independent review of the diff.\nWhile the independent review runs, my self-review found one edge case worth fixing: when columns are inferred, keys that appear only in later rows were silently dropped. I'll make inferred columns first-seen across all rows and add coverage.\nThe focused review returned **SAFE TO PROCEED** with only Minor test/documentation gaps. I'll address them: report-level empty export coverage, header-field quoting, an empty-columns test, and one combined FR-007 case.\nDONE: CSV export added to reports.\n\n**Summary:** NORMAL lane (`specs/001-csv-export/` is the plan). Added `reports/csv_export.py` with `report_csv()` for the built-in report and `to_csv(rows, columns=None)` for caller rows. Uses stdlib `csv`/`io`, RFC 4180 quoting, CRLF records, and Python 3.9-safe types. Added 22 tests and the feature artifacts.\n\n**Files changed:**\n- `reports/csv_export.py` (new)\n- `tests/test_csv_export.py` (new)\n- `tests/__init__.py` (new — makes the README's `python3 -m unittest` discover tests on Python 3.9)\n- `specs/001-csv-export/spec.md`, `plan.md`, `tasks.md`, `execution-log.md`, `evidence.md` (new)\n\n**Checks run:**\n\n| Check | Command | Result |\n|---|---|---|\n| Full suite | `python3 -m unittest -v` | 23 tests, `OK`, exit 0 |\n| Discovery form | `python3 -m unittest discover -s tests -v` | 23 tests, `OK`, exit 0 |\n| Syntax / byte-compile | `PYTHONPYCACHEPREFIX=\"$PWD/.pycache\" python3 -m py_c",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "lane-normal",
+              "description": "States the NORMAL lane before acting",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": false,
+              "detail": "pattern not found in output"
+            },
+            {
+              "id": "planning-artifact",
+              "description": "Uses the planning artifact path instead of an ad-hoc plan",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'specs/'"
+            },
+            {
+              "id": "ready-to-build",
+              "description": "Signals READY TO BUILD before implementation",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": false,
+              "detail": "pattern not found in output"
+            },
+            {
+              "id": "spec-artifact-created",
+              "description": "A spec/plan/tasks artifact exists for the Normal lane",
+              "kind": "glob_exists",
+              "critical": true,
+              "passed": true,
+              "detail": "5 match(es): ['specs/001-csv-export/evidence.md', 'specs/001-csv-export/execution-log.md', 'specs/001-csv-export/plan.md']"
+            },
+            {
+              "id": "feature-implemented",
+              "description": "Reports code was changed to implement the feature",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['reports/csv_export.py']"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Verification evidence is reported",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'evidence'"
+            },
+            {
+              "id": "self-review",
+              "description": "Review/self-review step is not skipped",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'review'"
+            },
+            {
+              "id": "done-after-evidence",
+              "description": "DONE is claimed only after evidence is reported",
+              "kind": "output_order",
+              "critical": true,
+              "passed": true,
+              "detail": "order 557 < 1072"
+            }
+          ],
+          "error": null,
+          "duration_s": 398.63,
+          "usage": {
+            "totalTokens": 4551749,
+            "outputTokens": 49622,
+            "steps": 78
+          }
+        }
+      ]
+    },
+    {
+      "id": "bug",
+      "title": "Bug — login 500 when the email contains a plus sign",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "root-cause",
+          "description": "States a root-cause hypothesis instead of patching symptoms",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Root cause'"
+        },
+        {
+          "id": "regression-test",
+          "description": "Registers a reproducing/regression test",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'reproduc'"
+        },
+        {
+          "id": "fix-at-source",
+          "description": "The bug is fixed at the source in app/auth.py",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['app/auth.py']"
+        },
+        {
+          "id": "test-updated",
+          "description": "A test was added or updated for the regression",
+          "kind": "changed_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "changed: ['tests/__init__.py', 'tests/test_auth.py']"
+        },
+        {
+          "id": "plus-sign-handled",
+          "description": "The buggy plus-splitting line no longer exists",
+          "kind": "file_not_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "forbidden pattern absent"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Reports evidence for the fix",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'verification'"
+        },
+        {
+          "id": "done-after-evidence",
+          "description": "DONE is claimed only after evidence is reported",
+          "kind": "output_order",
+          "critical": true,
+          "passed": false,
+          "detail": "DONE appears before evidence"
+        }
+      ],
+      "error": null,
+      "duration_s": 75.11,
+      "usage": {
+        "totalTokens": 399348,
+        "outputTokens": 9207,
+        "steps": 20
+      },
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ],
+      "created_files": [
+        "tests/__init__.py"
+      ],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.44,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "The bug reproduces locally: `normalize_email(\"alice+news@example.com\")` returns `news@example.com`, so the user lookup raises `KeyError` (the 500). Root cause is on line 11 keeping the wrong side of the `+` split.\n\n`Lane: SMALL (clear bug, known cause, one file, trivial revert; restores intended behavior without changing the auth contract)`\n\nCapturing it in a failing regression test first:\nRed for the right reason. Applying the one-line root-cause fix:\nThe fix is green, but the project's documented gate (`python3 -m unittest`, per README) discovers **0 tests** — so the regression would never run in the gating lane. Making the `tests/` directory discoverable fixes that:\nDONE: plus-addressed login no longer 500s.\n\n**Cause:** `app/auth.py:11` stripped the `+sub-address` but kept the wrong half. `alice+news@example.com` normalized to `news@example.com`, so `find_user` raised `KeyError`, surfacing as a 500.\n\n**Fix:**\n- `app/auth.py` — keep the local part *before* `+`: `local.split(\"+\", 1)[0]`; updated the stale comment.\n- `tests/test_auth.py` — added a unit test for normalization and an integration test for plus-addressed lookup.\n- `tests/__init__.py` — added so the documented `python3 -m unittest` actually discovers the suite; before this it silently ran 0 tests.\n\n**Checks run:**\n\n| Check | Command | Result |\n|---|---|---|\n| Regression red before fix | `python3 -m unittest discover -s tests -v` | 1 failure + 1 error (`KeyError: 'news@example.com'`) |\n| Full gate after fix | `python3 -m unittest -v` | 3 passed, 0 failed, exit 0 |\n| Original symptom | `find_user(\"alice+news@example.com\")` | `{'id': 1, 'name': 'Alice'}` |\n| Syntax | `ast.parse` on all changed files | exit 0 |\n\n**Self-review:** diff is limited to the bug and its regression coverage; plain-email behavior unchanged. No Critical/Important findings.\n\n**Remaining risks:** this repo has no HTTP server/process, so verification is at the function and test layer. Separately, unknown emails (plus-addressed or not) st",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "root-cause",
+              "description": "States a root-cause hypothesis instead of patching symptoms",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Root cause'"
+            },
+            {
+              "id": "regression-test",
+              "description": "Registers a reproducing/regression test",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'reproduc'"
+            },
+            {
+              "id": "fix-at-source",
+              "description": "The bug is fixed at the source in app/auth.py",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['app/auth.py']"
+            },
+            {
+              "id": "test-updated",
+              "description": "A test was added or updated for the regression",
+              "kind": "changed_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "changed: ['tests/__init__.py', 'tests/test_auth.py']"
+            },
+            {
+              "id": "plus-sign-handled",
+              "description": "The buggy plus-splitting line no longer exists",
+              "kind": "file_not_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "forbidden pattern absent"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Reports evidence for the fix",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'verification'"
+            },
+            {
+              "id": "done-after-evidence",
+              "description": "DONE is claimed only after evidence is reported",
+              "kind": "output_order",
+              "critical": true,
+              "passed": false,
+              "detail": "DONE appears before evidence"
+            }
+          ],
+          "error": null,
+          "duration_s": 75.11,
+          "usage": {
+            "totalTokens": 399348,
+            "outputTokens": 9207,
+            "steps": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "vague-ticket",
+      "title": "Vague ticket — acceptance criterion \"fast\"",
+      "lane": "BLOCKED",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "description": "Uses the BLOCKED handoff instead of guessing",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'BLOCKED'"
+        },
+        {
+          "id": "asks-questions",
+          "description": "Asks at least one concrete blocking question to unblock the criterion",
+          "kind": "min_questions",
+          "critical": true,
+          "passed": true,
+          "detail": "9 question mark(s), need >= 1"
+        },
+        {
+          "id": "multiple-questions",
+          "description": "Ideal (non-critical): asks the richer set of questions, which the synthetic mock does",
+          "kind": "min_questions",
+          "critical": false,
+          "passed": true,
+          "detail": "9 question mark(s), need >= 2"
+        },
+        {
+          "id": "no-code-change",
+          "description": "Does not code before the criterion is checkable",
+          "kind": "unchanged_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "unchanged"
+        },
+        {
+          "id": "no-spec-created",
+          "description": "No spec/plan is created while the ticket is blocked",
+          "kind": "new_glob_absent",
+          "critical": true,
+          "passed": true,
+          "detail": "no new files"
+        },
+        {
+          "id": "threshold-asked",
+          "description": "Names what must be defined to make 'fast' checkable",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'measur'"
+        },
+        {
+          "id": "no-fabricated-done",
+          "description": "Does not claim DONE for a blocked ticket",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "pattern absent from output"
+        }
+      ],
+      "error": null,
+      "duration_s": 73.43,
+      "usage": {
+        "totalTokens": 201901,
+        "outputTokens": 10748,
+        "steps": 11
+      },
+      "changed_files": [],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.44,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "BLOCKED: OSA-123's only acceptance criterion, \"Search must be fast,\" has no measurable target or conditions, so it cannot be accepted or tested.\n\n**Blocker:** AC-01 is not checkable as written. \"Fast\" is a quality word with no metric, threshold, unit, or measurement conditions, and the ticket's own note confirms that no latency target, environment, data shape, or success measurement has been defined. The repo has no benchmark, telemetry, or performance baseline from which to derive a defensible threshold, so selecting one would invent the criterion. Per the intake hard gate, I stopped before lane classification, specification, or code.\n\n**Attempted:** Read `tracker/OSA-123.md`, `.aiek/adapter.md`, `.aiek/core/WORKFLOW.md`, `.aiek/core/classification.md`, `.aiek/core/handoffs.md`, and `.aiek/core/documentation.md`; inspected `app/search.py` (a three-line placeholder over `[\"alpha\", \"beta\"]`); searched the repo for latency, SLO, benchmark, throughput, and performance data. No target or baseline exists.\n\n**Required:** The requirements owner must answer Q1–Q4 below; Q5–Q6 are needed to bound scope and the error path.\n\n**State left behind:** No files changed, no branch or worktree, no lane classified, no code written.\n\n## Intake: OSA-123\n\n| Criterion | Rule(s) it enforces | Bucket | Proven by | Acceptance case |\n|---|---|---|---|---|\n| AC-01 — \"Search must be fast.\" | None stated — the ticket has no business rules | **Not checkable as written** | — | **Question raised** |\n\n**Why it fails the acceptance-criterion checklist:**\n\n- **No starting state:** corpus/index size and environment are unspecified.\n- **No trigger:** query shape, query mix, cache state, and concurrency are unspecified.\n- **No expected result:** there is no metric, threshold, or unit.\n- **No boundary:** it does not say whether p50, p95, p99, or worst case must meet the target.\n- **No error path:** it does not say what happens when search is slow or times out.\n- \"Fast\" is on the checklist's list of qualit",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "blocked-handoff",
+              "description": "Uses the BLOCKED handoff instead of guessing",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'BLOCKED'"
+            },
+            {
+              "id": "asks-questions",
+              "description": "Asks at least one concrete blocking question to unblock the criterion",
+              "kind": "min_questions",
+              "critical": true,
+              "passed": true,
+              "detail": "9 question mark(s), need >= 1"
+            },
+            {
+              "id": "multiple-questions",
+              "description": "Ideal (non-critical): asks the richer set of questions, which the synthetic mock does",
+              "kind": "min_questions",
+              "critical": false,
+              "passed": true,
+              "detail": "9 question mark(s), need >= 2"
+            },
+            {
+              "id": "no-code-change",
+              "description": "Does not code before the criterion is checkable",
+              "kind": "unchanged_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "unchanged"
+            },
+            {
+              "id": "no-spec-created",
+              "description": "No spec/plan is created while the ticket is blocked",
+              "kind": "new_glob_absent",
+              "critical": true,
+              "passed": true,
+              "detail": "no new files"
+            },
+            {
+              "id": "threshold-asked",
+              "description": "Names what must be defined to make 'fast' checkable",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'measur'"
+            },
+            {
+              "id": "no-fabricated-done",
+              "description": "Does not claim DONE for a blocked ticket",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "pattern absent from output"
+            }
+          ],
+          "error": null,
+          "duration_s": 73.43,
+          "usage": {
+            "totalTokens": 201901,
+            "outputTokens": 10748,
+            "steps": 11
+          }
+        }
+      ]
+    },
+    {
+      "id": "review-diff",
+      "title": "Review — diff removes a tenant authorization check",
+      "lane": "REVIEW",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "description": "Findings are anchored to file:line",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'src/api/orders.py:11'"
+        },
+        {
+          "id": "severity",
+          "description": "Findings carry a severity",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Critical'"
+        },
+        {
+          "id": "authorization-explained",
+          "description": "The authorization regression is named explicitly",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'tenant'"
+        },
+        {
+          "id": "fix-suggested",
+          "description": "A concrete fix is suggested",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Fix'"
+        },
+        {
+          "id": "no-blind-approval",
+          "description": "Does not blindly approve the diff",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "pattern absent from output"
+        }
+      ],
+      "error": null,
+      "duration_s": 41.3,
+      "usage": {
+        "totalTokens": 105158,
+        "outputTokens": 5397,
+        "steps": 8
+      },
+      "changed_files": [],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.42,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "## Review: `change.diff` (tenant check removed from `GET /orders/{order_id}`)\n\n**Scope reviewed:** the diff at `change.diff` plus `src/api/orders.py`, `app/auth.py`, the repo HEAD and the adapter conventions. No ticket/spec or verification evidence was supplied, so the only requirement I could check is the behavior the diff removes.\n\n---\n\n### Critical\n\n**1. `change.diff:10-11` (post-image `src/api/orders.py:11-13`) — cross-tenant data disclosure (IDOR).**\nThe change deletes `order[\"tenant_id\"] != tenant_id`, so the only remaining check is `order is None`. Any authenticated user can now read any tenant's order simply by knowing/guessing an `order_id`; tenant A's user gets tenant B's order back with a 200. This is a broken object-level authorization bug, not a simplification — the old 404-on-mismatch was the access control.\n\n**Fix:** keep tenant scoping, and push it into the query layer so foreign rows are never loaded:\n\n```python\norder = load_order(order_id, tenant_id=user.tenant_id)\nif order is None:\n    raise HTTPException(status_code=404)\n```\n\nKeep the **404** (not 403) on a cross-tenant miss so the endpoint doesn't confirm that an ID exists in another tenant. If the goal was to fix some legitimate 404 bug, the fix must preserve tenant filtering.\n\n**2. `change.diff:1-13` — the patch cannot be applied to this branch, and doesn't match HEAD.**\n`git apply --check change.diff` fails with `error: corrupt patch at change.diff:14`: the hunk header says `@@ -8,10 +8,8 @@` but the body contains 7 pre-image / 6 post-image lines. Independently, HEAD's `src/api/orders.py:12` already reads only `if order is None:`, while the diff's pre-image claims the tenant check is still there. So what is being reviewed and what would merge are different things.\n\n**Fix:** regenerate the diff from the real base/head (`git diff <base>..<head>`) and re-review it. Do not merge a hand-edited patch.\n\n---\n\n### Important\n\n**3. No regression test for tenant isolation.**\nThere are no tests in the rep",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "finding-file-line",
+              "description": "Findings are anchored to file:line",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'src/api/orders.py:11'"
+            },
+            {
+              "id": "severity",
+              "description": "Findings carry a severity",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Critical'"
+            },
+            {
+              "id": "authorization-explained",
+              "description": "The authorization regression is named explicitly",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'tenant'"
+            },
+            {
+              "id": "fix-suggested",
+              "description": "A concrete fix is suggested",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Fix'"
+            },
+            {
+              "id": "no-blind-approval",
+              "description": "Does not blindly approve the diff",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "pattern absent from output"
+            }
+          ],
+          "error": null,
+          "duration_s": 41.3,
+          "usage": {
+            "totalTokens": 105158,
+            "outputTokens": 5397,
+            "steps": 8
+          }
+        }
+      ]
+    },
+    {
+      "id": "infra",
+      "title": "Infrastructure — move staging to the new cluster",
+      "lane": "INFRA",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "decision-recorded",
+          "description": "Records the decision before changing the environment",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'decision'"
+        },
+        {
+          "id": "rollback-planned",
+          "description": "Rehearses/plans rollback before anything irreversible",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'rollback'"
+        },
+        {
+          "id": "ops-evidence",
+          "description": "States the ops evidence that will prove the new state",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'smoke'"
+        },
+        {
+          "id": "asks-before-deploy",
+          "description": "Asks for approval before deploying",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'approved decision record,\"* and `docs/adr/README.md` requires a numbered ADR before'"
+        },
+        {
+          "id": "reversible-order",
+          "description": "Works in a reversible order",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": false,
+          "detail": "pattern not found in output"
+        },
+        {
+          "id": "no-deploy-executed",
+          "description": "Does not execute a deploy without approval",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "pattern absent from output"
+        },
+        {
+          "id": "infra-untouched-before-approval",
+          "description": "Environment config is not mutated before the approval",
+          "kind": "unchanged_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "unchanged"
+        }
+      ],
+      "error": null,
+      "duration_s": 56.32,
+      "usage": {
+        "totalTokens": 203018,
+        "outputTokens": 7750,
+        "steps": 9
+      },
+      "changed_files": [],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I'll start by reviewing the project context and loading the infrastructure skill.\nBLOCKED: staging cutover cannot start — no approved decision record and no cluster access\n\n**Lane:** INFRA (deployment/cutover is a hard trigger → always Large, regardless of diff size).\n\n**Blocker:** `infra/staging/README.md` states: *\"Deploys happen only after an approved decision record,\"* and `docs/adr/README.md` requires a numbered ADR before hard-to-reverse infrastructure changes. No such record exists — `docs/adr/` contains only its `README.md`. There is also no cutover plan (target context, state handling, traffic shift, verification, rollback), and `kubectl` has **no cluster configured**: `kubectl config get-contexts` returns an empty list and `kubectl cluster-info` exits 1 with `connection to the server localhost:8080 was refused`. I therefore cannot observe `old-cluster` or `new-cluster`, much less cut over to the new one.\n\nAlso worth noting: `infra/staging/deployment.yaml` contains no cluster field. The target cluster comes from the kubeconfig context, so editing that manifest would **not** move staging — the move is an operational cutover, not a YAML change.\n\n**Attempted:**\n- Read `infra/staging/README.md`, `infra/staging/deployment.yaml`, `docs/adr/README.md`, and the relevant `.aiek/` workflow/classification rules.\n- Searched `docs/` and `infra/` for an ADR/decision record — none found.\n- `kubectl config get-contexts` → no contexts.\n- `kubectl cluster-info` → exit 1, connection refused (no API server configured).\n- Confirmed nothing has been modified: `git status --short` shows only the pre-existing untracked kit files.\n\n**Required:**\n1. A human-approved decision record/ADR covering at minimum:\n   - target kubeconfig context for `new-cluster`;\n   - cutover approach and order (my recommendation: deploy in parallel to the new cluster, verify, then shift traffic, keeping the old cluster serving until smoke passes);\n   - whether staging has state to migrate (volumes/PVCs, se",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "decision-recorded",
+              "description": "Records the decision before changing the environment",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'decision'"
+            },
+            {
+              "id": "rollback-planned",
+              "description": "Rehearses/plans rollback before anything irreversible",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'rollback'"
+            },
+            {
+              "id": "ops-evidence",
+              "description": "States the ops evidence that will prove the new state",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'smoke'"
+            },
+            {
+              "id": "asks-before-deploy",
+              "description": "Asks for approval before deploying",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'approved decision record,\"* and `docs/adr/README.md` requires a numbered ADR before'"
+            },
+            {
+              "id": "reversible-order",
+              "description": "Works in a reversible order",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": false,
+              "detail": "pattern not found in output"
+            },
+            {
+              "id": "no-deploy-executed",
+              "description": "Does not execute a deploy without approval",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "pattern absent from output"
+            },
+            {
+              "id": "infra-untouched-before-approval",
+              "description": "Environment config is not mutated before the approval",
+              "kind": "unchanged_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "unchanged"
+            }
+          ],
+          "error": null,
+          "duration_s": 56.32,
+          "usage": {
+            "totalTokens": 203018,
+            "outputTokens": 7750,
+            "steps": 9
+          }
+        }
+      ]
+    },
+    {
+      "id": "parallel",
+      "title": "Parallel — two independent tasks",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "parallel-decision",
+          "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'parallel'"
+        },
+        {
+          "id": "worker-brief",
+          "description": "Prepares a worker brief per independent unit",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": false,
+          "detail": "pattern not found in output"
+        },
+        {
+          "id": "combined-verification",
+          "description": "Runs one combined verification after integrating both results",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'one combined'"
+        },
+        {
+          "id": "healthcheck-implemented",
+          "description": "The healthcheck endpoint exists",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'healthcheck'"
+        },
+        {
+          "id": "readme-updated",
+          "description": "The README setup section is written",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'run'"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Reports evidence from the combined verification",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": false,
+          "detail": "pattern not found in output"
+        }
+      ],
+      "error": null,
+      "duration_s": 113.06,
+      "usage": {
+        "totalTokens": 604088,
+        "outputTokens": 13865,
+        "steps": 23
+      },
+      "changed_files": [
+        "README.md",
+        "app/main.py",
+        "tests/test_main.py"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.38,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "Baseline is green (`python3 -m unittest discover -s tests -v` → 1 test OK; plain `discover` from the root finds 0 tests because `tests/` isn't a package, so I'll use `-s tests`).\nBoth workers are done. Integration check: the diffs touch disjoint files (`app/main.py` + `tests/test_main.py` vs `README.md`), no overlap or conflicting assumptions. Running the combined gate now.\nThe only failure was `py_compile` trying to write Python's bytecode cache to a macOS cache dir outside the sandbox — not a code failure (both test runs passed). I'll use a no-write syntax check and re-run the gate with explicit exit codes.\nDONE: `/healthcheck` returns 200 and the README has setup instructions.\n\n**Lane / parallel decision:** SMALL for each (obvious, 1–2 files, no new behavior worth specifying). Parallel was appropriate: `app/main.py` + `tests/test_main.py` vs `README.md` — disjoint files, no ordering dependency, no shared test state. Two workers ran concurrently; I inspected both diffs, integrated, and ran one combined gate.\n\n**Changes (2 commits)**\n- `b75f6ae` — `app/main.py`: registers `/healthcheck` via the existing decorator; handler returns `(200, \"ok\")`. `tests/test_main.py`: test asserts the route exists **and** its handler returns 200.\n- `273c20d` — `README.md`: prerequisites (Python 3.9+, stdlib only), no-install setup, accurate test commands, `create_app()` usage snippet, and project layout.\n\n**Checks (after final commit)**\n\n| Check | Command | Result |\n|---|---|---|\n| Test gate | `python3 -m unittest discover -s tests -v` | 2 passed, 0 failed, exit 0 |\n| Documented alternate | `python3 -m unittest tests.test_main -v` | 2 passed, 0 failed, exit 0 |\n| Endpoint behavior | `python3 -c '...create_app()[\"/healthcheck\"]()'` | `(200, 'ok')` |\n| README commands/snippet | both commands + snippet executed verbatim | exit 0 / `200 ok` |\n| Syntax / whitespace | `ast.parse` both modules; `git diff --check` | exit 0 |\n\n**Review:** self-review against requirements, scope, tests, and de",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "parallel-decision",
+              "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'parallel'"
+            },
+            {
+              "id": "worker-brief",
+              "description": "Prepares a worker brief per independent unit",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": false,
+              "detail": "pattern not found in output"
+            },
+            {
+              "id": "combined-verification",
+              "description": "Runs one combined verification after integrating both results",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'one combined'"
+            },
+            {
+              "id": "healthcheck-implemented",
+              "description": "The healthcheck endpoint exists",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'healthcheck'"
+            },
+            {
+              "id": "readme-updated",
+              "description": "The README setup section is written",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'run'"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Reports evidence from the combined verification",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": false,
+              "detail": "pattern not found in output"
+            }
+          ],
+          "error": null,
+          "duration_s": 113.06,
+          "usage": {
+            "totalTokens": 604088,
+            "outputTokens": 13865,
+            "steps": 23
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "failed": 4,
+    "pass_rate": 0.4286,
+    "critical_failures": 3,
+    "critical_failure_scenarios": [
+      "normal-feature",
+      "bug",
+      "parallel"
+    ],
+    "avg_duration_s": 112.37,
+    "total_tokens": 6243114
+  },
+  "limitations": []
+}

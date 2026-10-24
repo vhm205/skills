@@ -1,6 +1,6 @@
 ---
 name: finishing-branch
-description: "Integrates completed, verified and reviewed work when a merge, pull request or branch disposition is requested or configured."
+description: "Use when verified, reviewed work is ready to integrate and someone asks to 'merge this', 'open the PR', 'push the branch' or 'clean up the branch', or the adapter's integration policy requires a disposition. Confirms the base branch, offers exactly merge locally, push and open a PR, or keep as-is, executes the chosen option using the PR body written by authoring-pr, and removes only the worktrees this workflow created. Not for writing or updating the PR description - authoring-pr does that - producing verification evidence (use verifying-change), or resolving review findings (use reviewing-change)."
 ---
 
 # Finishing a Branch (optional)
@@ -29,8 +29,10 @@ Discarding work is offered only if the person asks, and needs them to type `disc
 
 - **Merge:** merge, re-run the checks on the merged result, then remove the worktree and
   delete the branch (`git branch -d`, never `-D` without asking).
-- **PR:** push the branch, open the PR using the adapter's PR template if any, and put the DONE
-  report (summary, checks, evidence, risks) in the description. Keep the worktree.
+- **PR:** write no new description here. Use the body produced by `authoring-pr` from this
+  session's verification evidence; if it is missing, stop and run `authoring-pr` first. Push the
+  branch, open the PR using the adapter's PR template if any, and put that body in the
+  description. Keep the worktree.
 - **Keep:** report the branch and worktree path.
 
 ## 5. Clean up

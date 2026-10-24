@@ -1,4 +1,5 @@
 """Run with Python 3 + PyYAML; uses disposable projects, no agent or network needed."""
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -84,6 +85,127 @@ class InstallerTests(unittest.TestCase):
         self.assertTrue(text.endswith(END + '\nafter\n'))
         self.assertEqual((self.project / 'CLAUDE.md').read_text(), '@AGENTS.md\n')
         self.assertFalse((self.project / '.agents').exists())
+
+
+class ProfileTests(unittest.TestCase):
+    """Installer profiles, --only/--skip and the installed helper script set (T18/T24)."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='aiek-profile-')
+        self.addCleanup(self.temp.cleanup)
+        self.manifest = json.loads((KIT / 'manifest.json').read_text())
+
+    def new_project(self, name):
+        project = Path(self.temp.name) / name
+        project.mkdir()
+        return project
+
+    def install(self, project, *args, ok=True):
+        result = subprocess.run(
+            ['bash', str(KIT / 'scripts/install.sh'), str(project), *args],
+            text=True, capture_output=True)
+        self.assertEqual(result.returncode == 0, ok, result.stdout + result.stderr)
+        return result
+
+    def installed_skills(self, project):
+        root = project / '.agents/skills'
+        return {path.name for path in root.iterdir() if path.is_dir()} if root.is_dir() else set()
+
+    def test_manifest_profiles_are_consistent(self):
+        profiles = self.manifest['profiles']
+        all_skills = {item['name'] for item in self.manifest['skills']}
+        self.assertEqual(set(profiles['full']), all_skills)
+        self.assertEqual(len(profiles['core']), 11)
+        self.assertEqual(len(profiles['discovery']), 4)
+        self.assertEqual(set(profiles['core']) | set(profiles['discovery']), all_skills)
+        self.assertFalse(set(profiles['core']) & set(profiles['discovery']))
+
+    def test_profiles_install_expected_skill_counts(self):
+        for profile in ('core', 'discovery', 'full'):
+            with self.subTest(profile=profile):
+                project = self.new_project('profile-' + profile)
+                self.install(project, '--harness', 'codex', '--profile', profile)
+                expected = set(self.manifest['profiles'][profile])
+                self.assertEqual(self.installed_skills(project), expected)
+                self.assertEqual(len(expected), {'core': 11, 'discovery': 4, 'full': 15}[profile])
+                # core never drags discovery skills in, and vice versa
+                if profile == 'core':
+                    self.assertFalse(
+                        set(self.manifest['profiles']['discovery']) & self.installed_skills(project))
+                if profile == 'discovery':
+                    self.assertFalse(
+                        set(self.manifest['profiles']['core']) & self.installed_skills(project))
+
+    def test_only_and_skip(self):
+        project = self.new_project('only')
+        self.install(project, '--harness', 'codex', '--only', 'executing-task,verifying-change')
+        self.assertEqual(self.installed_skills(project), {'executing-task', 'verifying-change'})
+
+        project = self.new_project('skip')
+        self.install(project, '--harness', 'codex', '--skip', 'exploring-idea,test-driven-development')
+        self.assertEqual(len(self.installed_skills(project)), 13)
+        self.assertNotIn('exploring-idea', self.installed_skills(project))
+        self.assertIn('verifying-change', self.installed_skills(project))
+
+        project = self.new_project('profile-skip')
+        self.install(project, '--harness', 'codex', '--profile', 'core', '--skip', 'executing-task')
+        self.assertEqual(len(self.installed_skills(project)), 10)
+        self.assertNotIn('executing-task', self.installed_skills(project))
+
+    def test_invalid_selection_fails_before_writing(self):
+        cases = [
+            ('--profile', 'nope'),
+            ('--only', 'nope'),
+            ('--only', 'executing-task,nope'),
+            ('--skip', 'nope'),
+            ('--only', 'executing-task', '--skip', 'executing-task'),
+        ]
+        for args in cases:
+            with self.subTest(args=args):
+                project = self.new_project('invalid-' + '-'.join(args).replace('/', '_'))
+                result = self.install(project, '--harness', 'codex', *args, ok=False)
+                self.assertTrue(result.stderr.strip(), result.stdout)
+                self.assertEqual(list(project.iterdir()), [])
+
+    def test_dry_run_for_each_profile_writes_nothing(self):
+        for profile in ('core', 'discovery', 'full'):
+            with self.subTest(profile=profile):
+                project = self.new_project('dry-' + profile)
+                self.install(project, '--harness', 'codex', '--profile', profile, '--dry-run')
+                self.assertEqual(list(project.iterdir()), [])
+
+    def test_adapter_never_overwritten_without_force(self):
+        project = self.new_project('adapter')
+        self.install(project, '--harness', 'codex')
+        adapter = project / '.aiek/adapter.md'
+        adapter.write_text('project-owned commands\n')
+        self.install(project, '--harness', 'codex')
+        self.assertEqual(adapter.read_text(), 'project-owned commands\n')
+        self.install(project, '--harness', 'codex', '--force')
+        self.assertNotEqual(adapter.read_text(), 'project-owned commands\n')
+
+    def test_helper_scripts_installed_and_runnable(self):
+        project = self.new_project('scripts')
+        self.install(project, '--harness', 'codex', '--profile', 'core')
+        installed = project / '.aiek/scripts'
+        expected = {Path(entry).name for entry in self.manifest['scripts']}
+        self.assertEqual({path.name for path in installed.iterdir()}, expected)
+        self.assertEqual(len(expected), 5)
+        for name in ('resolve_adapter.py', 'verify.py', 'worktree.py', 'traceability.py'):
+            result = subprocess.run(
+                [sys.executable, str(installed / name), '--help'],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, name + ': ' + result.stderr)
+            self.assertIn('usage', (result.stdout + result.stderr).lower(), name)
+        # The installed resolver runs standalone against the installed project.
+        result = subprocess.run(
+            [sys.executable, str(installed / 'resolve_adapter.py'),
+             '--repo', str(project), '--json'],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(result.stdout)
+        self.assertEqual(Path(payload['adapter']['repo']), project.resolve())
+        self.assertIn('verify', payload['adapter'])
 
 
 class BootstrapTests(unittest.TestCase):

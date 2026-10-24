@@ -17,7 +17,10 @@ documentation does not trigger Large; changing its contract or operational proce
 - Infrastructure, deploy pipeline, or release process changes
 - More than one service or deployable unit changes together
 - A meaningful product or architecture trade-off with no clear default
-- The adapter lists the touched area under `risk_areas`
+- The adapter lists the touched area under `risk_areas` **and the change alters its behavior,
+  contract or operational procedure**. A behavior-neutral edit in a risk path (a typo, comment
+  or formatting change) does not become LARGE on its own, but it still needs a human reviewer
+  when the adapter's `review.human_required_for` names that path.
 
 Infrastructure, build pipeline, deployment, release process and capacity work are Large **and**
 use `shipping-infrastructure` instead of the ordinary execution path: their proof is an observed

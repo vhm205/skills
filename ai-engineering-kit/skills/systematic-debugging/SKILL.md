@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "Investigates bugs, failing checks or unexpected behavior when the cause is not yet proven, before attempting a fix. Covers intake of the report, tracing the cause, fixing at the source, confirming the fix is actually running, and registering the reproduction as a permanent regression."
+description: "Use when something is broken and the cause is not proven - failing tests with no obvious reason, a flaky test, a production error, unexpected behavior, 'why is this happening?', 'it worked yesterday'. Runs intake, root-cause investigation, a failing reproduction, a fix at the source, confirmation that the fix is actually running, and a regression test that the gating lane will run. Not for feature work, a fix whose cause is already known (use executing-task), or checking evidence for a fix already made (use verifying-change)."
 ---
 
 # Systematic Debugging
@@ -95,6 +95,14 @@ Report **BLOCKED** (or **NEEDS DECISION** if a redesign is the real question) pe
 
 A root cause that requires changing what the system is *supposed* to do is no longer a bug fix.
 Re-classify (`.aiek/core/classification.md`). Normal/Large fixes go through Spec Kit.
+
+## Gotchas
+
+- The report mixes two bugs: fixing the visible symptom closes the ticket, the second survives.
+- The failing reproduction is deleted after the fix instead of registered in the gating lane.
+- "It passed this time" for an intermittent bug: a single green run is not a reproduction.
+- A fix that only moves the error to another layer, judged done because the first test is green.
+- The patch was reloaded in one worker process; the others still serve the old code.
 
 ## Red flags
 

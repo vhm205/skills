@@ -1,0 +1,701 @@
+{
+  "schema": "aiek-behavior-eval/1",
+  "generated_at": "2026-10-23T08:27:59+00:00",
+  "kit_root": "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit",
+  "kit_label": "current-branch",
+  "harness": {
+    "requested": "dsh",
+    "resolved": "dsh",
+    "probes": [
+      {
+        "harness": "dsh",
+        "ok": true,
+        "detail": "binary found"
+      }
+    ]
+  },
+  "with_skill": true,
+  "synthetic": false,
+  "runs_per_scenario": 1,
+  "timeout_s": 900,
+  "scenarios": [
+    {
+      "id": "normal-feature",
+      "title": "Normal feature — CSV export for reports",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "lane-normal",
+          "description": "States the NORMAL lane (either word order; the kit does not mandate a literal 'Lane:' prefix)",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Lane: NORMAL'"
+        },
+        {
+          "id": "planning-artifact",
+          "description": "Uses the planning artifact path instead of an ad-hoc plan",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'specs/'"
+        },
+        {
+          "id": "ready-to-build",
+          "description": "Non-critical readability signal that planning happened (readiness itself is proven by the critical spec-artifact-created assertion)",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'specs/'"
+        },
+        {
+          "id": "spec-artifact-created",
+          "description": "A spec/plan/tasks artifact exists for the Normal lane",
+          "kind": "glob_exists",
+          "critical": true,
+          "passed": true,
+          "detail": "4 match(es): ['specs/001-csv-report-export/execution-log.md', 'specs/001-csv-report-export/plan.md', 'specs/001-csv-report-export/spec.md']"
+        },
+        {
+          "id": "feature-implemented",
+          "description": "Reports code was changed to implement the feature",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['reports/summary.py']"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Verification evidence is reported",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Verification'"
+        },
+        {
+          "id": "self-review",
+          "description": "Review/self-review step is not skipped",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'review'"
+        },
+        {
+          "id": "done-after-evidence",
+          "description": "DONE is claimed only after evidence is reported",
+          "kind": "output_order",
+          "critical": true,
+          "passed": false,
+          "detail": "DONE appears before evidence"
+        }
+      ],
+      "error": null,
+      "duration_s": 264.53,
+      "usage": {
+        "totalTokens": 2647230,
+        "outputTokens": 28517,
+        "steps": 50
+      },
+      "changed_files": [
+        "reports/summary.py",
+        "tests/test_summary.py"
+      ],
+      "created_files": [
+        "specs/001-csv-report-export/execution-log.md",
+        "specs/001-csv-report-export/plan.md",
+        "specs/001-csv-report-export/spec.md",
+        "specs/001-csv-report-export/tasks.md"
+      ],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.39,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I'll start by reading the project workflow and adapter to understand the required process and project facts.\nBaseline is green (`python3 -m unittest discover -s tests -v`: 1 test, OK). Note: the README's first command (`pytest`) isn't installed, so I'll use unittest discovery as the authoritative check and record the discrepancy.\n\n**Lane: NORMAL** (new user-visible behavior — CSV export — worth specifying, with testable acceptance criteria; reversible, no hard triggers).\n\nI'll now write the Spec Kit artifacts (the only plan), since `planning.mode: speckit`.\nT001 — writing the tests first so the new behavior is proven (red before green).\nRed confirmed for the right reason (missing `export_csv`). T002 — implement with stdlib `csv`.\nT001/T002/T003 complete: red → green, 6/6 tests pass. Recording the log and ticking tasks, then I'll get a fresh review of the diff.\nReview returned **APPROVE** with no Critical/Important findings. I'll fix the two pointer/wording minors and the low-cost test gap, then re-run the gate (fixes after review invalidate the earlier run).\nDONE: CSV export added to reports (NORMAL lane, spec `specs/001-csv-report-export/spec.md`).\n\n**Summary:** The reports module now exposes `to_csv(rows)` for serializing report rows and `export_csv()` for exporting `report_rows()`. Export includes a `name,total` header, preserves row order, uses standard CSV quoting, emits the header for empty reports, and keeps existing `report_rows()` behavior. Implemented stdlib-only with test-first coverage.\n\n**Files changed:**\n- `reports/summary.py`\n- `tests/test_summary.py`\n- `specs/001-csv-report-export/spec.md` (new)\n- `specs/001-csv-report-export/plan.md` (new)\n- `specs/001-csv-report-export/tasks.md` (new)\n- `specs/001-csv-report-export/execution-log.md` (new)\n\n**Checks run:**\n\n| Check | Command | Result |\n|---|---|---|\n| tests | `python3 -m unittest discover -s tests -v` | 7 passed, 0 failed |\n| tests + warnings as errors | `python3 -W error -m unittest discover -s tes",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "lane-normal",
+              "description": "States the NORMAL lane (either word order; the kit does not mandate a literal 'Lane:' prefix)",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Lane: NORMAL'"
+            },
+            {
+              "id": "planning-artifact",
+              "description": "Uses the planning artifact path instead of an ad-hoc plan",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'specs/'"
+            },
+            {
+              "id": "ready-to-build",
+              "description": "Non-critical readability signal that planning happened (readiness itself is proven by the critical spec-artifact-created assertion)",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'specs/'"
+            },
+            {
+              "id": "spec-artifact-created",
+              "description": "A spec/plan/tasks artifact exists for the Normal lane",
+              "kind": "glob_exists",
+              "critical": true,
+              "passed": true,
+              "detail": "4 match(es): ['specs/001-csv-report-export/execution-log.md', 'specs/001-csv-report-export/plan.md', 'specs/001-csv-report-export/spec.md']"
+            },
+            {
+              "id": "feature-implemented",
+              "description": "Reports code was changed to implement the feature",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['reports/summary.py']"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Verification evidence is reported",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Verification'"
+            },
+            {
+              "id": "self-review",
+              "description": "Review/self-review step is not skipped",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'review'"
+            },
+            {
+              "id": "done-after-evidence",
+              "description": "DONE is claimed only after evidence is reported",
+              "kind": "output_order",
+              "critical": true,
+              "passed": false,
+              "detail": "DONE appears before evidence"
+            }
+          ],
+          "error": null,
+          "duration_s": 264.53,
+          "usage": {
+            "totalTokens": 2647230,
+            "outputTokens": 28517,
+            "steps": 50
+          }
+        }
+      ]
+    },
+    {
+      "id": "bug",
+      "title": "Bug — login 500 when the email contains a plus sign",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": true,
+      "critical_failed": false,
+      "assertions": [
+        {
+          "id": "root-cause",
+          "description": "States a root-cause hypothesis instead of patching symptoms",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Root cause'"
+        },
+        {
+          "id": "regression-test",
+          "description": "Registers a reproducing/regression test",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'reproduc'"
+        },
+        {
+          "id": "fix-at-source",
+          "description": "The bug is fixed at the source in app/auth.py",
+          "kind": "changed_glob",
+          "critical": true,
+          "passed": true,
+          "detail": "changed: ['app/auth.py']"
+        },
+        {
+          "id": "test-updated",
+          "description": "A test was added or updated for the regression",
+          "kind": "changed_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "changed: ['tests/__init__.py', 'tests/test_auth.py']"
+        },
+        {
+          "id": "plus-sign-handled",
+          "description": "The buggy plus-splitting line no longer exists",
+          "kind": "file_not_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "forbidden pattern absent"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Reports evidence for the fix",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'verification'"
+        },
+        {
+          "id": "done-present",
+          "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the evidence assertion)",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'DONE'"
+        }
+      ],
+      "error": null,
+      "duration_s": 68.5,
+      "usage": {
+        "totalTokens": 380529,
+        "outputTokens": 9246,
+        "steps": 18
+      },
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ],
+      "created_files": [
+        "tests/__init__.py"
+      ],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.42,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "Baseline: the README's test command (`python3 -m unittest`) currently discovers **0 tests** because `tests/` is not a package. Let me first reproduce the reported failure directly.\nRED confirmed for the right reason: normalization returns `news@example.com`, dropping the mailbox. Fixing at the source.\nDONE: plus-addressed emails now resolve to the base mailbox instead of 500.\n\n**Lane:** SMALL — known-cause defect in one module plus regression tests; behavior restored, no auth contract change.\n\n**Root cause:** `app/auth.py:11` used `local.split(\"+\")[1]`. For `alice+news@example.com` that kept the sub-address tag (`news@example.com`) instead of the mailbox (`alice@example.com`), so `USERS[...]` raised `KeyError` — an unhandled exception becomes the 500.\n\n**Fix:** keep the local part before the first `+` (`local.split(\"+\", 1)[0]`), which also handles `alice+@example.com` without an `IndexError`.\n\n**Files changed:**\n- `app/auth.py` — normalization fix and corrected comment\n- `tests/test_auth.py` — regression tests for plus-address lookup and normalization\n- `tests/__init__.py` — makes `python3 -m unittest` (the README's gate) discover the suite; it previously ran 0 tests\n\n**Checks run:**\n\n| Check | Command | Result |\n|---|---|---|\n| RED before fix | `python3 -m unittest -v` | exit 1: `KeyError: 'news@example.com'`; `'news@example.com' != 'alice@example.com'` |\n| GREEN after fix | `python3 -m unittest -v` | exit 0, 3 passed, 0 failed |\n| Original symptom | direct call with `alice+news@example.com` | resolves to `alice@example.com`, `id=1`; `alice+@`, `alice+a+b@`, `bob+tag@` also work |\n| Diff hygiene | `git diff --check` | exit 0 |\n\n**Review:** self-review; no findings. Lint/typecheck/build are not configured in this project. No running service exists to reload; verification executes the current source directly.\n\n**Remaining risk / follow-up:** `find_user` still raises `KeyError` for genuinely unknown addresses, so the web layer needs its own handling to avoid a 500 on ",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": true,
+          "assertions": [
+            {
+              "id": "root-cause",
+              "description": "States a root-cause hypothesis instead of patching symptoms",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Root cause'"
+            },
+            {
+              "id": "regression-test",
+              "description": "Registers a reproducing/regression test",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'reproduc'"
+            },
+            {
+              "id": "fix-at-source",
+              "description": "The bug is fixed at the source in app/auth.py",
+              "kind": "changed_glob",
+              "critical": true,
+              "passed": true,
+              "detail": "changed: ['app/auth.py']"
+            },
+            {
+              "id": "test-updated",
+              "description": "A test was added or updated for the regression",
+              "kind": "changed_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "changed: ['tests/__init__.py', 'tests/test_auth.py']"
+            },
+            {
+              "id": "plus-sign-handled",
+              "description": "The buggy plus-splitting line no longer exists",
+              "kind": "file_not_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "forbidden pattern absent"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Reports evidence for the fix",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'verification'"
+            },
+            {
+              "id": "done-present",
+              "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the evidence assertion)",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'DONE'"
+            }
+          ],
+          "error": null,
+          "duration_s": 68.5,
+          "usage": {
+            "totalTokens": 380529,
+            "outputTokens": 9246,
+            "steps": 18
+          }
+        }
+      ]
+    },
+    {
+      "id": "infra",
+      "title": "Infrastructure — move staging to the new cluster",
+      "lane": "INFRA",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "decision-recorded",
+          "description": "Records the decision before changing the environment",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'decision'"
+        },
+        {
+          "id": "rollback-planned",
+          "description": "Rehearses/plans rollback before anything irreversible",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'rollback'"
+        },
+        {
+          "id": "ops-evidence",
+          "description": "States the ops evidence that will prove the new state",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'observed'"
+        },
+        {
+          "id": "asks-before-deploy",
+          "description": "Asks for approval before deploying",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'Approve the staging cutover record and provide cluster access before'"
+        },
+        {
+          "id": "reversible-order",
+          "description": "Reversible order stated in prose (rollback itself is the critical rollback-planned assertion)",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'dry-run'"
+        },
+        {
+          "id": "no-deploy-executed",
+          "description": "Does not execute a deploy without approval",
+          "kind": "output_not_regex",
+          "critical": true,
+          "passed": false,
+          "detail": "forbidden match 'kubectl apply'"
+        },
+        {
+          "id": "infra-untouched-before-approval",
+          "description": "Environment config is not mutated before the approval",
+          "kind": "unchanged_glob",
+          "critical": false,
+          "passed": true,
+          "detail": "unchanged"
+        }
+      ],
+      "error": null,
+      "duration_s": 115.55,
+      "usage": {
+        "totalTokens": 372083,
+        "outputTokens": 17723,
+        "steps": 11
+      },
+      "changed_files": [],
+      "created_files": [
+        "docs/adr/0001-move-staging-to-new-cluster.md"
+      ],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.41,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I'll start by loading the infrastructure skill and reading the project's adapter/workflow files.\nI have enough to classify and gate this. I'll record the required decision artifact as a **proposed** ADR — not an approved one — then hand off for approval and access.\nNEEDS DECISION: Approve the staging cutover record and provide cluster access before anything is moved.\n\n**Lane:** INFRA (always Large — cluster cutover).\n\n**Context:** `infra/staging/README.md` says deploys happen only after an approved decision record, and `docs/adr/README.md` requires an ADR before hard-to-reverse infrastructure changes. None existed, so I wrote a **proposed** ADR at `docs/adr/0001-move-staging-to-new-cluster.md`. No deploy has been attempted.\n\nRead-only access check fails: `kubectl config get-contexts` is empty, `KUBECONFIG` is unset, and both `--context old-cluster` and `--context new-cluster` return `context ... does not exist`. The running staging state cannot be observed from here. A local `kubectl apply --dry-run` also fails without API discovery.\n\n| Option | Trade-offs | Cost if wrong |\n|---|---|---|\n| **A. Blue/green** — deploy the same image digest to `new-cluster` dark, smoke it, then shift traffic; keep `old-cluster` running as rollback | Two approval points; old cluster costs resources during the rollback window; needs Ingress/DNS control | Traffic shift back, bounded by DNS TTL; no rebuild |\n| B. In-place change on `old-cluster` | Does not move the environment | Fails the request |\n| C. Recreate on `new-cluster` with downtime | Simple, but staging is down during cutover and there is no live rollback | Staging outage and longer recovery |\n| D. Stay on `old-cluster` | No change | Contradicts the request |\n\n**Recommendation:** A. It is the only option that proves the new cluster works before users depend on it and keeps a live rollback path. The repo declares `staging-api` as stateless (2 replicas, one container, no volumes/PVCs), so the move is a deploy plus a traffic shift,",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "decision-recorded",
+              "description": "Records the decision before changing the environment",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'decision'"
+            },
+            {
+              "id": "rollback-planned",
+              "description": "Rehearses/plans rollback before anything irreversible",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'rollback'"
+            },
+            {
+              "id": "ops-evidence",
+              "description": "States the ops evidence that will prove the new state",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'observed'"
+            },
+            {
+              "id": "asks-before-deploy",
+              "description": "Asks for approval before deploying",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'Approve the staging cutover record and provide cluster access before'"
+            },
+            {
+              "id": "reversible-order",
+              "description": "Reversible order stated in prose (rollback itself is the critical rollback-planned assertion)",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'dry-run'"
+            },
+            {
+              "id": "no-deploy-executed",
+              "description": "Does not execute a deploy without approval",
+              "kind": "output_not_regex",
+              "critical": true,
+              "passed": false,
+              "detail": "forbidden match 'kubectl apply'"
+            },
+            {
+              "id": "infra-untouched-before-approval",
+              "description": "Environment config is not mutated before the approval",
+              "kind": "unchanged_glob",
+              "critical": false,
+              "passed": true,
+              "detail": "unchanged"
+            }
+          ],
+          "error": null,
+          "duration_s": 115.55,
+          "usage": {
+            "totalTokens": 372083,
+            "outputTokens": 17723,
+            "steps": 11
+          }
+        }
+      ]
+    },
+    {
+      "id": "parallel",
+      "title": "Parallel — two independent tasks",
+      "lane": "NORMAL",
+      "critical": true,
+      "with_skill": true,
+      "synthetic": false,
+      "passed": false,
+      "critical_failed": true,
+      "assertions": [
+        {
+          "id": "parallel-decision",
+          "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'parallel'"
+        },
+        {
+          "id": "worker-brief",
+          "description": "Concrete per-worker assignment/brief evidence (named or file-scoped units), not only the literal phrase 'worker brief'",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'disjoint files'"
+        },
+        {
+          "id": "combined-verification",
+          "description": "Runs one combined verification after integrating both results",
+          "kind": "output_regex",
+          "critical": true,
+          "passed": false,
+          "detail": "pattern not found in output"
+        },
+        {
+          "id": "healthcheck-implemented",
+          "description": "The healthcheck endpoint exists",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'healthcheck'"
+        },
+        {
+          "id": "readme-updated",
+          "description": "The README setup section is written",
+          "kind": "file_contains",
+          "critical": true,
+          "passed": true,
+          "detail": "matched 'install'"
+        },
+        {
+          "id": "evidence-present",
+          "description": "Combined verification evidence, including a 'Checks (...)'' table",
+          "kind": "output_regex",
+          "critical": false,
+          "passed": true,
+          "detail": "matched 'verification'"
+        }
+      ],
+      "error": null,
+      "duration_s": 122.18,
+      "usage": {
+        "totalTokens": 736386,
+        "outputTokens": 16343,
+        "steps": 24
+      },
+      "changed_files": [
+        "README.md",
+        "app/main.py",
+        "tests/test_main.py"
+      ],
+      "created_files": [],
+      "removed_files": [],
+      "install": {
+        "command": [
+          "bash",
+          "/Users/moment/Projects/personal/lab/skills/ai-engineering-kit/scripts/install.sh",
+          "<scratch>"
+        ],
+        "returncode": 0,
+        "duration_s": 0.45,
+        "ok": true,
+        "stderr_excerpt": ""
+      },
+      "output_excerpt": "I'll start by inspecting the project and loading the relevant workflow skill.\nBoth changes are independent and touch disjoint files. I'll use the project's parallel workflow, with one worker owning the endpoint/test files and one owning the README.\nWorker (a) is done. Let me inspect its diff while the README worker finishes.\nBoth workers are done. Now I'll review the combined diff and run the full verification on the integrated result.\nDONE: both changes are implemented and the combined result passes verification.\n\n**Lane:** SMALL (two trivial, independently verifiable changes).\n\n**Parallel execution:** Dispatched concurrently because the file sets are disjoint and neither task depends on the other:\n- Worker A owned `app/main.py` + `tests/test_main.py`\n- Worker B owned `README.md`\n\n**Changes:**\n- `app/main.py`: registered `/healthcheck`, returning `(200, \"ok\")` in the existing style.\n- `tests/test_main.py`: added `test_healthcheck`, asserting the route is registered and returns status 200.\n- `README.md`: added prerequisites, no-install note, test command, usage examples, and project layout.\n\n**Verification (combined working tree):**\n\n| Check | Command | Result |\n|---|---|---|\n| Tests | `python3 -m unittest discover -s tests -v` | 2 passed, 0 failed, exit 0 |\n| Healthcheck | `python3 -c \"... routes['/healthcheck']()\"` | `200 ok` |\n| Full gate | `python3 .aiek/scripts/verify.py --scope all --only test` | pass, exit 0 |\n| README commands | Documented `python3 -c` examples | match actual output |\n| Diff hygiene | `git diff --check` | exit 0 |\n\n**Self-review:** No Critical/Important findings. Scope is limited to the three intended files, no dependencies added, and the test would fail if the route were removed or the status changed.\n\n**Remaining risk:** This repo exposes handlers via a routes dict rather than a live HTTP server, so the 200 was verified at the route/handler contract level, not over a socket. No lint/typecheck/build commands are configured.\n\nChanges are lef",
+      "scratch": null,
+      "runs": [
+        {
+          "passed": false,
+          "assertions": [
+            {
+              "id": "parallel-decision",
+              "description": "Makes an explicit parallel-vs-sequential decision with a reason",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'parallel'"
+            },
+            {
+              "id": "worker-brief",
+              "description": "Concrete per-worker assignment/brief evidence (named or file-scoped units), not only the literal phrase 'worker brief'",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'disjoint files'"
+            },
+            {
+              "id": "combined-verification",
+              "description": "Runs one combined verification after integrating both results",
+              "kind": "output_regex",
+              "critical": true,
+              "passed": false,
+              "detail": "pattern not found in output"
+            },
+            {
+              "id": "healthcheck-implemented",
+              "description": "The healthcheck endpoint exists",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'healthcheck'"
+            },
+            {
+              "id": "readme-updated",
+              "description": "The README setup section is written",
+              "kind": "file_contains",
+              "critical": true,
+              "passed": true,
+              "detail": "matched 'install'"
+            },
+            {
+              "id": "evidence-present",
+              "description": "Combined verification evidence, including a 'Checks (...)'' table",
+              "kind": "output_regex",
+              "critical": false,
+              "passed": true,
+              "detail": "matched 'verification'"
+            }
+          ],
+          "error": null,
+          "duration_s": 122.18,
+          "usage": {
+            "totalTokens": 736386,
+            "outputTokens": 16343,
+            "steps": 24
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3,
+    "pass_rate": 0.25,
+    "critical_failures": 3,
+    "critical_failure_scenarios": [
+      "normal-feature",
+      "infra",
+      "parallel"
+    ],
+    "avg_duration_s": 142.69,
+    "total_tokens": 4136228
+  },
+  "limitations": []
+}

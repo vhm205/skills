@@ -1,10 +1,10 @@
 {
-  "name": "ai-engineering-kit", "version": "0.1.0",
+  "name": "ai-engineering-kit", "version": "0.2.0",
   "description": "Local review UI and project-agnostic AI engineering workflow",
   "license": "MIT", "type": "module",
   "bin": { "aiek": "dist/server/cli.js" },
   "engines": { "node": ">=22.12.0" },
-  "files": ["dist", "core", "skills", "speckit", "adapters", "scripts/install.sh", "scripts/init-project.sh", "manifest.json", "SKILL.md", "NOTICE.md", "LICENSE"],
+  "files": ["dist", "core", "skills", "speckit", "adapters", "scripts/install.sh", "scripts/init-project.sh", "manifest.json", "KIT.md", "NOTICE.md", "LICENSE"],
   "scripts": {
     "build": "node scripts/version-check.mjs && tsc -p tsconfig.build.json && vite build",
     "dev": "npm run build && node dist/server/cli.js web",

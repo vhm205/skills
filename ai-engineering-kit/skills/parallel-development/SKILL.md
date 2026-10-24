@@ -1,6 +1,6 @@
 ---
 name: parallel-development
-description: "Evaluates independent ready tasks or unrelated proven failures when concurrent workers are available and permitted. Falls back to sequential execution."
+description: "Use when several ready tasks are independent or unrelated proven failures could be worked concurrently - 'these three tasks are independent; run them in parallel', 'dispatch workers', 'can this be parallelized?' - and the harness offers a parallel or subagent facility. Checks every pair against the independence rules, prepares isolation and worker briefs, dispatches all independent workers, then reads their diffs one at a time and runs one combined verification. Not for work that must stay sequential (use executing-task), creating the isolated checkouts themselves (use using-worktrees), or reviewing the combined result (use reviewing-change)."
 ---
 
 # Parallel Development
