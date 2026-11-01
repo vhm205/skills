@@ -128,8 +128,10 @@ The installer also copies the helper scripts to `.aiek/scripts/`:
 library only; `--help` on each).
 
 - `resolve_adapter.py --repo . --json` — resolved adapter commands, read-only.
-- `verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --dry-run` — prints
-  and runs the matching checks, writes evidence.
+- `verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --path tests/pure/test_x.py --dry-run`
+  — prints and runs the matching checks, writes evidence. A command may contain the adapter's
+  `{path}` placeholder; each `--path` value replaces it (repeatable, shell-quoted). A selected
+  command that still holds `{path}` is refused (exit 2) instead of running it literally.
 - `worktree.py --adapter .aiek/adapter.md --slug my-change --ticket OSA-123 --setup` — creates
   an isolated worktree using the adapter's patterns.
 - `traceability.py --file specs/007-my-change/spec.md` — checks each acceptance criterion has a
