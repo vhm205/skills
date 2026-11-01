@@ -494,6 +494,75 @@ verify:
             ["lint", "typecheck", "test_full"],
         )
 
+    def test_path_placeholder_is_substituted_for_each_path(self):
+        self.adapter(
+            '  test_targeted: python3 -c "import sys; print(sys.argv[1:])" {path}\n'
+        )
+        result = run(
+            VERIFY,
+            "--repo",
+            self.root,
+            "--only",
+            "test_targeted",
+            "--path",
+            "a.py",
+            "--path",
+            "b.py",
+            "--json",
+        )
+        self.assert_rc(result, 0)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["paths"], ["a.py", "b.py"])
+        self.assertIn("a.py b.py", payload["commands"][0]["command"])
+        self.assertIn("['a.py', 'b.py']", payload["commands"][0]["stdout_tail"])
+        evidence = (self.evidence() / "evidence.md").read_text()
+        self.assertIn("--path a.py --path b.py", evidence)
+
+    def test_path_with_spaces_is_shell_quoted(self):
+        self.adapter(
+            '  test_targeted: python3 -c "import sys; print(sys.argv[1])" {path}\n'
+        )
+        result = run(
+            VERIFY,
+            "--repo",
+            self.root,
+            "--only",
+            "test_targeted",
+            "--path",
+            "dir with space/a.py",
+            "--json",
+        )
+        self.assert_rc(result, 0)
+        payload = json.loads(result.stdout)
+        self.assertIn("dir with space/a.py", payload["commands"][0]["stdout_tail"])
+
+    def test_missing_path_refuses_instead_of_running_literal(self):
+        self.adapter(
+            '  test_fast: python3 -c "open(\'ran.txt\', \'w\').write(\'x\')" {path}\n'
+        )
+        result = run(VERIFY, "--repo", self.root, "--only", "test_fast")
+        self.assert_rc(result, 2)
+        self.assertIn("--path", result.stderr)
+        self.assertIn("test_fast", result.stderr)
+        self.assertFalse((self.root / "ran.txt").exists())
+        self.assertFalse(self.evidence().exists())
+
+    def test_path_leaves_commands_without_placeholder_unchanged(self):
+        self.adapter('  lint: python3 -c "print(\'lint\')"\n')
+        result = run(
+            VERIFY,
+            "--repo",
+            self.root,
+            "--only",
+            "lint",
+            "--path",
+            "unused.py",
+            "--json",
+        )
+        self.assert_rc(result, 0)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["commands"][0]["command"], 'python3 -c "print(\'lint\')"')
+
     def test_custom_evidence_dir(self):
         self.adapter('  lint: python3 -c "print(1)"\n')
         evidence = self.root / "artifacts"

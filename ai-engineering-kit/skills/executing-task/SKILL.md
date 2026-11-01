@@ -49,13 +49,15 @@ For each task, in tasks.md order (or the single Small change):
 `.aiek/scripts/verify.py` runs the targeted checks and writes evidence for the current task:
 
 ```bash
-python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --json --dry-run
+python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --path tests/pure/test_x.py --json --dry-run
 ```
 
-Drop `--dry-run` to run; it prints each command first and records exit codes and output. Use
-`--scope changed` (fast checks) inside the task loop and `--scope all`, or `verify.test_full`,
-before the completion gates. Without the script, the adapter's commands are still authoritative:
-run them by hand and quote the output.
+Drop `--dry-run` to run; it prints each command first and records exit codes and output. When a
+selected command contains the adapter's `{path}` placeholder, pass each path with `--path`
+(repeatable); `verify.py` refuses to run a literal `{path}` (exit 2). Use `--scope changed` (fast
+checks) inside the task loop and `--scope all`, or `verify.test_full`, before the completion gates.
+Without the script, the adapter's commands are still authoritative: run them by hand and quote the
+output.
 
 ## Rulings, not stalls
 

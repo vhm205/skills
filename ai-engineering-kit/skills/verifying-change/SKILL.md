@@ -38,14 +38,16 @@ output, and what it proves. See `shipping-infrastructure`.
 If the kit installed `.aiek/scripts/verify.py`, it runs this gate and writes the evidence:
 
 ```bash
-python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --json --dry-run
+python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --path tests/pure/test_x.py --json --dry-run
 ```
 
 Drop `--dry-run` to run. It prints each command before executing it, records exit codes and
-output, and compares failures against the adapter's baseline. `--scope changed` is the fast pass;
-`--scope all` is the full gate. The script is optional: when it is absent, cannot parse the
-adapter, or the claim needs a check it does not model, run the same commands by hand. A dry-run
-plan is not evidence; only executed commands and their real output count.
+output, and compares failures against the adapter's baseline. When a selected command contains the
+adapter's `{path}` placeholder, pass each path with `--path` (repeatable); the script refuses to
+run a literal `{path}` (exit 2). `--scope changed` is the fast pass; `--scope all` is the full
+gate. The script is optional: when it is absent, cannot parse the adapter, or the claim needs a
+check it does not model, run the same commands by hand. A dry-run plan is not evidence; only
+executed commands and their real output count.
 
 ## What each claim needs
 

@@ -288,7 +288,7 @@ Installer còn copy các script hỗ trợ vào `.aiek/scripts/` (Python 3, ch�
 | Script | Việc | Ghi chú an toàn |
 |---|---|---|
 | `resolve_adapter.py --repo . --json` | resolve command từ adapter + auto-discovery | chỉ đọc, không chạy lệnh |
-| `verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --dry-run` | in và chạy các check khớp scope, ghi `evidence.md`/`evidence.json`, so baseline | in lệnh trước khi chạy; từ chối deploy/merge/publish |
+| `verify.py --adapter .aiek/adapter.md --scope changed --only test,lint --path tests/pure/test_x.py --dry-run` | in và chạy các check khớp scope, ghi `evidence.md`/`evidence.json`, so baseline | in lệnh trước khi chạy; từ chối deploy/merge/publish; command có `{path}` mà thiếu `--path` thì từ chối (exit 2), không chạy literal |
 | `worktree.py --adapter ... --slug my-change --ticket OSA-123 --setup --baseline` | tạo worktree cô lập theo pattern của adapter | không `--force`, không xoá worktree khác |
 | `traceability.py --file specs/007-x/spec.md` | kiểm tra mỗi AC có row + proof | chỉ đọc |
 

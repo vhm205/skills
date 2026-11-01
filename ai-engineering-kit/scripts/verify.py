@@ -12,6 +12,8 @@ Safety rules, enforced here rather than left to the agent:
 * every command is printed before it runs;
 * deploy / release / publish / merge / push / destroy / migration / cloud-CLI style
   commands are refused with a reason — they are never executed, even if an adapter says so;
+* a ``{path}`` placeholder in a selected command is replaced only by explicit ``--path``
+  values; without one the command is refused (exit 2) instead of running a literal {path};
 * ``--dry-run`` prints the plan and executes nothing, writing no evidence;
 * commands run with a timeout and a non-interactive stdin; no secret is read or printed.
 
@@ -397,6 +399,19 @@ def _resolve_selection(resolved, scope, only):
     return selected, None
 
 
+def _apply_paths(selected, paths):
+    """Replace the ``{path}`` placeholder in selected commands.
+
+    Returns the keys whose command still carries an unsubstituted placeholder so the
+    caller can refuse them instead of executing a literal ``{path}``.
+    """
+    if paths:
+        quoted = " ".join(shlex.quote(os.path.expanduser(str(path))) for path in paths)
+        for item in selected:
+            item["command"] = item["command"].replace("{path}", quoted)
+    return [item["key"] for item in selected if "{path}" in item["command"]]
+
+
 def _write_evidence(evidence_dir, payload, results):
     evidence_dir = Path(evidence_dir)
     evidence_dir.mkdir(parents=True, exist_ok=True)
@@ -414,7 +429,12 @@ def _write_evidence(evidence_dir, payload, results):
     lines.append("- repo: %s" % payload["repo"])
     lines.append("- scope: %s" % payload["scope"])
     lines.append("- result: **%s**" % payload["result"].upper())
-    lines.append("- command: `bash .aiek/scripts/verify.py --adapter .aiek/adapter.md`")
+    command_line = "bash .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope %s" % (
+        payload["scope"],
+    )
+    for path in payload.get("paths") or []:
+        command_line += " --path %s" % path
+    lines.append("- command: `%s`" % command_line)
     lines.append("")
     lines.append("| # | check | command | exit | status | duration |")
     lines.append("|---|---|---|---|---|---|")
@@ -451,8 +471,8 @@ def _write_evidence(evidence_dir, payload, results):
     return {"json": str(json_path), "markdown": str(markdown_path)}
 
 
-def verify(adapter=None, repo=None, scope="changed", only=None, json_output=False,
-           dry_run=False, timeout=600, evidence_dir=None):
+def verify(adapter=None, repo=None, scope="changed", only=None, paths=None,
+           json_output=False, dry_run=False, timeout=600, evidence_dir=None):
     """Run adapter verification commands; returns the process exit code (0/1/2)."""
     warnings = []
     try:
@@ -493,6 +513,17 @@ def verify(adapter=None, repo=None, scope="changed", only=None, json_output=Fals
             file=sys.stderr,
         )
         return 1
+
+    missing_paths = _apply_paths(selected, paths)
+    if missing_paths:
+        print(
+            "error: command(s) %s contain the {path} placeholder but no --path was given; "
+            "pass --path <file-or-dir> once per path (resolve it the way the command does, "
+            "e.g. tests/pure/test_x.py for a command that cds into a package directory), or "
+            "use --only with a command that needs no path" % ", ".join(missing_paths),
+            file=sys.stderr,
+        )
+        return 2
 
     baselines = _load_baselines(resolved, repo_path, warnings)
     if baselines["prose_entries"]:
@@ -536,6 +567,7 @@ def verify(adapter=None, repo=None, scope="changed", only=None, json_output=Fals
             "dry_run": True,
             "result": "refused" if refused else "planned",
             "scope": scope,
+            "paths": paths,
             "adapter": adapter_path,
             "repo": str(repo_path),
             "commands": [
@@ -646,6 +678,7 @@ def verify(adapter=None, repo=None, scope="changed", only=None, json_output=Fals
         "result": result_name,
         "scope": scope,
         "only": only_keys,
+        "paths": paths,
         "adapter": adapter_path,
         "repo": str(repo_path),
         "started_at": started_at,
@@ -707,8 +740,10 @@ def main(argv=None):
         epilog=(
             "Scopes: changed = lint, typecheck, test_fast (falls back to test); "
             "all = lint, typecheck, build, test_full (falls back to test), e2e, uat. "
+            "Commands may contain a {path} placeholder; pass it with --path (repeatable). "
             "Exit codes: 0 = pass, 1 = fail/refusal, 2 = bad usage. "
-            "Example: verify.py --adapter .aiek/adapter.md --scope changed --json"
+            "Example: verify.py --adapter .aiek/adapter.md --scope changed "
+            "--path tests/pure/test_x.py --json"
         ),
     )
     parser.add_argument(
@@ -727,6 +762,17 @@ def main(argv=None):
         "--only",
         metavar="KEYS",
         help="comma-separated verify.* keys to run, e.g. test,lint,typecheck",
+    )
+    parser.add_argument(
+        "--path",
+        action="append",
+        dest="paths",
+        metavar="PATH",
+        help=(
+            "substitute the {path} placeholder in selected commands; repeat once per path. "
+            "Resolve it the way the command will (for a command that cds into a package "
+            "directory, the path is relative to that directory)"
+        ),
     )
     parser.add_argument(
         "--json", action="store_true", help="print the machine-readable evidence JSON"
@@ -756,6 +802,7 @@ def main(argv=None):
         repo=args.repo,
         scope=args.scope,
         only=args.only,
+        paths=args.paths,
         json_output=args.json,
         dry_run=args.dry_run,
         timeout=args.timeout,

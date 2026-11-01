@@ -38,6 +38,14 @@ another project). The kit is now installable with one `npx` command, without a c
   `--prefix` cannot be combined with `--link`. Existing installations keep their bare names
   until reinstalled; remove the old directories after switching.
 
+### Fixed
+
+- `scripts/verify.py` and the optional helper-script guidance: a selected command containing the
+  adapter's `{path}` placeholder now runs with the values passed via `--path` (repeatable,
+  shell-quoted) instead of a literal `{path}`, and a command still holding the placeholder is
+  refused with exit 2 instead of executed. `--path` values are recorded in the JSON payload and in
+  `evidence.md`, so the evidence table names the exact files that were checked.
+
 ## [0.2.0] — 2026-10-23
 
 Phase 1 of the kit optimization plan: bring the 15 skills up to Agent Skills best practice and
