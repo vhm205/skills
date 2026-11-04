@@ -161,6 +161,19 @@ is impossible, report BLOCKED.
   that description; it does not re-author the body, and no skill opens, pushes or merges a PR
   unless the person asked or the adapter's `integration` policy authorizes it.
 
+## Announce before execution
+
+Before the first edit of an implementation step, report the plan to the person: lane and the
+one-line reason, the scope you expect to touch, the checks that will run with rough durations,
+and every long-running task in the plan (E2E suite, full test gate, UAT, load test, large
+build, migration, deploy). If there is none, say so.
+
+Where the adapter defines a lane-scaled verification ladder, that ladder decides which checks
+apply; a Small change does not inherit the full gate. A long-running check the ladder does not
+require must be dropped or explicitly approved before it runs. A check the lane does require is
+named up front so the person can veto before the time is spent. Announcing the plan is not
+asking permission to continue task by task - ask only about the expensive or risky parts.
+
 ## Reviewer policy
 
 | Lane | Reviewer |

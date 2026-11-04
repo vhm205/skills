@@ -1,6 +1,6 @@
 ---
 name: executing-task
-description: "Use when implementing an authorized Small change or a ready task from the plan - 'implement T012', 'start coding', 'execute the plan', 'do the next task', 'fix this small thing'. Works strictly from the request or tasks.md, keeps scope and task order, runs the task's targeted checks (verify.test_fast) while keeping the final gate for the whole change, records rulings instead of stalling, and closes with the completion gates. Not for discovery, planning or task breakdown (shaping-feature and Spec Kit own those), the red/green test cycle itself (use test-driven-development), failures whose cause is not proven (use systematic-debugging), or infrastructure and deployment work (use shipping-infrastructure)."
+description: "Use when implementing an authorized Small change or a ready task from the plan - 'implement T012', 'start coding', 'execute the plan', 'do the next task', 'fix this small thing'. Announces the execution plan - lane, scope, checks and any E2E or long-running gate - before the first edit, works strictly from the request or tasks.md, keeps scope and task order, runs the task's targeted checks (verify.test_fast) while keeping the lane's final gate for the whole change, records rulings instead of stalling, and closes with the completion gates. Not for discovery, planning or task breakdown (shaping-feature and Spec Kit own those), the red/green test cycle itself (use test-driven-development), failures whose cause is not proven (use systematic-debugging), or infrastructure and deployment work (use shipping-infrastructure)."
 ---
 
 # Executing a Task
@@ -24,6 +24,14 @@ Go back to Spec Kit `tasks`.
 3. Run relevant baseline checks once; reuse an unchanged isolation baseline if already run.
 4. If the adapter or the task requires TDD, load `test-driven-development`.
 
+## Announce the plan first (mandatory)
+
+Before the first edit, report the plan defined by `.aiek/core/WORKFLOW.md` (Announce before
+execution): lane and reason, scope, the checks with rough durations, and every long-running
+gate (E2E, full suite, UAT, large build) with an estimate; say so when there is none. Use the
+adapter's lane-scaled ladder - Small work runs targeted checks, not the full gate - and do not
+run an expensive check the ladder does not require without explicit approval.
+
 ## The task loop
 
 Follow completion ownership in `.aiek/core/WORKFLOW.md`. Inside an upstream implementation
@@ -38,8 +46,8 @@ For each task, in tasks.md order (or the single Small change):
    No "while I'm here" edits.
 4. **Run the task's checks** (its test, the adapter's targeted command, or `verify.test_fast`).
    If something fails and the cause is not obvious, switch to `systematic-debugging`. Do not
-   guess-fix. Keep the fast checks for the loop; `verify.test_full` is the gate for the combined
-   change before DONE.
+   guess-fix. Keep the fast checks for the loop; before DONE run the final gate the adapter's
+   lane-scaled ladder requires for the combined change (Small: the same targeted checks).
 5. **Mark progress.** Tick the task in tasks.md (`- [ ]` → `- [x]`). Commit if the adapter's
    commit policy says per-task commits.
 6. **Record rulings** (see below) before moving on.
@@ -55,9 +63,10 @@ python .aiek/scripts/verify.py --adapter .aiek/adapter.md --scope changed --only
 Drop `--dry-run` to run; it prints each command first and records exit codes and output. When a
 selected command contains the adapter's `{path}` placeholder, pass each path with `--path`
 (repeatable); `verify.py` refuses to run a literal `{path}` (exit 2). Use `--scope changed` (fast
-checks) inside the task loop and `--scope all`, or `verify.test_full`, before the completion gates.
-Without the script, the adapter's commands are still authoritative: run them by hand and quote the
-output.
+checks) inside the task loop. Before the completion gates run only the checks the adapter's
+lane-scaled ladder requires; `--scope all` (full gate + E2E + UAT) is release-only when that
+ladder exists. Without the script, the adapter's commands are still authoritative: run them by
+hand and quote the output.
 
 ## Rulings, not stalls
 
@@ -88,6 +97,8 @@ hooks without repeating those gates or emitting DONE early. Integration uses `fi
 - "While I'm here" cleanup that quietly widens the task's diff and its review surface.
 - Ticking a task from an earlier successful run after a later edit invalidated that run.
 - Running the full suite for every task, or only targeted checks and never the final gate.
+- Running a long suite (full gate, full E2E) the lane ladder did not ask for, and only
+  discovering its cost after the person asked for a small change.
 - Editing spec/plan/tasks to match the code; rulings cover silent artifacts, not contradictions.
 - Starting execution while the artifact is still not READY TO BUILD.
 

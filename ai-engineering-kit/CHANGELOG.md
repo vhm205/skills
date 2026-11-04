@@ -31,6 +31,12 @@ another project). The kit is now installable with one `npx` command, without a c
 
 ### Added
 
+- Execution announces its plan before the first edit. `executing-task` and `verifying-change`
+  report lane, scope, checks and any long-running gate (E2E, full suite, UAT, build) up front,
+  and `core/WORKFLOW.md` gains an **Announce before execution** section. Where the adapter
+  defines a lane-scaled verification ladder, the final gate is the lane's gate - a Small change
+  does not inherit the full suite - and an expensive check the ladder does not require needs
+  explicit approval before it runs.
 - `scripts/install.sh --prefix <p|none>`: install skills under a namespace (`aiek-` by default)
   so they cannot collide with a project's own skills or another kit. The prefix is applied to
   the skill directory, the `SKILL.md` `name`, the router block in `AGENTS.md`/`CLAUDE.md` and
