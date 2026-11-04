@@ -1,6 +1,6 @@
 ---
 name: verifying-change
-description: "Use when a change is about to be claimed done, fixed, passing or ready to merge, or when asked to 'run the tests', 'prove it', 'is it done?', 'verify this'. Runs the checks that match the claim and the changed scope - fast targeted checks first, then the full gate - plus lint, typecheck, build, e2e or observed system state, compares the result against the project baseline, and returns the evidence table for DONE. Not for reviewing code or diffs (use reviewing-change), release acceptance and sign-off (use accepting-change), or investigating a failure whose cause is not proven (use systematic-debugging)."
+description: "Use when a change is about to be claimed done, fixed, passing or ready to merge, or when asked to 'run the tests', 'prove it', 'is it done?', 'verify this'. Announces the check plan and any expensive gate (full suite, full E2E, UAT) before running it, then runs the checks that match the claim and the changed scope - fast targeted checks first, then the lane's final gate - plus lint, typecheck, build, e2e or observed system state, compares the result against the project baseline, and returns the evidence table for DONE. Not for reviewing code or diffs (use reviewing-change), release acceptance and sign-off (use accepting-change), or investigating a failure whose cause is not proven (use systematic-debugging)."
 ---
 
 # Verifying a Change
@@ -23,10 +23,16 @@ output, and what it proves. See `shipping-infrastructure`.
 
 ## The gate
 
+0. **Announce the check plan** before running anything (or confirm it if the implementation
+   announcement already covered the same commands): the checks you will run, expected duration,
+   and every expensive check in the plan (full suite, full E2E, UAT, large build). If a check the
+   adapter's lane-scaled ladder does not require is still in the plan, drop it or get explicit
+   consent - a long suite for a copy fix is cost, not evidence.
 1. **Identify** which commands prove the claim. Take them from the adapter: `verify.test_fast`
    for quick iteration, `verify.test_full` for the final gate, plus `verify.lint`,
    `verify.typecheck`, `verify.build`, `verify.e2e` and any check a task or acceptance criterion
-   names. The final gate is the full selection, not the fast one.
+   names. Where the adapter defines a lane-scaled ladder, that ladder defines the final gate;
+   otherwise the final gate is the full selection, not the fast one.
 2. **Run** the relevant checks after the last change affecting their scope. Reuse evidence
    for unchanged state and scope as defined in `.aiek/core/WORKFLOW.md`.
 3. **Read** the output: exit code, failure count, warnings that matter. Not just the last line.
@@ -45,9 +51,10 @@ Drop `--dry-run` to run. It prints each command before executing it, records exi
 output, and compares failures against the adapter's baseline. When a selected command contains the
 adapter's `{path}` placeholder, pass each path with `--path` (repeatable); the script refuses to
 run a literal `{path}` (exit 2). `--scope changed` is the fast pass; `--scope all` is the full
-gate. The script is optional: when it is absent, cannot parse the adapter, or the claim needs a
-check it does not model, run the same commands by hand. A dry-run plan is not evidence; only
-executed commands and their real output count.
+gate, release-only when the adapter defines a lane-scaled ladder. The script is optional: when it
+is absent, cannot parse the adapter, or the claim needs a check it does not model, run the same
+commands by hand. A dry-run plan is not evidence; only executed commands and their real output
+count.
 
 ## What each claim needs
 
@@ -72,6 +79,8 @@ would verify it. Never paper over it.
 - A mocked unit test proves the mock, not the integration behavior the claim is about.
 - Matching a failure to the baseline without naming the entry can hide a different failure.
 - Dry-run output and a script's exit code are not executed evidence.
+- Running a long suite (full gate, full E2E) for a diff the lane ladder says only needs targeted
+  checks, without saying so first.
 - Reusing the pre-review-fix run after the fixes, because the command did not change.
 
 ## Red-flag words
