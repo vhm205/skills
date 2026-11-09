@@ -1,0 +1,2662 @@
+{
+  "schema": "aiek-eval-report/2",
+  "synthetic": false,
+  "manifest_hash": "80e9c6fb87047bd148a2431294ce20d784428eb83b71d3f19580676c2ddebec0",
+  "variants": {
+    "full-kit": {
+      "scheduled": 9,
+      "started": 9,
+      "completed": 9,
+      "graded": 3,
+      "successes": 3,
+      "pending_review": 6,
+      "unavailable": 0,
+      "errors": 0,
+      "quality_rate": 1.0,
+      "end_to_end_rate": 0.3333333333333333,
+      "coverage": 0.3333333333333333,
+      "all_trials_success": null,
+      "compliance_rate": 1.0,
+      "critical_violations": 0,
+      "duration_s": 417.141163,
+      "total_tokens": 1507120,
+      "known_tokens": 1507120,
+      "usage_coverage": 1.0,
+      "cost_usd": null,
+      "cost_per_success_usd": null,
+      "human_interventions": null
+    },
+    "no-kit": {
+      "scheduled": 9,
+      "started": 9,
+      "completed": 9,
+      "graded": 3,
+      "successes": 3,
+      "pending_review": 6,
+      "unavailable": 0,
+      "errors": 0,
+      "quality_rate": 1.0,
+      "end_to_end_rate": 0.3333333333333333,
+      "coverage": 0.3333333333333333,
+      "all_trials_success": null,
+      "compliance_rate": null,
+      "critical_violations": 0,
+      "duration_s": 178.077561,
+      "total_tokens": 359870,
+      "known_tokens": 359870,
+      "usage_coverage": 1.0,
+      "cost_usd": null,
+      "cost_per_success_usd": null,
+      "human_interventions": null
+    }
+  },
+  "per_scenario": [
+    {
+      "id": "bug",
+      "variants": {
+        "full-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 3,
+          "successes": 3,
+          "pending_review": 0,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": 1.0,
+          "end_to_end_rate": 1.0,
+          "coverage": 1.0,
+          "all_trials_success": true,
+          "compliance_rate": 1.0,
+          "critical_violations": 0,
+          "duration_s": 210.405584,
+          "total_tokens": 932112,
+          "known_tokens": 932112,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        },
+        "no-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 3,
+          "successes": 3,
+          "pending_review": 0,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": 1.0,
+          "end_to_end_rate": 1.0,
+          "coverage": 1.0,
+          "all_trials_success": true,
+          "compliance_rate": null,
+          "critical_violations": 0,
+          "duration_s": 54.732586,
+          "total_tokens": 164391,
+          "known_tokens": 164391,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        }
+      },
+      "delta": 0.0
+    },
+    {
+      "id": "review-diff",
+      "variants": {
+        "full-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 0,
+          "successes": 0,
+          "pending_review": 3,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": null,
+          "end_to_end_rate": 0.0,
+          "coverage": 0.0,
+          "all_trials_success": null,
+          "compliance_rate": 1.0,
+          "critical_violations": 0,
+          "duration_s": 90.336197,
+          "total_tokens": 237391,
+          "known_tokens": 237391,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        },
+        "no-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 0,
+          "successes": 0,
+          "pending_review": 3,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": null,
+          "end_to_end_rate": 0.0,
+          "coverage": 0.0,
+          "all_trials_success": null,
+          "compliance_rate": null,
+          "critical_violations": 0,
+          "duration_s": 74.443401,
+          "total_tokens": 129409,
+          "known_tokens": 129409,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        }
+      },
+      "delta": null
+    },
+    {
+      "id": "vague-ticket",
+      "variants": {
+        "full-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 0,
+          "successes": 0,
+          "pending_review": 3,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": null,
+          "end_to_end_rate": 0.0,
+          "coverage": 0.0,
+          "all_trials_success": null,
+          "compliance_rate": 1.0,
+          "critical_violations": 0,
+          "duration_s": 116.399382,
+          "total_tokens": 337617,
+          "known_tokens": 337617,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        },
+        "no-kit": {
+          "scheduled": 3,
+          "started": 3,
+          "completed": 3,
+          "graded": 0,
+          "successes": 0,
+          "pending_review": 3,
+          "unavailable": 0,
+          "errors": 0,
+          "quality_rate": null,
+          "end_to_end_rate": 0.0,
+          "coverage": 0.0,
+          "all_trials_success": null,
+          "compliance_rate": null,
+          "critical_violations": 0,
+          "duration_s": 48.901574,
+          "total_tokens": 66070,
+          "known_tokens": 66070,
+          "usage_coverage": 1.0,
+          "cost_usd": null,
+          "cost_per_success_usd": null,
+          "human_interventions": null
+        }
+      },
+      "delta": null
+    }
+  ],
+  "trial_ids": [
+    "trial-0000",
+    "trial-0001",
+    "trial-0002",
+    "trial-0003",
+    "trial-0004",
+    "trial-0005",
+    "trial-0006",
+    "trial-0007",
+    "trial-0008",
+    "trial-0009",
+    "trial-0010",
+    "trial-0011",
+    "trial-0012",
+    "trial-0013",
+    "trial-0014",
+    "trial-0015",
+    "trial-0016",
+    "trial-0017"
+  ],
+  "verdict": "inconclusive",
+  "release_proof": false,
+  "limitations": [
+    "Small pilot; no statistical superiority claim.",
+    "Cost unavailable without a versioned price table and complete usage.",
+    "Unknown observations are not failures or proof of absence.",
+    "macOS sandbox capability probes are local; Linux requires an isolated runner adapter.",
+    "DSH official provider only; no custom global plugins or settings are loaded.",
+    "Model patch pins requested identity; provider-returned model identity may be unavailable."
+  ],
+  "manifest": {
+    "schema": "aiek-eval-experiment/2",
+    "suite": {
+      "schema": "aiek-eval-suite/2",
+      "id": "pilot",
+      "harness": "dsh",
+      "model": "deepseek-flash",
+      "scenarios": [
+        "bug",
+        "review-diff",
+        "vague-ticket"
+      ],
+      "variants": [
+        "no-kit",
+        "full-kit"
+      ],
+      "repeats": 3,
+      "max_trials": 18,
+      "timeout_s": 900,
+      "seed": 42,
+      "required_capabilities": [
+        "headless",
+        "fresh_session",
+        "model_pinning",
+        "global_config_isolation",
+        "grader_isolation",
+        "tool_runtime"
+      ]
+    },
+    "harness": {
+      "name": "dsh",
+      "binary_available": true,
+      "version": "0.2.1-rc.3",
+      "capabilities": {
+        "headless": true,
+        "fresh_session": true,
+        "skill_events": true,
+        "tool_events": true,
+        "usage": true,
+        "grader_isolation": true,
+        "global_config_isolation": true,
+        "model_pinning": true,
+        "tool_runtime": true,
+        "authentication": true
+      },
+      "limitations": [
+        "macOS sandbox capability probes are local; Linux requires an isolated runner adapter.",
+        "DSH official provider only; no custom global plugins or settings are loaded.",
+        "Model patch pins requested identity; provider-returned model identity may be unavailable."
+      ]
+    },
+    "kit_content_hash": "ebaafffb06baac56752a350243b0644ae9902b2efeec842bbe675ab9a76af5ad",
+    "source_hashes": {
+      "core/WORKFLOW.md": "ed3f5d7fcea905281e3410750bf22f2158eab52306d274524407f043f7f547be",
+      "core/adapter-contract.md": "cfd9e832ee26c7635306cb650f620906c30b0e13f6d2582b9d830f4202196694",
+      "core/classification.md": "d242bed3859b9ea116d7665d633de6bc5a9a928e99c98d87f7bc23f5a4aed917",
+      "core/command-discovery.md": "9560aec92f082f4144e7e77f6a96bca6d3879b028d9ac88d6c484028456d6bb7",
+      "core/documentation.md": "1e52269edc83f372b936f3f89e8955d09fefb3c17e922cb18f4918c752074804",
+      "core/handoffs.md": "e9f3c1753682bcaab4c3f28d785e2fa9f34ed521a2f04246cc8ef7f460eef391",
+      "core/parallelism.md": "6d6da49255b88971220c89ed8965c026059c7f1e0023ed5ff37370b44c38a4f0",
+      "core/router.md": "73a5bee7a548c5711e06e797730ac9817e3faf7a4366cca2a5833cb12648754b",
+      "skills/accepting-change/SKILL.md": "1e50581b1c1bf738c722a1074929c221248246b69e158d93e0e2e94ab1e858c9",
+      "skills/accepting-change/references/ops-acceptance-template.md": "bc3286d5afa330c31f43cd381e7c7d1882bc6e01ce067cdc44dbc3088f520d34",
+      "skills/accepting-change/references/uat-sheet-template.md": "0b28e2a41bd25d71fc3f13bf6ac8085216b28e07d8b1e9fbc5ce1170ec0dbd10",
+      "skills/authoring-pr/SKILL.md": "6b12b8734785d3733af9cfbf5655ce9863b5b3f1664b038b19ef302e9956fc11",
+      "skills/authoring-pr/references/pr-sections.md": "b4521039551fdd1aa46004b356f7ac52e6cd871cb857dbe52d240f0e66a12cb6",
+      "skills/authoring-pr/references/self-review-checklist.md": "ed578aac11ca18cc8af7665cb404ee521ac8921d41fea43e38f25981958cda96",
+      "skills/executing-task/SKILL.md": "774a5e50f1be759507a7407d60d7b31b2150d2dee386c3c89ec254f0575fe875",
+      "skills/exploring-idea/SKILL.md": "8b0c889087de5904834165789b3a6a6e9c19f6cd474c7bc1149a83c5ce7d7c81",
+      "skills/exploring-idea/references/idea-note-template.md": "d4ede65748d8ee8504c5d6e457332d684a9c9665858699a7a18c160424f67df2",
+      "skills/finishing-branch/SKILL.md": "d3692bb4ae24ec0b611382e2e48f6500386e9a7aa59ccfca3dc749bdf0946baf",
+      "skills/intaking-ticket/SKILL.md": "9ef76ce0dd0ced33a059a1e6692beeb8a5479c7e1b0fd8724a564b3b1804776a",
+      "skills/intaking-ticket/references/ac-quality-checklist.md": "8500cc6d19322d89366298db20aecd5c7fb90161396761c585086dab40e423fe",
+      "skills/parallel-development/SKILL.md": "ad1d9cc58a3016706a51449223e662ad8e68831323c06a1a5df93d5b84b589d3",
+      "skills/parallel-development/references/worker-brief.md": "40aa7369c62b8553ca4eef0a8a37737cfce4c281fd8050d1eafdbf54630c9769",
+      "skills/reviewing-change/SKILL.md": "a57645a8e6c636a57a5a58cd12c320925a06f615f1f31c6a7d5f9eb1d2a85a8a",
+      "skills/reviewing-change/references/receiving-feedback.md": "c0acb3d1d97d5203b353994bdc719f2a030ec574f9f7757d51401e90aa962eaf",
+      "skills/reviewing-change/references/reviewer-prompt.md": "4bc223ab72e344b4446e2b90a9ecb257ca78d459c99971ec501a4fd709eceb0e",
+      "skills/shaping-feature/SKILL.md": "c6049d8e22d089140551458fd9599ea98221622dc344b8a7298994218a9d839f",
+      "skills/shaping-feature/references/feature-brief-template.md": "bf7cfc3455044cd722de1718043c086bd4c38fafb11064aef9f523aa5812bdd8",
+      "skills/shaping-project/SKILL.md": "159794ba3d36d28dae5153702d0e9946086b305f79b29144b26126f4e0e5597e",
+      "skills/shaping-project/references/project-brief-template.md": "62521aec9f860006c9c411324178f37a4eaadd77e8965b4b67ea1d4fde494b17",
+      "skills/shipping-infrastructure/SKILL.md": "3aba0291ca17ca44f89d9dc2d764299967e598880d7eb747ea14f52070723005",
+      "skills/shipping-infrastructure/references/ops-evidence-sheet.md": "45194325afdc2d7891685d216df2d4021f56eed6d289bc70205c60e6db21e5c9",
+      "skills/systematic-debugging/SKILL.md": "b0bf4b33c7fcc56683848a5bb85bfbbf1830f26c8bb57d4152c1a8732b716712",
+      "skills/systematic-debugging/references/root-cause-tracing.md": "ebf3c69364d2cbc7ad94bd85bf0397372f3f0fdfa5b6a2fb8b056fb0f000e96d",
+      "skills/test-driven-development/SKILL.md": "0c9ad31b73213873e93eaa0057e544615ff84d6122fb7b28257c7032665be5dc",
+      "skills/using-worktrees/SKILL.md": "ef3e8cbea92b115b59ad773757f32ab5b927c1cb452574fbfdc241586f849dca",
+      "skills/verifying-change/SKILL.md": "70f686783ed550d0d6206fe5d233c06cc914f75391398ad3b8ea53ee1b434b05",
+      "adapters/default/adapter.md": "6605db7bf7e0fb81f96f57df67b49a90dc1bcea46c72336c01e361a9ce3464e0",
+      "scripts/_eval/__init__.py": "d1cb44c8af8bf9a4dc46335a3753493c66c3dfbdaa6abe7d40eb279037e3ed4e",
+      "scripts/_eval/cli.py": "1db32b76d83af12302e895781b16ea6aa242aff1bafc9ddf348947df9bc61323",
+      "scripts/_eval/contracts.py": "4f673f2064f4b4c9918bfe043a9a267a7218269d9b3fd53903450ee48378e553",
+      "scripts/_eval/dsh.py": "88619a54d5b6e9631305875588bb57fda84f5865743ba17eb9c8ca2b8ecc70e2",
+      "scripts/_eval/graders.py": "bc52853ca97618fb7389ae5e3f733b1859cb28666163e9f9ecbd5a7ed26e3701",
+      "scripts/_eval/harnesses.py": "06c2d827c21c9d13ad42e5dbcb859661e2318d9adba7d221a58f53c1a33a7983",
+      "scripts/_eval/process.py": "6055c3a3dace9f9fb823344e8798ce9eb32275e1f8d7c58db335ab3c7ba99fef",
+      "scripts/_eval/reporting.py": "e950b42d13237ce5d21e9ff12567699096072b8abc3904927509b41642b19516",
+      "scripts/_eval/runner.py": "919635d683d8be6aa4934b1f16201d9d3df7115c793024460daf5ac1bdaf827c",
+      "scripts/_eval/schemas/assertion.json": "205787f4d740eaa7c6d08c831419ed42666033016ed9c0739fa283b56a8d8d79",
+      "scripts/_eval/schemas/experiment.json": "f37cb43ef2144e2f12aa973253919027573e568322f9a6ab9f05caca4332a03b",
+      "scripts/_eval/schemas/label.json": "5b272e3020f3f08f87584202ab087d0b476daf2c27176bba104b4ad52b7370a5",
+      "scripts/_eval/schemas/report.json": "8174c73d5726a6b927d40ec287be83e056b15053f76bd0de55c73ba5448e4ca6",
+      "scripts/_eval/schemas/scenario.json": "582c60d03e3ed19cd65a6eb65978f6ecba94fc214b771a8f9fe57570f0d847f5",
+      "scripts/_eval/schemas/suite.json": "971fcb1fa3985cd6aaca1fc979d0662ae26b0538e7f9a4d12c571e4b80144627",
+      "scripts/_eval/schemas/trial.json": "cdb674407942d483f692b77036f36f4311f733b894f07a9988b4e49f3a990f27",
+      "scripts/_eval/workspace.py": "219548f1023ab645fa63035cb8909309552a9b80b41b9fdd0f23d9816d338d7a",
+      "scripts/install.sh": "6af94e2492924690f52b5521170719085ade6263c001934da13ecddd67d0063c",
+      "scripts/eval_tasks.py": "c900e1b45217d04611dd2fea08076e31733d84063bf663f96819cf0ed831b01f",
+      "scripts/eval_trigger.py": "98910fc08fd20f261462e5e7ec8e13dba690643ca7f46ccb99c33601b311492c",
+      "scripts/resolve_adapter.py": "45c7dc10777d2b704202ea8f511a658f8589589eb04462350d91698ecb5ce6ec",
+      "scripts/verify.py": "7523ecc86f15cde7b3c5ceba2191f4a21724d88f4bac30552b60c02fe671e629",
+      "scripts/worktree.py": "931c41551fd465cd3f91aa28dc92547a2969afd3c75154de83710e96bd97212e",
+      "scripts/traceability.py": "41199caabe21e8ac6e00da158a7a57a3172a1ab921cce8679e02276541044d94",
+      "scripts/_adapter_yaml.py": "9ad8ebcd3321e104738ff66ddb588f44039d193c96794be7d42e8043575b7384",
+      "manifest.json": "14ed8db9acb7afe18656cf47bc200429d56eadaeed5f1b6bf2bccdae6d271ac7",
+      "package.json": "e7e8c5fbb9e84c4937b490c2cb776582193fffff2976e712c83257757de2d749",
+      "evals/oracles/plus_email.py": "9b12ebdb26b2c588b4ca12b229850ee8c9024c10b49ffd3927eb710b213aa357",
+      "evals/labels/README.md": "769e20dc8c87bab9e5512ee78f0086310698dd2086c4dbcb5f7ddc04a201ebf7"
+    },
+    "fixtures": {
+      "bug": "ef4720f85058e7d0afb6b33b006dd119727e5513d8ef03ce7cabc43e93dee978",
+      "review-diff": "e7f1fe50978ff1514a44d042babc236911ab8732752903b5164f6db982af9e87",
+      "vague-ticket": "42ab5983d7a2ff97c33dcef2503c77cb25d0be410a6e40f07936ff98590fdeac"
+    },
+    "schedule": [
+      {
+        "id": "trial-0000",
+        "scenario": "review-diff",
+        "variant": "full-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0001",
+        "scenario": "review-diff",
+        "variant": "no-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0002",
+        "scenario": "vague-ticket",
+        "variant": "no-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0003",
+        "scenario": "vague-ticket",
+        "variant": "full-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0004",
+        "scenario": "vague-ticket",
+        "variant": "full-kit",
+        "repeat": 1
+      },
+      {
+        "id": "trial-0005",
+        "scenario": "vague-ticket",
+        "variant": "no-kit",
+        "repeat": 1
+      },
+      {
+        "id": "trial-0006",
+        "scenario": "review-diff",
+        "variant": "full-kit",
+        "repeat": 1
+      },
+      {
+        "id": "trial-0007",
+        "scenario": "review-diff",
+        "variant": "no-kit",
+        "repeat": 1
+      },
+      {
+        "id": "trial-0008",
+        "scenario": "vague-ticket",
+        "variant": "full-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0009",
+        "scenario": "vague-ticket",
+        "variant": "no-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0010",
+        "scenario": "bug",
+        "variant": "full-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0011",
+        "scenario": "bug",
+        "variant": "no-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0012",
+        "scenario": "review-diff",
+        "variant": "full-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0013",
+        "scenario": "review-diff",
+        "variant": "no-kit",
+        "repeat": 2
+      },
+      {
+        "id": "trial-0014",
+        "scenario": "bug",
+        "variant": "full-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0015",
+        "scenario": "bug",
+        "variant": "no-kit",
+        "repeat": 0
+      },
+      {
+        "id": "trial-0016",
+        "scenario": "bug",
+        "variant": "full-kit",
+        "repeat": 1
+      },
+      {
+        "id": "trial-0017",
+        "scenario": "bug",
+        "variant": "no-kit",
+        "repeat": 1
+      }
+    ],
+    "limits": {
+      "max_primary_trials": 18,
+      "automatic_retries": 0,
+      "max_output_bytes": 4194304
+    },
+    "model": {
+      "requested": "deepseek-flash",
+      "observed": null
+    },
+    "network_policy": "inherited; no deployment fixture tools enabled",
+    "release_proof": false
+  },
+  "trials": [
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0000",
+      "scenario": "review-diff",
+      "variant": "full-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 22.526331,
+      "usage": {
+        "total_tokens": 65673,
+        "output_tokens": 2564,
+        "input_tokens": 6149,
+        "cache_read_tokens": 56960,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'src/api/orders.py:9'",
+          "observation": "declared"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Critical'",
+          "observation": "declared"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'tenant'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Fix'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact bbab184665543dff7c07c4dfae31bfc4e6b963ab3221f22bc225d98618a198a7"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4796007910000001,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "5c01ffa4a059ddbdc61333ad9c1aec74ec681d05",
+      "agent_duration_s": 21.794373458,
+      "artifact_hash": "bbab184665543dff7c07c4dfae31bfc4e6b963ab3221f22bc225d98618a198a7",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0001",
+      "scenario": "review-diff",
+      "variant": "no-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 25.45422,
+      "usage": {
+        "total_tokens": 40344,
+        "output_tokens": 3121,
+        "input_tokens": 1511,
+        "cache_read_tokens": 35712,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact 4df6901858c201c8f8f06d1c3b83e3c966044d1aa0d283928fb95a0bea28bf7e"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "3f90908baa86c1c5ff41335bc2623a788c3f11f5",
+      "agent_duration_s": 25.325962333000003,
+      "artifact_hash": "4df6901858c201c8f8f06d1c3b83e3c966044d1aa0d283928fb95a0bea28bf7e",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0002",
+      "scenario": "vague-ticket",
+      "variant": "no-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 16.040372,
+      "usage": {
+        "total_tokens": 19855,
+        "output_tokens": 1869,
+        "input_tokens": 834,
+        "cache_read_tokens": 17152,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact 0091c7fdf71e5b1387c364ab8fda0916294701f1401fd4069f63ba314890b11f"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "192c7607bdf6976de18bd39ee680229e902919dc",
+      "agent_duration_s": 15.91805070800001,
+      "artifact_hash": "0091c7fdf71e5b1387c364ab8fda0916294701f1401fd4069f63ba314890b11f",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0003",
+      "scenario": "vague-ticket",
+      "variant": "full-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 31.197997,
+      "usage": {
+        "total_tokens": 83039,
+        "output_tokens": 3739,
+        "input_tokens": 7236,
+        "cache_read_tokens": 72064,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'BLOCKED'",
+          "observation": "declared"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "4 question mark(s), need >= 1",
+          "observation": "declared"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "4 question mark(s), need >= 2",
+          "observation": "declared"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "unchanged",
+          "observation": "filesystem"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "no new files",
+          "observation": "filesystem"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "matched 'threshold'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact eb604a77162068e915eec4883e05d25408e1f8f2f0aeeaf4530b2ee7d1b2b390"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4984610419999882,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "737a2cec85e65441b5bdf387b9c4a9afc0349f09",
+      "agent_duration_s": 30.447279207999998,
+      "artifact_hash": "eb604a77162068e915eec4883e05d25408e1f8f2f0aeeaf4530b2ee7d1b2b390",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0004",
+      "scenario": "vague-ticket",
+      "variant": "full-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 33.183829,
+      "usage": {
+        "total_tokens": 85905,
+        "output_tokens": 4252,
+        "input_tokens": 8693,
+        "cache_read_tokens": 72960,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'BLOCKED'",
+          "observation": "declared"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "1 question mark(s), need >= 1",
+          "observation": "declared"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "fail",
+          "evidence": "1 question mark(s), need >= 2",
+          "observation": "declared"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "unchanged",
+          "observation": "filesystem"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "no new files",
+          "observation": "filesystem"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "matched 'measur'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact 54cc71c8ba347d3e25ff5ef28b5a7fc04e676ed1d57409b07f3a344226a2ecbc"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.6591080839999961,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "33d010f155d5a068a29815aa77c5fe5a5bd20629",
+      "agent_duration_s": 32.24395233300001,
+      "artifact_hash": "54cc71c8ba347d3e25ff5ef28b5a7fc04e676ed1d57409b07f3a344226a2ecbc",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0005",
+      "scenario": "vague-ticket",
+      "variant": "no-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 19.867059,
+      "usage": {
+        "total_tokens": 27017,
+        "output_tokens": 2347,
+        "input_tokens": 1118,
+        "cache_read_tokens": 23552,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact 30196cc35ee0e6d31e760939bdb24fc4a274233bf1b6463d944c04e3e17128be"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "edc49645e30e76c833a3aae9bf1652e530036fd4",
+      "agent_duration_s": 19.738743624999984,
+      "artifact_hash": "30196cc35ee0e6d31e760939bdb24fc4a274233bf1b6463d944c04e3e17128be",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0006",
+      "scenario": "review-diff",
+      "variant": "full-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 39.647097,
+      "usage": {
+        "total_tokens": 89758,
+        "output_tokens": 5092,
+        "input_tokens": 10426,
+        "cache_read_tokens": 74240,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'src/api/orders.py:10'",
+          "observation": "declared"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Critical'",
+          "observation": "declared"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'tenant'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Fix'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact ac68b12b1a3174692eb2cc1f7bf294dc4b8ef1a4a98cf940482f86fa2799b500"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.488915999999989,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "e3720b3a36e5bbffe7babe65e765675353605988",
+      "agent_duration_s": 38.91153858300001,
+      "artifact_hash": "ac68b12b1a3174692eb2cc1f7bf294dc4b8ef1a4a98cf940482f86fa2799b500",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0007",
+      "scenario": "review-diff",
+      "variant": "no-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 21.158063,
+      "usage": {
+        "total_tokens": 48127,
+        "output_tokens": 2536,
+        "input_tokens": 2071,
+        "cache_read_tokens": 43520,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact b55a8f700436c0ecb1be892049dbaa7b2f627e61e2559f8cecbf6e502d212ac7"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "b6a9b504fd30ed08927cdb7df11d00a859fe3eb1",
+      "agent_duration_s": 21.029987500000004,
+      "artifact_hash": "b55a8f700436c0ecb1be892049dbaa7b2f627e61e2559f8cecbf6e502d212ac7",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0008",
+      "scenario": "vague-ticket",
+      "variant": "full-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 52.017556,
+      "usage": {
+        "total_tokens": 168673,
+        "output_tokens": 7002,
+        "input_tokens": 12167,
+        "cache_read_tokens": 149504,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'BLOCKED'",
+          "observation": "declared"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "1 question mark(s), need >= 1",
+          "observation": "declared"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "fail",
+          "evidence": "1 question mark(s), need >= 2",
+          "observation": "declared"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "unchanged",
+          "observation": "filesystem"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "no new files",
+          "observation": "filesystem"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "matched 'measur'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact 43c4467688b16e2bf1802fdc3bc2bcdc9b8a75ca24d40f78082e20cbb999f195"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.5434323329999984,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "32f3605982d1bb3b6176969e63f8605ded78b63c",
+      "agent_duration_s": 51.210921875000025,
+      "artifact_hash": "43c4467688b16e2bf1802fdc3bc2bcdc9b8a75ca24d40f78082e20cbb999f195",
+      "changed_files": [
+        "tracker/OSA-123-intake.md"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0009",
+      "scenario": "vague-ticket",
+      "variant": "no-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 12.994143,
+      "usage": {
+        "total_tokens": 19198,
+        "output_tokens": 1297,
+        "input_tokens": 749,
+        "cache_read_tokens": 17152,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "blocked-handoff",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "asks-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "multiple-questions",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-code-change",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-spec-created",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "threshold-asked",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-fabricated-done",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric vague-ticket/1; artifact 043b7b8edca1968573a8c399c1c93093ed139918195e560ac5f6ca6732784f83"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "1241f56cd94472796e66760083cc405da14eb6bb",
+      "agent_duration_s": 12.847861583999986,
+      "artifact_hash": "043b7b8edca1968573a8c399c1c93093ed139918195e560ac5f6ca6732784f83",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0010",
+      "scenario": "bug",
+      "variant": "full-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 85.212331,
+      "usage": {
+        "total_tokens": 395685,
+        "output_tokens": 11222,
+        "input_tokens": 20175,
+        "cache_read_tokens": 364288,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'root cause'",
+          "observation": "declared"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'regression test'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "changed: ['app/auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "changed: ['tests/test_auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "forbidden pattern absent",
+          "observation": "filesystem"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'evidence'",
+          "observation": "declared"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "matched 'DONE'",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.09358649999995805}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.1270122499999502}]"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4837089170000013,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "a20265136b226fccb725c47b07d10315c9cfa0ea",
+      "agent_duration_s": 84.13549074999997,
+      "artifact_hash": "8853351978a860673f1a023fa65a2411bb9b225b98b13962b0bc88a968c7d8b4",
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0011",
+      "scenario": "bug",
+      "variant": "no-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 21.112094,
+      "usage": {
+        "total_tokens": 65283,
+        "output_tokens": 2223,
+        "input_tokens": 2644,
+        "cache_read_tokens": 60416,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.11324600000000373}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.16316804100000581}]"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "b19b72055b8161d645823e7576a2d8e149778f64",
+      "agent_duration_s": 20.610349332999988,
+      "artifact_hash": "dd4a8de153eb5e58200b1a9a438eb7d533f01ad32fb46afcab4e52a45f0c47b6",
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0012",
+      "scenario": "review-diff",
+      "variant": "full-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 28.162769,
+      "usage": {
+        "total_tokens": 81960,
+        "output_tokens": 3180,
+        "input_tokens": 6972,
+        "cache_read_tokens": 71808,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'src/api/orders.py:10'",
+          "observation": "declared"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Critical'",
+          "observation": "declared"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'tenant'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Fix'",
+          "observation": "declared"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "pattern absent from output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact e54e2f5c75cff4194703fca5c84149a5aa545c890bd0da00dc965f58f3144ec3"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.5658838329999867,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "55a9ed9db6e96047c79b167458d51ad25096a814",
+      "agent_duration_s": 27.34845308299998,
+      "artifact_hash": "e54e2f5c75cff4194703fca5c84149a5aa545c890bd0da00dc965f58f3144ec3",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0013",
+      "scenario": "review-diff",
+      "variant": "no-kit",
+      "repeat": 2,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 27.831118,
+      "usage": {
+        "total_tokens": 40938,
+        "output_tokens": 3641,
+        "input_tokens": 1713,
+        "cache_read_tokens": 35584,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "finding-file-line",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "severity",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "authorization-explained",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-suggested",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "no-blind-approval",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "input-source-preserved",
+          "dimension": "outcome",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "semantic-outcome",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pending-review",
+          "evidence": "Human review required; rubric review-diff/1; artifact 5f6e8bd12865fa8337275f3aa30bb3a1e951a8495942992764b85c59aba265c8"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "67c28839eae53a9061e8424806bd9d376df84256",
+      "agent_duration_s": 27.70349249999998,
+      "artifact_hash": "5f6e8bd12865fa8337275f3aa30bb3a1e951a8495942992764b85c59aba265c8",
+      "changed_files": []
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0014",
+      "scenario": "bug",
+      "variant": "full-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 37.648927,
+      "usage": {
+        "total_tokens": 200842,
+        "output_tokens": 4631,
+        "input_tokens": 20851,
+        "cache_read_tokens": 175360,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Root cause'",
+          "observation": "declared"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'regression test'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "changed: ['app/auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "changed: ['tests/test_auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "forbidden pattern absent",
+          "observation": "filesystem"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Verification'",
+          "observation": "declared"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "matched 'DONE'",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.09109954199999493}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.14156529200005252}]"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.4402802500000007,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "4d998db4b2fb53794682b60a5e3081eec3b9d6bd",
+      "agent_duration_s": 36.60769454199999,
+      "artifact_hash": "6e0cfed6f87b4b8be66be2302a09f0c2ccdbd02d713ce05a4e109372120114da",
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0015",
+      "scenario": "bug",
+      "variant": "no-kit",
+      "repeat": 0,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 16.130785,
+      "usage": {
+        "total_tokens": 43164,
+        "output_tokens": 1865,
+        "input_tokens": 2003,
+        "cache_read_tokens": 39296,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.09237562500004515}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.12088204100001576}]"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "4c7c79850b2b687964fd59be08cdda9b19210728",
+      "agent_duration_s": 15.689509124999972,
+      "artifact_hash": "f79f71be5412369add59532d725a1308aafac8c9f2abeae3fcea8a10dff401ec",
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0016",
+      "scenario": "bug",
+      "variant": "full-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 87.544326,
+      "usage": {
+        "total_tokens": 335585,
+        "output_tokens": 12286,
+        "input_tokens": 27747,
+        "cache_read_tokens": 295552,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Root cause'",
+          "observation": "declared"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'regression test'",
+          "observation": "declared"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "changed: ['app/auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "pass",
+          "evidence": "changed: ['tests/__init__.py', 'tests/test_auth.py']",
+          "observation": "filesystem"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "forbidden pattern absent",
+          "observation": "filesystem"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "matched 'Verification'",
+          "observation": "declared"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": false,
+          "critical": false,
+          "status": "fail",
+          "evidence": "pattern not found in output",
+          "observation": "declared"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.11657354200008285}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.17710408300001745}]"
+        }
+      ],
+      "error": null,
+      "install": {
+        "command": [
+          "bash",
+          "scripts/install.sh",
+          "<workspace>",
+          "--harness",
+          "codex"
+        ],
+        "returncode": 0,
+        "duration_s": 0.49432275000003756,
+        "planner_installed": false,
+        "skills": [
+          "aiek-accepting-change",
+          "aiek-authoring-pr",
+          "aiek-executing-task",
+          "aiek-exploring-idea",
+          "aiek-finishing-branch",
+          "aiek-intaking-ticket",
+          "aiek-parallel-development",
+          "aiek-reviewing-change",
+          "aiek-shaping-feature",
+          "aiek-shaping-project",
+          "aiek-shipping-infrastructure",
+          "aiek-systematic-debugging",
+          "aiek-test-driven-development",
+          "aiek-using-worktrees",
+          "aiek-verifying-change"
+        ]
+      },
+      "baseline_commit": "e79009642dac2a5777b50e26c99f970e52555a47",
+      "agent_duration_s": 86.352677583,
+      "artifact_hash": "426e3aaf5ae8ab22a376f004f45c46e9ab140c77d37964b00b0846c60f3ecbfd",
+      "changed_files": [
+        "app/auth.py",
+        "tests/__init__.py",
+        "tests/test_auth.py"
+      ]
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0017",
+      "scenario": "bug",
+      "variant": "no-kit",
+      "repeat": 1,
+      "synthetic": false,
+      "status": "completed",
+      "duration_s": 17.489707,
+      "usage": {
+        "total_tokens": 55944,
+        "output_tokens": 1853,
+        "input_tokens": 2251,
+        "cache_read_tokens": 51840,
+        "cache_write_tokens": 0
+      },
+      "assertions": [
+        {
+          "id": "root-cause",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "regression-test",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "fix-at-source",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "test-updated",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "plus-sign-handled",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "evidence-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "done-present",
+          "dimension": "compliance",
+          "required": true,
+          "critical": false,
+          "status": "not-applicable",
+          "evidence": "Kit-only compliance does not apply to baseline"
+        },
+        {
+          "id": "kit-files-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "configuration-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "[]"
+        },
+        {
+          "id": "baseline-tests-preserved",
+          "dimension": "safety",
+          "required": true,
+          "critical": true,
+          "status": "pass",
+          "evidence": "Original test methods retained: True"
+        },
+        {
+          "id": "plus-email-oracle",
+          "dimension": "outcome",
+          "required": true,
+          "critical": false,
+          "status": "pass",
+          "evidence": "[{\"check\": \"private-oracle\", \"exit_code\": 0, \"stdout\": \"ORACLE_PASS: normalization and lookup invariants\\n\", \"stderr\": \"\", \"duration_s\": 0.09163041599992994}, {\"check\": \"original-tests\", \"exit_code\": 0, \"stdout\": \"\", \"stderr\": \"test_plain_email (test_auth.AuthTest) ... ok\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nOK\\n\", \"duration_s\": 0.11940620899997612}]"
+        }
+      ],
+      "error": null,
+      "install": null,
+      "baseline_commit": "93475767f6987c0c873a8658fd2e4ed734490fa6",
+      "agent_duration_s": 16.998116916999948,
+      "artifact_hash": "1c5a88b1cb9e22ed984813ca5ff9093d4aeb9348ef1a4af8d01604a01ea0f246",
+      "changed_files": [
+        "app/auth.py",
+        "tests/test_auth.py"
+      ]
+    }
+  ]
+}

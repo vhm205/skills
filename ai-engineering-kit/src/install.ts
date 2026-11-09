@@ -13,7 +13,7 @@ const HARNESS_ROOTS: Record<string, string> = {
 const TEXT_SUFFIXES = new Set(['.md', '.json', '.yml', '.yaml', '.txt']);
 const PREFIX_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*-$/;
 
-export type Profile = 'core' | 'discovery' | 'full';
+export type Profile = 'lite' | 'core' | 'discovery' | 'full';
 
 export interface InstallOptions {
   /** Kit checkout or installed package root (the directory holding manifest.json). */

@@ -5,6 +5,9 @@ description: "Use when implementing an authorized Small change or a ready task f
 
 # Executing a Task
 
+For Small work, use `.aiek/core/small-changes.md`; it owns the inline completion path.
+Consult the guidance below only when the task needs it.
+
 Implement exactly what the source of truth asks for, prove it works, and leave a record.
 
 ## Source of truth

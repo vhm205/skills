@@ -41,9 +41,11 @@ import subprocess
 import sys
 import tempfile
 import time
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from _eval.process import run_process
+from _eval.harnesses import (HarnessResult, HarnessError, Harness, DshHarness, ClaudeHarness,
+                             CodexHarness, normalize_skill_names, parse_declared_skills, _dedupe, _sum_usage)
 
 SCHEMA = "aiek-trigger-eval/1"
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -75,9 +77,7 @@ STOPWORDS = set(
     project projects code coding thing things something request know understand wondering""".split()
 )
 
-SKILL_NAME_RE = re.compile(r"[a-z][a-z0-9-]*")
-DECLARED_RE = re.compile(r"(?im)^\s*[-*`> ]*SKILL_USED\s*:\s*(?P<names>.*?)\s*$")
-NONE_WORDS = {"none", "no", "nothing", "null", "-", "n/a", "na", "no skill", "no skills"}
+
 
 
 def eprint(*args: object) -> None:
@@ -90,38 +90,6 @@ def utc_now() -> str:
 
 def which(name: str) -> str | None:
     return shutil.which(name)
-
-
-def run_process(
-    cmd: list[str],
-    *,
-    cwd: Path,
-    timeout: float,
-    env: dict[str, str] | None = None,
-) -> tuple[int | None, str, str, float, list[str]]:
-    """Run a subprocess with a hard timeout. Returns (rc, stdout, stderr, seconds, cmd).
-
-    rc is None on timeout/OSError. The timeout is enforced with subprocess.run; macOS
-    has no timeout(1) binary, so the Python-level timeout is the portable mechanism.
-    """
-    started = time.monotonic()
-    try:
-        proc = subprocess.run(
-            cmd,
-            cwd=str(cwd),
-            env=env,
-            stdin=subprocess.DEVNULL,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-        return proc.returncode, proc.stdout or "", proc.stderr or "", time.monotonic() - started, cmd
-    except subprocess.TimeoutExpired as exc:
-        out = exc.stdout if isinstance(exc.stdout, str) else (exc.stdout or b"").decode("utf-8", "replace")
-        err = exc.stderr if isinstance(exc.stderr, str) else (exc.stderr or b"").decode("utf-8", "replace")
-        return None, out or "", (err or "") + f"\n[eval] timeout after {timeout:.0f}s", time.monotonic() - started, cmd
-    except OSError as exc:
-        return None, "", f"[eval] cannot execute {cmd[0]}: {exc}", time.monotonic() - started, cmd
 
 
 # --------------------------------------------------------------------------- #
@@ -210,301 +178,6 @@ def load_queries(path: Path) -> list[dict]:
         query.setdefault("preferred_skills", list(query["expected_skills"]))
         query.setdefault("reason", "")
     return queries
-
-
-def normalize_skill_names(raw: str) -> list[str]:
-    """Parse a SKILL_USED value into canonical skill names (case/whitespace tolerant)."""
-    cleaned = raw.strip().strip("`\"'")
-    cleaned = re.sub(r"\([^)]*\)", " ", cleaned)  # drop parenthetical commentary
-    found: list[str] = []
-    if cleaned.lower() in NONE_WORDS:
-        return []
-    for token in re.split(r"[,;/|]+|\band\b|\s{2,}", cleaned):
-        token = token.strip().strip("`\"'.").lower()
-        token = token.replace("_", "-").replace(" ", "-")
-        token = re.sub(r"^(skill|skills)[:-]", "", token)
-        # Installed skills carry the installer's namespace (default `aiek-`); the evals
-        # compare against bare kit names, so strip it before matching.
-        token = re.sub(r"^aiek-", "", token)
-        if not token or token in NONE_WORDS:
-            continue
-        if SKILL_NAME_RE.fullmatch(token):
-            found.append(token)
-    # A single unseparated sentence like "executing-task (small fix)" leaves garbage; keep known-ish tokens.
-    if not found and cleaned and cleaned.lower() not in NONE_WORDS:
-        for token in re.findall(r"[a-z][a-z0-9-]+", cleaned.lower()):
-            if token in NONE_WORDS:
-                continue
-            found.append(token)
-    deduped: list[str] = []
-    for name in found:
-        if name not in deduped:
-            deduped.append(name)
-    return deduped
-
-
-def parse_declared_skills(text: str) -> list[str]:
-    match = DECLARED_RE.search(text or "")
-    if not match:
-        return []
-    return normalize_skill_names(match.group("names"))
-
-
-# --------------------------------------------------------------------------- #
-# Harness adapters
-# --------------------------------------------------------------------------- #
-
-@dataclass
-class HarnessResult:
-    skills_used: list[str] = field(default_factory=list)
-    source: str = "none"          # tool_call | declared | heuristic | none
-    text: str = ""
-    duration_s: float = 0.0
-    usage: dict = field(default_factory=dict)
-    error: str | None = None
-    command: list[str] = field(default_factory=list)
-    raw_excerpt: str = ""
-
-
-class HarnessError(RuntimeError):
-    """A harness could not run (missing binary, auth failure, timeout, crash)."""
-
-
-class Harness:
-    name = "base"
-
-    def probe(self, cwd: Path, env: dict[str, str] | None, timeout: float) -> dict:
-        raise NotImplementedError
-
-    def run(self, prompt: str, cwd: Path, env: dict[str, str] | None, timeout: float) -> HarnessResult:
-        raise NotImplementedError
-
-
-class DshHarness(Harness):
-    """DeepSeek Harness: skill use is read from real tool_call events (ground truth)."""
-
-    name = "dsh"
-
-    def __init__(self) -> None:
-        self.binary = which("dsh")
-        if not self.binary:
-            raise HarnessError("dsh not found on PATH (expected ~/.local/bin/dsh)")
-
-    def command(self, prompt: str) -> list[str]:
-        return [self.binary, "headless", "--json", prompt]
-
-    def parse(self, stdout: str, stderr: str, duration_s: float, timeout: float) -> HarnessResult:
-        skills: list[str] = []
-        texts: list[str] = []
-        errors: list[str] = []
-        usage_steps: list[dict] = []
-        raw_lines = 0
-        for line in stdout.splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            raw_lines += 1
-            try:
-                event = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if not isinstance(event, dict):
-                continue
-            etype = event.get("type")
-            if etype == "tool_call" and event.get("tool") == "skill":
-                payload = event.get("input") or {}
-                name = payload.get("name") or payload.get("skill")
-                if isinstance(name, str):
-                    skills.extend(normalize_skill_names(name))
-            elif etype == "text" and isinstance(event.get("text"), str):
-                texts.append(event["text"])
-            elif etype == "error":
-                errors.append(str(event.get("message") or event.get("error") or event)[:300])
-            elif etype == "status" and event.get("usage"):
-                usage_steps.append(event["usage"])
-        combined = "\n".join(texts)
-        declared = parse_declared_skills(combined)
-        source = "tool_call"
-        resolved = _dedupe(skills)
-        if not resolved and declared:
-            resolved = declared
-            source = "declared"
-        elif not resolved:
-            source = "none"
-        usage = _sum_usage(usage_steps)
-        error = None
-        if raw_lines == 0:
-            error = "harness produced no JSON events"
-        elif errors and not combined:
-            error = "harness error: " + "; ".join(errors[:2])
-        return HarnessResult(
-            skills_used=resolved,
-            source=source,
-            text=combined,
-            duration_s=duration_s,
-            usage=usage,
-            error=error,
-            raw_excerpt=(stdout or stderr)[-1200:],
-            command=[],
-        )
-
-    def run(self, prompt: str, cwd: Path, env: dict[str, str] | None, timeout: float) -> HarnessResult:
-        cmd = self.command(prompt)
-        rc, out, err, duration, _ = run_process(cmd, cwd=cwd, timeout=timeout, env=env)
-        result = self.parse(out, err, duration, timeout)
-        result.command = [Path(cmd[0]).name, *cmd[1:-1], "<prompt>"]
-        if rc is None:
-            result.error = (err.strip() or "timeout")[-800:]
-            result.text = result.text or out[-1200:]
-        elif rc != 0 and not result.text:
-            result.error = f"harness exited {rc}: {(err or out).strip()[-800:]}"
-        return result
-
-    def probe(self, cwd: Path, env: dict[str, str] | None, timeout: float) -> dict:
-        result = self.run("Reply with exactly: PROBE_OK", cwd, env, timeout)
-        ok = False if result.error else bool(re.search(r"PROBE_OK", result.text))
-        return {
-            "harness": "dsh",
-            "ok": ok,
-            "source": result.source,
-            "detail": "probe returned PROBE_OK" if ok else (result.error or "no PROBE_OK in output")[-500:],
-        }
-
-
-class ClaudeHarness(Harness):
-    """Claude Code. Skill tool events are not reliably exported by -p, so the
-    declared SKILL_USED line is used (marked as source=declared)."""
-
-    name = "claude"
-
-    def __init__(self) -> None:
-        self.binary = which("claude")
-        if not self.binary:
-            raise HarnessError("claude not found on PATH")
-
-    def command(self, prompt: str) -> list[str]:
-        return [self.binary, "-p", prompt, "--output-format", "json"]
-
-    def run(self, prompt: str, cwd: Path, env: dict[str, str] | None, timeout: float) -> HarnessResult:
-        cmd = self.command(prompt)
-        rc, out, err, duration, _ = run_process(cmd, cwd=cwd, timeout=timeout, env=env)
-        result = HarnessResult(duration_s=duration, command=[Path(cmd[0]).name, "-p", "<prompt>", "--output-format", "json"])
-        text = ""
-        try:
-            data = json.loads(out)
-        except (json.JSONDecodeError, TypeError):
-            data = None
-        if isinstance(data, dict):
-            if data.get("is_error"):
-                result.error = f"claude error: {str(data.get('result') or data.get('error') or 'unknown')[:600]}"
-            text = str(data.get("result") or "")
-            usage = data.get("usage") or {}
-            if isinstance(usage, dict):
-                result.usage = {
-                    "totalTokens": (usage.get("input_tokens") or 0) + (usage.get("output_tokens") or 0),
-                    "outputTokens": usage.get("output_tokens") or 0,
-                }
-            messages = data.get("messages")
-            tool_skills: list[str] = []
-            if isinstance(messages, list):
-                for message in messages:
-                    for block in (message or {}).get("content") or []:
-                        if isinstance(block, dict) and block.get("type") == "tool_use":
-                            name = block.get("name") or ""
-                            if str(name).lower() in ("skill", "skills"):
-                                payload = block.get("input") or {}
-                                raw = payload.get("skill") or payload.get("name")
-                                if isinstance(raw, str):
-                                    tool_skills.extend(normalize_skill_names(raw))
-            declared = parse_declared_skills(text)
-            if tool_skills:
-                result.skills_used, result.source = _dedupe(tool_skills), "tool_call"
-            elif declared:
-                result.skills_used, result.source = declared, "declared"
-        else:
-            text = out
-        result.text = text
-        if rc is None:
-            result.error = (err.strip() or "timeout")[-800:]
-        elif rc != 0 and not result.text:
-            result.error = f"claude exited {rc}: {(err or out).strip()[-800:]}"
-        return result
-
-    def probe(self, cwd: Path, env: dict[str, str] | None, timeout: float) -> dict:
-        result = self.run("Reply with exactly: PROBE_OK", cwd, env, timeout)
-        ok = False if result.error else bool(re.search(r"PROBE_OK", result.text))
-        return {
-            "harness": "claude",
-            "ok": ok,
-            "detail": "probe returned PROBE_OK" if ok else (result.error or "no PROBE_OK in output")[-500:],
-        }
-
-
-class CodexHarness(Harness):
-    """Codex CLI. The skill tool call is not exposed in the JSON stream, so the
-    declared SKILL_USED line is used (marked source=declared)."""
-
-    name = "codex"
-
-    def __init__(self) -> None:
-        self.binary = which("codex")
-        if not self.binary:
-            raise HarnessError("codex not found on PATH")
-
-    def command(self, prompt: str) -> list[str]:
-        return [self.binary, "exec", "--json", "--skip-git-repo-check", prompt]
-
-    def run(self, prompt: str, cwd: Path, env: dict[str, str] | None, timeout: float) -> HarnessResult:
-        cmd = self.command(prompt)
-        rc, out, err, duration, _ = run_process(cmd, cwd=cwd, timeout=timeout, env=env)
-        texts: list[str] = []
-        usage: dict = {}
-        for line in out.splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                event = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if not isinstance(event, dict):
-                continue
-            etype = event.get("type")
-            if etype == "item.completed":
-                item = event.get("item") or {}
-                if item.get("type") == "agent_message" and isinstance(item.get("text"), str):
-                    texts.append(item["text"])
-            elif etype == "turn.completed" and isinstance(event.get("usage"), dict):
-                raw = event["usage"]
-                usage = {
-                    "totalTokens": (raw.get("input_tokens") or 0) + (raw.get("output_tokens") or 0),
-                    "outputTokens": raw.get("output_tokens") or 0,
-                }
-        combined = "\n".join(texts)
-        declared = parse_declared_skills(combined)
-        result = HarnessResult(
-            skills_used=declared,
-            source="declared" if declared else "none",
-            text=combined,
-            duration_s=duration,
-            usage=usage,
-            command=[Path(cmd[0]).name, "exec", "--json", "--skip-git-repo-check", "<prompt>"],
-            raw_excerpt=(out or err)[-1200:],
-        )
-        if rc is None:
-            result.error = (err.strip() or "timeout")[-800:]
-        elif rc != 0 and not combined:
-            result.error = f"codex exited {rc}: {(err or out).strip()[-800:]}"
-        return result
-
-    def probe(self, cwd: Path, env: dict[str, str] | None, timeout: float) -> dict:
-        result = self.run("Reply with exactly: PROBE_OK", cwd, env, timeout)
-        ok = False if result.error else bool(re.search(r"PROBE_OK", result.text))
-        return {
-            "harness": "codex",
-            "ok": ok,
-            "detail": "probe returned PROBE_OK" if ok else (result.error or "no PROBE_OK in output")[-500:],
-        }
 
 
 # --------------------------------------------------------------------------- #
@@ -695,25 +368,6 @@ class MockHarness(Harness):
 
     def probe(self, cwd: Path, env: dict[str, str] | None, timeout: float) -> dict:
         return {"harness": "mock", "ok": True, "detail": "deterministic keyword scorer (offline)"}
-
-
-def _dedupe(items: list[str]) -> list[str]:
-    seen: list[str] = []
-    for item in items:
-        if item not in seen:
-            seen.append(item)
-    return seen
-
-
-def _sum_usage(steps: list[dict]) -> dict:
-    if not steps:
-        return {}
-    total = 0
-    output = 0
-    for step in steps:
-        total += step.get("totalTokens") or 0
-        output += step.get("outputTokens") or 0
-    return {"totalTokens": total, "outputTokens": output, "steps": len(steps)}
 
 
 # --------------------------------------------------------------------------- #

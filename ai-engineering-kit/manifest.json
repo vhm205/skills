@@ -120,6 +120,13 @@
       "parallel-development",
       "test-driven-development",
       "finishing-branch"
+    ],
+    "lite": [
+      "executing-task",
+      "verifying-change",
+      "reviewing-change",
+      "systematic-debugging",
+      "authoring-pr"
     ]
   },
   "scripts": [

@@ -5,6 +5,9 @@ description: "Use when a change is about to be claimed done, fixed, passing or r
 
 # Verifying a Change
 
+For Small work, use `.aiek/core/small-changes.md`; it owns the inline completion path.
+Consult the guidance below only when the task needs it.
+
 **Iron rule: no completion claim without fresh verification evidence.**
 If you did not run the check in this session after the last edit affecting its scope, you
 cannot say it passes.

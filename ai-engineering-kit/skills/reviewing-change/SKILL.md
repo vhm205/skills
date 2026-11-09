@@ -5,6 +5,9 @@ description: "Use when reviewing an implemented change or diff before DONE, merg
 
 # Reviewing a Change
 
+For Small work, use `.aiek/core/small-changes.md`; it owns the inline completion path.
+Consult the guidance below only when the task needs it.
+
 Catch problems before a human spends review time on them, and handle incoming feedback on
 its technical merits.
 

@@ -1,5 +1,6 @@
 # vague-ticket
 
+- version: 2
 - id: vague-ticket
 - title: Vague ticket — acceptance criterion "fast"
 - critical: true
@@ -29,6 +30,11 @@ def search(query: str) -> list[str]:
     return [item for item in ["alpha", "beta"] if query.lower() in item]
 ```
 
+## Outcome
+```json
+{"kind": "human", "version": 1}
+```
+
 ## Assertions
 ```json
 [
@@ -37,50 +43,64 @@ def search(query: str) -> list[str]:
     "kind": "output_regex",
     "pattern": "(?i)\\bBLOCKED\\b",
     "description": "Uses the BLOCKED handoff instead of guessing",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "asks-questions",
     "kind": "min_questions",
     "min": 1,
     "description": "Asks at least one concrete blocking question to unblock the criterion",
-    "rationale": "The plan requires 'BLOCKED + câu hỏi' (a question, not two question marks). One concrete blocking question plus a traceability row is a valid BLOCKED handoff; counting '?' characters tested formatting, not the contract.",
-    "critical": true
+    "rationale": "The plan requires 'BLOCKED + c\u00e2u h\u1ecfi' (a question, not two question marks). One concrete blocking question plus a traceability row is a valid BLOCKED handoff; counting '?' characters tested formatting, not the contract.",
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "multiple-questions",
     "kind": "min_questions",
     "min": 2,
     "description": "Ideal (non-critical): asks the richer set of questions, which the synthetic mock does",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   },
   {
     "id": "no-code-change",
     "kind": "unchanged_glob",
     "glob": "app/**",
     "description": "Does not code before the criterion is checkable",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "no-spec-created",
     "kind": "new_glob_absent",
     "glob": "specs/**",
     "description": "No spec/plan is created while the ticket is blocked",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "threshold-asked",
     "kind": "output_regex",
     "pattern": "(?i)(threshold|measur|p95|latenc|millisecond|\\bms\\b|define)",
     "description": "Names what must be defined to make 'fast' checkable",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   },
   {
     "id": "no-fabricated-done",
     "kind": "output_not_regex",
     "pattern": "(?i)\\bDONE\\b",
     "description": "Does not claim DONE for a blocked ticket",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   }
 ]
 ```

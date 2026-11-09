@@ -23,7 +23,7 @@ try {
   const { stdout } = await exec('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', temp], { cwd: kit });
   const pack = JSON.parse(stdout)[0];
   const paths = pack.files.map(file => file.path);
-  for (const path of ['dist/server/cli.js', 'dist/server/install.js', 'dist/ui/index.html', 'manifest.json', 'core/WORKFLOW.md', 'skills/executing-task/SKILL.md', 'skills/shaping-project/SKILL.md', 'speckit/workflows/aiek-project/workflow.yml', 'scripts/install.sh', 'scripts/init-project.sh']) assert(paths.includes(path), `Missing ${path}`);
+  for (const path of ['dist/server/cli.js', 'dist/server/install.js', 'dist/ui/index.html', 'manifest.json', 'core/WORKFLOW.md', 'core/small-changes.md', 'skills/executing-task/SKILL.md', 'skills/shaping-project/SKILL.md', 'speckit/workflows/aiek-project/workflow.yml', 'scripts/install.sh', 'scripts/init-project.sh']) assert(paths.includes(path), `Missing ${path}`);
   assert(!paths.some(path => /^(node_modules|tests|src|ui|specs)\//.test(path)), 'Package contains development sources');
   await mkdir(join(project, 'specs', '001-smoke'), { recursive: true });
   await writeFile(join(project, 'specs', '001-smoke', 'spec.md'), '# Packaged feature\n');
@@ -39,6 +39,15 @@ try {
   assert.match(await readFile(join(installed, '.agents/skills/aiek-exploring-idea/SKILL.md'), 'utf8'), /^name: aiek-exploring-idea$/m);
   assert.match(await readFile(join(installed, 'AGENTS.md'), 'utf8'), /`aiek-intaking-ticket`/);
   assert.equal((await readdir(join(installed, '.aiek/scripts'))).length, 5);
+  const liteTarget = join(temp, 'lite project');
+  await mkdir(liteTarget);
+  const lite = await exec('npm', ['exec', '--yes', `--package=${packed}`, '--', 'aiek', 'install', liteTarget, '--harness', 'codex', '--profile', 'lite'], { cwd: temp });
+  assert.match(lite.stdout, /Installed 5 skill\(s\)/);
+  assert.deepEqual((await readdir(join(liteTarget, '.agents/skills'))).sort(), [
+    'aiek-authoring-pr', 'aiek-executing-task', 'aiek-reviewing-change', 'aiek-systematic-debugging', 'aiek-verifying-change',
+  ]);
+  assert.match(await readFile(join(liteTarget, 'AGENTS.md'), 'utf8'), /small-changes\.md/);
+  assert.match(await readFile(join(liteTarget, '.aiek/core/small-changes.md'), 'utf8'), /`aiek-verifying-change`/);
   // npm exec selects the package from the tarball, never the repository checkout.
   child = spawn('npm', ['exec', '--yes', `--package=${packed}`, '--', 'aiek', 'web', '--project', project, '--no-open'], {
     cwd: temp, env: { ...process.env, AIEK_DATA_DIR: join(temp, 'state') }, stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32',

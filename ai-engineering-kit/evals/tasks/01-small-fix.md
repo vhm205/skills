@@ -1,5 +1,6 @@
 # small-fix
 
+- version: 2
 - id: small-fix
 - title: Small fix — typo in the signup email
 - critical: true
@@ -26,6 +27,11 @@ export const signupEmail = {
 A tiny project used by the kit behaviour fixture.
 ```
 
+## Outcome
+```json
+{"kind": "signup-copy", "version": 1}
+```
+
 ## Assertions
 ```json
 [
@@ -34,21 +40,27 @@ A tiny project used by the kit behaviour fixture.
     "kind": "output_regex",
     "pattern": "(?i)lane[^\\n]{0,80}small",
     "description": "States the SMALL lane before acting",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "evidence-present",
     "kind": "output_regex",
     "pattern": "(?i)(evidence|verification)",
     "description": "Reports verification/evidence for the change",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "evidence-table",
     "kind": "output_regex",
     "pattern": "(?is)\\|[^\\n]*(command|check|verification|exit)[^\\n]*\\|",
     "description": "DONE report carries a command/exit-code evidence table",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   },
   {
     "id": "typo-fixed",
@@ -56,7 +68,9 @@ A tiny project used by the kit behaviour fixture.
     "path": "src/emails/signup.ts",
     "pattern": "Welcome aboard",
     "description": "The typo is actually fixed in the file",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "typo-gone",
@@ -64,35 +78,45 @@ A tiny project used by the kit behaviour fixture.
     "path": "src/emails/signup.ts",
     "pattern": "Welcom aboard",
     "description": "The misspelling no longer exists",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "changed-expected-file",
     "kind": "changed_glob",
     "glob": "src/emails/signup.ts",
     "description": "Only the target file needed changing",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "no-spec-for-small",
     "kind": "new_glob_absent",
     "glob": "specs/**",
     "description": "No Spec Kit artifacts for a Small change",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "done-present",
     "kind": "output_regex",
     "pattern": "(?i)\\bDONE\\b",
     "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the Checks table assertion)",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   },
   {
     "id": "kit-files-untouched",
     "kind": "unchanged_glob",
     "glob": ".aiek/**",
     "description": "The installed kit files are not modified",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   }
 ]
 ```

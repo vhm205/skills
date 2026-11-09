@@ -47,6 +47,9 @@ describe('prefix and selection', () => {
   it('selects by profile, only and skip', async () => {
     const manifest = await readManifest(KIT);
     expect(selectSkills(manifest, { profile: 'core' })).toHaveLength(11);
+    expect(selectSkills(manifest, { profile: 'lite' })).toEqual([
+      'executing-task', 'verifying-change', 'reviewing-change', 'authoring-pr', 'systematic-debugging',
+    ]);
     expect(selectSkills(manifest, { profile: 'discovery' })).toHaveLength(4);
     expect(selectSkills(manifest, { only: ['executing-task', 'verifying-change'] })).toEqual([
       'executing-task',
@@ -121,12 +124,12 @@ describe('installKit', () => {
     expect(await readdir(clean)).toEqual([]);
   });
 
-  it('matches the bash installer file layout', async () => {
+  it.each(['discovery', 'lite'] as const)('matches the bash installer file layout for %s', async (profile) => {
     if (process.platform === 'win32') return;
     const bash = await tempProject();
     const node = await tempProject();
-    await exec('bash', [join(KIT, 'scripts/install.sh'), bash, '--harness', 'codex', '--profile', 'discovery'], { cwd: KIT });
-    await installKit({ kitRoot: KIT, target: node, harness: 'codex', profile: 'discovery' });
+    await exec('bash', [join(KIT, 'scripts/install.sh'), bash, '--harness', 'codex', '--profile', profile], { cwd: KIT });
+    await installKit({ kitRoot: KIT, target: node, harness: 'codex', profile });
     expect(await walk(node)).toEqual(await walk(bash));
     const digest = async (root: string) => {
       const hash = createHash('sha256');

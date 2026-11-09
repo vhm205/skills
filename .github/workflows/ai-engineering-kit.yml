@@ -81,6 +81,9 @@ jobs:
       - name: Trigger eval smoke (10 deterministic mock queries)
         run: python3 scripts/eval_trigger.py --mock --runs 1 --limit 10 --out evals/results/trigger-quick.json
 
+      - name: Eval v2 contracts, graders, process boundaries and replay (offline)
+        run: python3 scripts/test_evals.py
+
       - name: Behaviour eval smoke (2 deterministic mock fixtures)
         run: >
           python3 scripts/eval_tasks.py --mock
@@ -136,6 +139,9 @@ jobs:
 
       - name: Full trigger eval (25 deterministic mock queries)
         run: python3 scripts/eval_trigger.py --mock --runs 1 --out evals/results/trigger-nightly.json
+
+      - name: Eval v2 contracts, graders, process boundaries and replay (offline)
+        run: python3 scripts/test_evals.py
 
       - name: Full behaviour eval + with/without benchmark (deterministic mock)
         run: >

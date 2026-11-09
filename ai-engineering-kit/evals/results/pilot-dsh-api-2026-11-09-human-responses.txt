@@ -1,0 +1,480 @@
+Human review responses — variant labels omitted
+
+## 1. trial-0000 — review-diff/1
+
+Artifact hash: `bbab184665543dff7c07c4dfae31bfc4e6b963ab3221f22bc225d98618a198a7`
+
+## Review: `change.diff` (`src/api/orders.py`)
+
+**What the diff does:** removes the tenant-ownership check from `GET /orders/{order_id}`, so the endpoint returns any order that exists, regardless of which tenant owns it.
+
+### Strengths
+- Nothing unrelated was touched; the change is small and easy to reason about.
+
+### Issues
+
+**[Critical] `change.diff:8-11` (and `src/api/orders.py:9-14`) — cross-tenant order disclosure (IDOR).**
+The diff deletes `tenant_id = user.tenant_id` and drops `order["tenant_id"] != tenant_id` from the guard, leaving only `if order is None: raise 404`. Any authenticated user can now fetch another tenant's order by guessing or enumerating `order_id`. That is a direct data-confidentiality breach, and per `.aiek/adapter.md` anything touching auth is a hard LARGE-lane trigger.
+**Fix:** restore tenant scoping, preferably at the lookup so it can't be forgotten:
+```python
+order = load_order(order_id, tenant_id=user.tenant_id)
+if order is None:
+    raise HTTPException(status_code=404)
+```
+Keep the same 404 for "not found" and "not yours" so the endpoint isn't an existence oracle.
+
+**[Important] No test accompanies a security-control change.**
+There is no test in the repo asserting the isolation behavior, and the diff adds none. A test like "tenant-b user requests a tenant-a order → 404, owner → 200" would have failed on this change and is the only thing that keeps the guard from being removed again.
+**Fix:** add the regression test and record its failing-before/passing-after output.
+
+**[Minor] `tenant_id` is left unused (`change.diff:8` → `src/api/orders.py:10`).**
+In the diff's intended state the assignment disappears with its only use. If you keep the variable for a later check, use it; otherwise remove it to avoid an `F841` lint failure.
+
+**[Important, process] Diff and working tree disagree.**
+`src/api/orders.py` on disk still contains `tenant_id = user.tenant_id` (line 10) while the diff deletes that line. Either `change.diff` is stale or there's uncommitted divergence — either way, what gets merged may not be what I just reviewed. Reconcile the diff with the branch before approving.
+
+### Set aside
+- `load_order` is not imported or defined anywhere in the repo (`app/` or `src/`); it looks like a pre-existing stub, not introduced by this diff, so I did not score it.
+- No migration, config, or compatibility impact.
+
+### Verdict
+**Ready: No.** Do not merge: this removes a tenant-isolation control and exposes every tenant's orders to any authenticated user, with no test or justification. Restore the check, add the regression test, and resubmit.
+
+## 2. trial-0001 — review-diff/1
+
+Artifact hash: `4df6901858c201c8f8f06d1c3b83e3c966044d1aa0d283928fb95a0bea28bf7e`
+
+I'll start by reading the diff.
+Bash is unavailable in this environment (sandbox backend failure), so I'll inspect the files with the file tools.
+## Verdict: do not merge
+
+This is a one-hunk diff, but it contains a serious authorization regression plus a technical problem that means it isn't a valid/applyable patch anyway. I reviewed statically — `bash` is non-functional in this session (sandbox backend error: `sandbox-exec: sandbox_apply: Operation not permitted`), so I could not run tests or `git apply --check`.
+
+### 1. Blocking — removes the tenant ownership check (cross-tenant data leak)
+
+`change.diff:10-11` deletes the only authorization logic on this endpoint:
+
+```diff
+-    if order is None or order["tenant_id"] != tenant_id:
++    if order is None:
+```
+
+`load_order(order_id)` is keyed only by order id, so after this change any authenticated user can read **any tenant's** order by guessing/enumerating an id:
+
+1. User from `tenant-a` calls `GET /orders/<id-belonging-to-tenant-b>`.
+2. `order is None` is false.
+3. Endpoint returns `200` with `tenant-b`'s full order object.
+
+This is a textbook BOLA/IDOR (OWASP API Security #1) and leaks cross-tenant PII/order data. The `Depends(current_user)` makes the caller *authenticated*, not *authorized*. Removing `tenant_id` also drops the last use of `user`, which may tempt a follow-up "cleanup" — do **not** remove the `user=Depends(current_user)` dependency, or the endpoint becomes fully public.
+
+Required shape (also hoisting the lookup so the check can't be split later):
+
+```python
+@router.get("/orders/{order_id}")
+def get_order(order_id: str, user=Depends(current_user)):
+    order = load_order(order_id)
+    if order is None or order["tenant_id"] != user.tenant_id:
+        raise HTTPException(status_code=404)
+    return order
+```
+
+Keeping `404` (rather than `403`) for another tenant's order is correct — don't "improve" that to 403, as it discloses that the id exists.
+
+### 2. Blocking — the hunk header is wrong; the patch cannot apply
+
+The hunk is declared `@@ -8,10 +8,8 @@` (`change.diff:5`), but it only contains **7 old-side lines and 6 new-side lines**: old lines 8–14, i.e. through end of file. The header should be `@@ -8,7 +8,6 @@`. `git apply` rejects this as a corrupt patch.
+
+It also doesn't match the working tree. The current `src/api/orders.py` still has `tenant_id = user.tenant_id` (`src/api/orders.py:10`) but has **already lost** the authorization `if`. So this file is neither the pre-image nor the post-image of the diff: the tree is already in the vulnerable state, and the diff is stale/hand-edited. The `index 1111111..2222222` hashes are placeholders, which reinforces that this wasn't produced by `git diff`.
+
+Before merging: regenerate from the real tree (`git diff > change.diff`), confirm `git apply --check change.diff` is clean, and make sure you're reviewing the change actually staged — right now reviewing this diff would not tell you what's really landing.
+
+### 3. Non-blocking, but worth fixing in the same PR
+
+- **No regression test.** There are no tests in the repo (only `app/auth.py`, `src/api/orders.py`, `README.md`), so nothing would have caught this. Add a test that overrides `current_user` to `tenant-b` and asserts `404` for a `tenant-a` order; that single test pins the invariant permanently.
+- **Pre-existing bug:** `load_order` is never imported or defined in `src/api/orders.py` (only `APIRouter`, `Depends`, `HTTPException`, `current_user`. =`load_order`). As written the endpoint raises `NameError` on every request, and the removed line was the only reader of `tenant_id`. Worth fixing separately, but it means "tests pass" claims about this file are suspect.
+
+### Summary
+
+| Severity | Finding |
+|---|---|
+| Blocker | Cross-tenant read (BOLA/IDOR) — tenant check deleted, `change.diff:10-11` |
+| Blocker | Malformed hunk header + file already partially modified; patch won't apply and doesn't reflect the tree |
+| Should fix | No tenant-isolation regression test |
+| Note | `load_order` undefined (pre-existing) |
+
+Merge only after the tenant check is restored, the diff is regenerated against the real tree, and a cross-tenant 404 test exists. Happy to apply the corrected patch and add the test if you want.
+
+## 3. trial-0002 — vague-ticket/1
+
+Artifact hash: `0091c7fdf71e5b1387c364ab8fda0916294701f1401fd4069f63ba314890b11f`
+
+I picked up OSA-123 and reviewed both files:
+
+- `tracker/OSA-123.md` — the only acceptance criterion is "Search must be fast," and the ticket itself notes there is no latency target, environment, data shape, or success measurement.
+- `app/search.py` — a 3-line placeholder `search()` with no index, data source, or benchmark.
+
+I have **not** changed any code, because "fast" isn't testable as written. Optimizing now would mean inventing a target and a workload, and I'd have no way to prove the ticket is done.
+
+**To unblock, I need four things:**
+
+1. **Target** — what latency, at which percentile, on what corpus? For example: "p95 ≤ 100 ms for 10k documents on the CI runner" or "10× faster than the current baseline."
+2. **Baseline** — the current benchmark command/timings, or permission for me to add a benchmark and establish one.
+3. **Workload** — corpus size, query mix, warm vs. cold, concurrency, and whether the data fits in memory.
+4. **Constraints / definition of done** — may I add an index, cache, or dependency? Must the public API stay the same? Which benchmark gates merge?
+
+If you don't have a preference, my proposed default would be: **p95 < 100 ms and p99 < 250 ms on a representative 10k-document corpus on the standard CI runner, no new runtime dependencies, public API unchanged, with a committed benchmark that enforces the threshold.** Confirm or adjust that and I'll implement it.
+
+One environment note: shell commands are currently failing with `sandbox-exec: Operation not permitted` (no usable `workspace-write` backend), so I can't run tests, benchmarks, or git. I'll need `danger-full-access` or a fixed sandbox to measure anything.
+
+## 4. trial-0003 — vague-ticket/1
+
+Artifact hash: `eb604a77162068e915eec4883e05d25408e1f8f2f0aeeaf4530b2ee7d1b2b390`
+
+BLOCKED: OSA-123's only acceptance criterion, "Search must be fast", has no metric, threshold, unit or measurement conditions — it cannot be checked as written.
+
+**Blocker:** AC-01 is a quality word, not an observable result. It states no metric (latency? throughput? time-to-first-result?), no number, no unit, and no conditions (dataset size, load, warm/cold cache, server- or client-side). The ticket's own note confirms none of this is defined. The repo offers no evidence to borrow a target from: `app/search.py` is a 3-line placeholder over two items, there are no benchmarks or perf tests, `.aiek/adapter.md` has `baselines: []`, and no SLO/perf-budget document exists. There is also no baseline to "improve" against, so the ticket title doesn't pin the behavior down either.
+
+**Attempted:**
+- Read `tracker/OSA-123.md` — criterion and note say no latency target, environment, data shape or success measurement.
+- Read `app/search.py` and globbed the whole repo — no perf tests, benchmarks, SLOs or latency baselines.
+- Checked `.aiek/adapter.md` — no verify command or baseline captures latency.
+- Applied `references/ac-quality-checklist.md` — AC-01 has no starting state, no trigger, no expected result, and is on the "qualities that need a threshold" list.
+
+**Required:** The requirements owner answers AC-01 before any lane is chosen, spec written or code changed:
+
+> **Q (AC-01):** What number defines "fast" for search — e.g. "p95 server-side latency under ___ ms for a single-term query over a ___ document index at ___ queries/second" — and in which environment (local CI, staging, production) is it measured?
+
+A one-sentence answer with a metric, threshold and unit is enough; I will treat the conditions as part of the agreed measurement. Since no target exists in the repo, I am **not** filling the gap with my own guess.
+
+**Assumptions proposed for the owner to accept or replace** (labeled, not adopted): p95 server-side latency < 200 ms for a single-term query on a production-sized index at 20 QPS, warm cache. The number and conditions are placeholders — the owner's answer overrides them.
+
+**State left behind:** None. No lane classified (per the intake hard gate), no spec, no branch/worktree, no files modified. The working tree is exactly as received.
+
+**Traceability table (intake artifact — one row per criterion):**
+
+| Criterion | Rule(s) it enforces | Bucket | Proven by | Acceptance case |
+|---|---|---|---|---|
+| AC-01 Search must be fast | — (no business rules in ticket) | **not checkable as written** | — | **question raised** (metric/threshold/unit/conditions above) |
+
+Once AC-01 comes back with a number and unit, it becomes machine-checkable (a latency benchmark at the lowest layer that can reproduce the stated conditions), and I can classify the lane and continue.
+
+## 5. trial-0004 — vague-ticket/1
+
+Artifact hash: `54cc71c8ba347d3e25ff5ef28b5a7fc04e676ed1d57409b07f3a344226a2ecbc`
+
+I'll start by loading the ticket intake skill, which is the required first step for a ticket with acceptance criteria.
+Now let me look at the project context — the adapter, the harness handoff conventions, and any ticket artifacts for OSA-123.
+The sandbox backend isn't available on this host. I'll retry the same read-only commands with the wider mode they require.
+Shell execution is unavailable in this environment (no usable sandbox backend and no approval channel). I'll proceed with the file tools, which use a separate filesystem backend.
+BLOCKED: OSA-123's only acceptance criterion — "Search must be fast" — has no measurable threshold, so it cannot be checked as written.
+
+**Blocker:** "Fast" is a quality word, not an observable result. AC-01 names no metric, no threshold with a unit, and no measurement conditions (environment, data shape/size, load, percentile). The ticket's own Notes confirm this ("No latency target, environment, data shape or success measurement is defined yet"). Nothing in the repo supplies a target either: `app/search.py` is a 3-line placeholder, and there is no perf test, benchmark, SLO doc or baseline to borrow a number from. Any threshold I picked would be invented, so I am not adopting one.
+
+**Attempted:** Read `tracker/OSA-123.md`, `.aiek/adapter.md`, `.aiek/core/handoffs.md`, `.aiek/core/classification.md`, the AC quality checklist, and `app/search.py`; searched the workspace for an existing latency target or baseline — none found. The optional `.aiek/scripts/traceability.py` could not be run because this environment has no usable shell (workspace-write sandbox backend unavailable, no approval channel); the single-criterion table was checked by hand.
+
+**Required:** The requirements owner must replace AC-01 with a measurable criterion. One question for AC-01:
+
+> **AC-01:** For search, what number should count as "fast" — which metric and percentile, what threshold and unit, over what data set and environment, and at what load? For example: "p95 search latency ≤ ___ ms over a corpus of ___ records on ___ (environment), at ___ concurrent requests, measured by ___."
+
+The blanks must come from you; I am not treating the example values as agreed. If search must stay fast as data grows, include the expected corpus size and growth in that answer.
+
+Traceability table (the artifact the rest of the workflow would read):
+
+| Criterion | Rule(s) it enforces | Bucket | Proven by | Acceptance case |
+|---|---|---|---|---|
+| AC-01 Search must be fast | — (ticket states no business rules) | not checkable as written | — | **question raised** (above) |
+
+**State left behind:** None — read-only; no files created or modified. No lane classified, no spec/plan/tasks written, and no code changed. Once AC-01 is measurable (metric · threshold · unit · conditions), intake can finish and the lane can be classified.
+
+## 6. trial-0005 — vague-ticket/1
+
+Artifact hash: `30196cc35ee0e6d31e760939bdb24fc4a274233bf1b6463d944c04e3e17128be`
+
+I'll start by exploring the workspace to understand what OSA-123 involves.
+The shell sandbox backend is unavailable on this host, so I'll work with the file tools. Let me read the ticket and the relevant code.
+I read the ticket and the only relevant source file.
+
+**What I found**
+
+`tracker/OSA-123.md` says:
+
+> **OSA-123 — Improve search**
+> Acceptance criteria: Search must be fast.
+> Notes: No latency target, environment, data shape or success measurement is defined yet.
+
+`app/search.py` is a 3-line placeholder that filters a hard-coded two-item list. There are no tests, benchmarks, fixtures, data files, or project config in the workspace.
+
+**Why I'm not changing code yet**
+
+"Fast" isn't a verifiable acceptance criterion. There is no latency threshold, no workload, no data size, and no measurement environment, so any optimization I make would be unprovable — and I'd be inventing the requirement rather than implementing it. The ticket itself acknowledges this gap. I'd rather get that pinned down than guess and produce a change nobody can accept.
+
+**Questions that unblock this**
+
+1. **Target** — what latency counts as "fast"? e.g. p50/p95/p99 in ms, at what query throughput?
+2. **Workload** — corpus size and shape, query mix, expected result set sizes, cold vs. warm cache.
+3. **Environment** — where is it measured (laptop, CI, production), and on what hardware/runtime?
+4. **Baseline** — do we have current numbers? What improvement is required (absolute ms, speedup factor)?
+5. **Scope** — is "search" just `search()` in `app/search.py`, or the wider service? May I add an index/cache/dependency, or change the function signature/return type?
+6. **Correctness** — I assume results must stay identical; please confirm, and point me at the test suite if one exists outside this workspace.
+
+**Proposed measurable replacement for the AC** (adjust numbers):
+
+> On a benchmark of 100k documents and 1k representative queries, on the CI runner, search returns identical results with p95 latency ≤ 100 ms, measured by a committed benchmark script.
+
+Once I have the target and workload, I can add a baseline benchmark first, then optimize against it so the improvement is demonstrated rather than asserted. One operational note: shell commands currently fail here because the configured `workspace-write` sandbox backend isn't usable on this host (`sandbox-exec: Operation not permitted`), so I'd need `danger-full-access` approval to run Python/benchmarks when we get to that step.
+
+## 7. trial-0006 — review-diff/1
+
+Artifact hash: `ac68b12b1a3174692eb2cc1f7bf294dc4b8ef1a4a98cf940482f86fa2799b500`
+
+## Review: `change.diff`
+
+**What it does:** removes the tenant-ownership check from `GET /orders/{order_id}`, leaving only an existence check. The request is still authenticated via `Depends(current_user)`, but no longer authorized per tenant.
+
+### Issues
+
+**[Critical] `src/api/orders.py:10-12` — cross-tenant data exposure (IDOR).**
+`load_order(order_id)` looks the order up by ID alone, and the returned order is handed back with no comparison to `user.tenant_id`. Any authenticated user can read any tenant's order by supplying its ID. The old code returned 404 for non-owned orders, which also prevented ID enumeration; the new code returns 200 with the full record. If order IDs are sequential or leak in logs/URLs, this is a straightforward data breach.
+
+Fix — restore the ownership check, preferably enforcing it at the data layer so future callers can't forget it:
+
+```python
+order = load_order(order_id)
+if order is None or order["tenant_id"] != user.tenant_id:
+    raise HTTPException(status_code=404)
+```
+
+(or `load_order(order_id, tenant_id=user.tenant_id)`).
+
+**[Important] `change.diff:1-13` — the diff does not match the working tree.**
+The checked-in `src/api/orders.py:10` still contains `tenant_id = user.tenant_id`, but the ownership `if` is already gone. That matches neither the pre-image nor the post-image of this diff, so the patch cannot apply cleanly as-is, and the vulnerable state may already be in the tree. Regenerate/rebase the diff and confirm the intended final file before merging.
+
+**[Important] `src/api/orders.py` — no regression test.**
+The repo has no tests and the diff adds none. Tenant isolation is exactly the behavior that needs a lock: own-tenant order → 200, other-tenant order → 404, missing order → 404. Note `load_order` is not defined or imported anywhere in the repo, so the endpoint can't actually run as checked in — a pre-existing gap that blocks real verification.
+
+**[Minor] `src/api/orders.py:9` — `user` is now an unused parameter.**
+The `Depends` still authenticates but no longer authorizes; linters may flag the dead argument. Restoring the check resolves it.
+
+### Requirements
+
+No spec, ticket, or acceptance criteria is present in the repo, and nothing states that cross-tenant access is intended. If sharing orders across tenants really is the goal, that is a product/security decision requiring a spec and a different access model — not a silent deletion of the check. Absent that, this is a security regression.
+
+### Set aside
+
+- `order["tenant_id"]` would raise `KeyError` if the key were missing — pre-existing, not introduced by this diff.
+- Returning 404 rather than 403 for non-owned orders — existing convention, reasonable to keep (avoids confirming existence).
+- I could not run the suite or `git` here: there are no tests, and the workspace sandbox backend would not start.
+
+### Verdict
+
+**No — do not merge.** The diff removes tenant isolation from an order-read endpoint, turning a 404 into a cross-tenant data leak.
+
+## 8. trial-0007 — review-diff/1
+
+Artifact hash: `b55a8f700436c0ecb1be892049dbaa7b2f627e61e2559f8cecbf6e502d212ac7`
+
+## Verdict: Block — this removes tenant isolation (cross-tenant IDOR)
+
+### Blocking issue
+`change.diff` (lines 10–11) drops the ownership check in `GET /orders/{order_id}`:
+
+```diff
+-    if order is None or order["tenant_id"] != tenant_id:
++    if order is None:
+```
+
+`load_order(order_id)` takes no tenant/user argument, so it cannot be filtering by tenant internally. After this change, **any authenticated user can read any tenant's order** simply by supplying its `order_id` — a classic broken access control / IDOR (OWASP A01). `current_user` still enforces authentication, but all authorization is gone. If order IDs are guessable or enumerable, this is a full cross-tenant data leak.
+
+### Suggested fix
+Keep the tenant check (and note `user` would otherwise become an unused parameter):
+
+```python
+@router.get("/orders/{order_id}")
+def get_order(order_id: str, user=Depends(current_user)):
+    order = load_order(order_id)
+    if order is None or order["tenant_id"] != user.tenant_id:
+        raise HTTPException(status_code=404)
+    return order
+```
+
+Better still, push the scope into the data layer so it can't be forgotten at a call site:
+
+```python
+order = load_order(order_id, tenant_id=user.tenant_id)
+if order is None:
+    raise HTTPException(status_code=404)
+```
+
+Returning `404` (rather than `403`) is the right choice here — it avoids leaking whether another tenant's order exists.
+
+### Additional notes
+- **Working tree doesn't match the diff.** `src/api/orders.py:10` still contains `tenant_id = user.tenant_id`, the diff removes that line, and the check itself is already gone. So the vulnerable state is currently checked in, but the patch as shown wouldn't apply cleanly. Rebase/regenerate the diff and confirm the final file.
+- No tests cover tenant isolation in this repo, which is likely how this slipped through. A regression test asserting tenant B gets 404 for tenant A's order would be worth adding.
+- Review was static only — the sandbox backend was unusable on this host, so I couldn't run the test suite.
+
+## 9. trial-0008 — vague-ticket/1
+
+Artifact hash: `43c4467688b16e2bf1802fdc3bc2bcdc9b8a75ca24d40f78082e20cbb999f195`
+
+I'll load the ticket-intake skill first, since this ticket arrives with an acceptance criterion before any lane is chosen.
+The sandbox backend can't start on this host, so I'll retry the same read-only inspection with the wider mode.
+Shell access is unavailable (no sandbox backend, no approval channel). I'll use the file tools directly.
+There's an actual `app/search.py` — let me check it for any existing performance evidence before deciding the criterion is uncheckable.
+No performance target, benchmark, or SLO exists anywhere in the repo — `app/search.py` is an explicit placeholder and the adapter has `baselines: []`. So "fast" cannot be converted from existing evidence. I'll record the intake table and stop at the hard gate.
+BLOCKED: OSA-123's only acceptance criterion, "Search must be fast," has no measurable target, so it cannot be checked.
+
+**Blocker:** AC-01 is a quality with no metric, threshold, unit, or measurement conditions. The ticket's own notes confirm no latency target, environment, data shape or success measurement is defined. There is also no existing target in the repo to adopt: `.aiek/adapter.md` has `baselines: []`, `app/search.py` is an explicit placeholder with no benchmark, and no SLO/performance docs exist. Implementing now would be guessing what "fast" means.
+
+**Attempted:** Read the full ticket, the adapter (`planning.mode: speckit`, `baselines: []`), and `app/search.py`; searched the workspace for an existing latency/SLO target or benchmark. Found none. Intake table saved to `tracker/OSA-123-intake.md`. The optional `traceability.py` check could not run because the shell sandbox cannot start on this host (`sandbox-exec: sandbox_apply: Operation not permitted`); the table was checked by hand and the AC analysis does not depend on it.
+
+**Traceability**
+
+| Criterion | Rule(s) it enforces | Bucket | Proven by | Acceptance case |
+|---|---|---|---|---|
+| AC-01: Search must be fast. | — (no business rules stated) | not checkable as written | — | Q-01 raised |
+
+**Required — Q-01:** What should "fast" mean in numbers: what p95 (or p99) search latency, in milliseconds, for which search operation, on what corpus and environment, with what query mix and concurrency, warm or cold cache?
+
+To make that answerable, a proposed default would be **p95 ≤ 200 ms on a 1,000-document corpus, single user, warm cache, staging hardware** — but those numbers are an assumption only, not adopted. Confirm or replace them. Once AC-01 has a checkable threshold, I can classify the lane and proceed.
+
+**State left behind:** Intake note only; ticket, code, and plan untouched; no lane chosen; no branch, worktree, or commit. No specification or implementation work was started.
+
+## 10. trial-0009 — vague-ticket/1
+
+Artifact hash: `043b7b8edca1968573a8c399c1c93093ed139918195e560ac5f6ca6732784f83`
+
+I've reviewed OSA-123 and the current search implementation.
+
+**Ticket status: blocked on an unverifiable acceptance criterion — no code changes made.**
+
+`tracker/OSA-123.md` says only:
+
+> Search must be fast.
+
+and its own notes confirm there is **no latency target, environment, data shape, or success measurement**. That means I can't tell whether any change passes or fails, and picking an arbitrary optimization (caching, indexing, etc.) would be guessing at the requirement.
+
+`app/search.py` is a placeholder filtering a two-element list, so there is also no real workload to measure against.
+
+To make this actionable, I need the following (or approval to use the defaults I propose):
+
+1. **Metric and threshold** — e.g. p95 latency ≤ 200 ms, or ≥ 1,000 queries/sec.
+2. **Workload and data shape** — corpus size, query type (substring, prefix, fuzzy), read/write ratio, index refresh expectations.
+3. **Environment** — target hardware/runtime where the target must hold (CI, laptop, production).
+4. **Measurement method** — existing benchmark harness, or should I add one?
+5. **Scope of "search"** — the `search()` function only, or an API/service path?
+
+**Proposed default AC** (say "use these" and I'll proceed):
+
+> On production-like hardware with a 10,000-item corpus, `search()` returns substring matches with **p95 latency ≤ 200 ms** over 1,000 queries, measured by a checked-in benchmark script.
+
+Once the criterion is measurable, I'll implement the optimization plus the benchmark and report before/after numbers. Which option do you want?
+
+## 11. trial-0012 — review-diff/1
+
+Artifact hash: `e54e2f5c75cff4194703fca5c84149a5aa545c890bd0da00dc965f58f3144ec3`
+
+## Review: `change.diff`
+
+**Scope reviewed:** the single hunk in `src/api/orders.py` (`GET /orders/{order_id}`). I had no spec/acceptance criteria, PR description, or verification evidence to compare against, so requirements coverage is judged against expected behavior for a tenant-scoped API. The repo has no test suite, and shell commands couldn't run in this environment (sandbox backend unavailable), so this is a static review.
+
+### Strengths
+- The change is tiny and easy to reason about.
+- Keeping the `order is None → 404` path is correct.
+
+### Issues
+
+**[Critical]** `src/api/orders.py:10-13` — the tenant-isolation check was deleted.
+`tenant_id` is still read from `current_user()` on line 10, but the condition is now only `if order is None`. Any authenticated user can fetch any tenant's order by supplying an `order_id`; this is a broken object-level authorization (IDOR) vulnerability, not just a behavior change. It also silently changes cross-tenant responses from a deliberately uninformative `404` to returning another tenant's data. If `order_id` values are sequential or otherwise guessable, this is a full cross-tenant data leak.
+*Fix:* restore the ownership check before returning, keeping the `404` (rather than `403`) so order existence isn't disclosed:
+```python
+order = load_order(order_id)
+if order is None or order["tenant_id"] != user.tenant_id:
+    raise HTTPException(status_code=404)
+return order
+```
+If removing tenancy here is genuinely intended (e.g. orders became global/public), that is a product and security decision that needs an explicit spec and an alternative authorization rule — not a silent diff.
+
+**[Important]** `src/api/orders.py:8-14` — no regression test for the authorization boundary.
+This is exactly the kind of change a single test would catch: request an order belonging to tenant B as tenant A and assert `404`. No tests were added, and the repository appears to have none, so nothing would fail if this check disappeared again. Add a test that fails against the new code and passes with the check restored (cross-tenant → 404, missing order → 404, own order → 200). If test infrastructure genuinely doesn't exist, that gap should be raised as its own task rather than waived for an auth change.
+
+**[Minor]** `src/api/orders.py:10` — `tenant_id` is now assigned and never used. This is a `F841` lint failure under ruff/flake8 and a strong hint that the deletion was accidental. Remove it only if the check is deliberately gone; otherwise the restored check uses it.
+
+### Set aside
+- `load_order` is neither imported nor defined anywhere in the repo (`src/api/orders.py:11`). That would be a runtime `NameError`, but it predates this diff and isn't introduced here — worth confirming the real project has it, but it's not a finding against this change.
+- No `specs/<feature>/` artifact or PR description was provided, so I could not verify acceptance criteria or detect scope creep beyond the hunk itself.
+- The pre-existing `404` status style (no `detail`) is consistent with the surrounding code and out of scope.
+
+### Verdict
+
+**Ready: No.** A Critical authorization regression removes tenant isolation on an order-read endpoint.
+
+Process note: this change touches auth, which the project adapter treats as a hard trigger for the LARGE lane with independent review. Do not merge this on a self-review alone — restore the check, add the cross-tenant test, and get an independent reviewer/human sign-off with fresh test evidence.
+
+## 12. trial-0013 — review-diff/1
+
+Artifact hash: `5f6e8bd12865fa8337275f3aa30bb3a1e951a8495942992764b85c59aba265c8`
+
+I'll start by reading the diff file.
+The shell sandbox is unavailable on this host. I'll use the file tools instead.
+## Verdict: Request changes — blocking security regression
+
+The diff is a one-hunk change to `src/api/orders.py` and it removes tenant scoping from an order-read endpoint. That is an IDOR / Broken Object Level Authorization (OWASP API1:2023) bug, not a refactor.
+
+### [BLOCKER] Cross-tenant read via `GET /orders/{order_id}`
+
+`change.diff:8-11` deletes both the `tenant_id` lookup and the ownership comparison:
+
+```diff
+-    tenant_id = user.tenant_id
+     order = load_order(order_id)
+-    if order is None or order["tenant_id"] != tenant_id:
++    if order is None:
+         raise HTTPException(status_code=404)
+     return order
+```
+
+After this, any authenticated user can fetch any order by ID and receive the full payload — including other tenants' data (`tenant_id`, and whatever else `load_order` returns). The `Depends(current_user)` only proves *who* the caller is; it never proves the caller may see *this* order. `src/api/orders.py:9-13` shows nothing else compensates for the removed check.
+
+Two aggravating factors:
+
+- If `order_id` is sequential/guessable, the whole order table becomes enumerable by any logged-in account.
+- The 404 for a wrong-tenant order was also correct behavior (it avoids confirming existence of another tenant's resource). Returning 200 leaks existence *and* contents.
+
+Note this is likely the most attractive kind of diff to wave through: it's small, it deletes a line that "looks redundant" because `load_order` is already called, and tests probably only cover the happy path.
+
+### Recommended fix
+
+Enforce scope at the data-access layer so it can't be forgotten at a call site:
+
+```python
+@router.get("/orders/{order_id}")
+def get_order(order_id: str, user=Depends(current_user)):
+    order = load_order(order_id, tenant_id=user.tenant_id)  # filtered in the query
+    if order is None:
+        raise HTTPException(status_code=404)
+    return order
+```
+
+If you must keep `load_order(order_id)` unchanged, the minimum safe form is to restore the check and fail closed — `.get()` rather than `[]`, so a malformed/legacy order without `tenant_id` is denied instead of raising `KeyError` → 500:
+
+```python
+    order = load_order(order_id)
+    if order is None or order.get("tenant_id") != user.tenant_id:
+        raise HTTPException(status_code=404)
+```
+
+### Tests to add before merging
+
+- Tenant A requests its own order → 200.
+- Tenant B requests tenant A's order ID → 404 (assert body is the same as a nonexistent ID, so existence isn't distinguishable).
+- Missing/malformed `tenant_id` on the order → 404, not 500.
+- Unauthenticated request → 401/403.
+
+I'd also make the tenant-scoped variant the only exported loader, so a future endpoint can't repeat this by calling the unscoped one.
+
+### Non-blocking notes
+
+- **[Caveat] The hunk header doesn't match its body.** `@@ -8,10 +8,8 @@` claims 10 old / 8 new lines, but only 7 old / 6 new are present and `change.diff` ends at line 13. Combined with the placeholder `index 1111111..2222222` hashes, this looks like a fragment or a hand-edited diff. Please confirm no other hunks were dropped from review — especially other routes with the same pattern.
+- **[Pre-existing, not caused by this diff]** `src/api/orders.py:11` calls `load_order(...)` but the module imports only `APIRouter`, `Depends`, `HTTPException`, and `current_user` (lines 1-3). As written this raises `NameError` at request time. Worth fixing in the same PR, or confirm the real module has an import that was stripped from this excerpt.
+- I could not run the test suite: this host has no usable `workspace-write` sandbox backend, so the review above is static (file inspection only).
+

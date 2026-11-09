@@ -1,0 +1,135 @@
+{
+  "schema": "aiek-aborted-eval/1",
+  "status": "aborted-environment-invalid",
+  "reason": "DSH shell/search could not create subprocess temp artifacts outside sandbox writable root; TMPDIR was not redirected.",
+  "experiment": "evals/results/local/pilot-dsh-api-2026-11-09",
+  "completed_records": 8,
+  "started_slots": 9,
+  "unfinished_started_slots": [
+    "trial-0008.started.json"
+  ],
+  "known_usage": {
+    "total_tokens": 1305891,
+    "input_tokens": 62418,
+    "output_tokens": 56401,
+    "cache_read_tokens": 1187072
+  },
+  "usage_incomplete": true,
+  "comparison_valid": false,
+  "automatic_retries": 0,
+  "trials": [
+    {
+      "id": "trial-0000",
+      "scenario": "review-diff",
+      "variant": "full-kit",
+      "status": "completed",
+      "duration_s": 47.314486,
+      "usage": {
+        "total_tokens": 167241,
+        "output_tokens": 5472,
+        "input_tokens": 12521,
+        "cache_read_tokens": 149248,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0001",
+      "scenario": "review-diff",
+      "variant": "no-kit",
+      "status": "completed",
+      "duration_s": 34.263036,
+      "usage": {
+        "total_tokens": 48699,
+        "output_tokens": 4411,
+        "input_tokens": 1664,
+        "cache_read_tokens": 42624,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0002",
+      "scenario": "vague-ticket",
+      "variant": "no-kit",
+      "status": "completed",
+      "duration_s": 57.724493,
+      "usage": {
+        "total_tokens": 131299,
+        "output_tokens": 8255,
+        "input_tokens": 3748,
+        "cache_read_tokens": 119296,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0003",
+      "scenario": "vague-ticket",
+      "variant": "full-kit",
+      "status": "completed",
+      "duration_s": 55.490051,
+      "usage": {
+        "total_tokens": 202139,
+        "output_tokens": 6435,
+        "input_tokens": 14200,
+        "cache_read_tokens": 181504,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0004",
+      "scenario": "vague-ticket",
+      "variant": "full-kit",
+      "status": "completed",
+      "duration_s": 34.86953,
+      "usage": {
+        "total_tokens": 112133,
+        "output_tokens": 4248,
+        "input_tokens": 12653,
+        "cache_read_tokens": 95232,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0005",
+      "scenario": "vague-ticket",
+      "variant": "no-kit",
+      "status": "completed",
+      "duration_s": 128.573305,
+      "usage": {
+        "total_tokens": 424924,
+        "output_tokens": 19086,
+        "input_tokens": 8782,
+        "cache_read_tokens": 397056,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0006",
+      "scenario": "review-diff",
+      "variant": "full-kit",
+      "status": "completed",
+      "duration_s": 47.037327,
+      "usage": {
+        "total_tokens": 136130,
+        "output_tokens": 5673,
+        "input_tokens": 6553,
+        "cache_read_tokens": 123904,
+        "cache_write_tokens": 0
+      }
+    },
+    {
+      "id": "trial-0007",
+      "scenario": "review-diff",
+      "variant": "no-kit",
+      "status": "completed",
+      "duration_s": 28.594281,
+      "usage": {
+        "total_tokens": 83326,
+        "output_tokens": 2821,
+        "input_tokens": 2297,
+        "cache_read_tokens": 78208,
+        "cache_write_tokens": 0
+      }
+    }
+  ],
+  "next_experiment": "evals/results/local/pilot-dsh-api-fixed-2026-11-09"
+}

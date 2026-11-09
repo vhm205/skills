@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "dimension",
+    "required",
+    "critical",
+    "status",
+    "evidence"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dimension": {
+      "enum": [
+        "outcome",
+        "compliance",
+        "safety"
+      ]
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "critical": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail",
+        "unavailable",
+        "pending-review",
+        "not-applicable"
+      ]
+    },
+    "evidence": {
+      "type": "string"
+    }
+  }
+}

@@ -43,7 +43,7 @@ Take the **highest** column that any row lands in.
 
 | Lane | Required | Optional |
 |---|---|---|
-| **SMALL** | `executing-task` → `verifying-change` → self-review via `reviewing-change` → DONE | TDD, worktree |
+| **SMALL** | Inline execution → verification → self-review → compact DONE ([small-changes.md](small-changes.md)) | TDD, worktree |
 | **NORMAL** | Spec Kit `specify` → `clarify` (if the spec has `[NEEDS CLARIFICATION]`) → `plan` → `tasks` → `executing-task` → `verifying-change` → `reviewing-change` → DONE | `checklist`, `analyze`, worktree, parallel tasks |
 | **LARGE** | research → `specify` → `clarify` → `plan` → **NEEDS DECISION if a trade-off remains** → `tasks` → `analyze` → `using-worktrees` → `executing-task` → `verifying-change` → `reviewing-change` by an **independent reviewer** (subagent or human) → DONE | TDD (often required by adapter), `checklist` |
 | **INFRA** | recorded decision → `shipping-infrastructure` → `verifying-change` → `reviewing-change` (independent) → `accepting-change` (ops mode) → DONE | `using-worktrees` |

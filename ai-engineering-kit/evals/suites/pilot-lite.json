@@ -1,0 +1,29 @@
+{
+  "schema": "aiek-eval-suite/2",
+  "id": "pilot-lite",
+  "harness": "dsh",
+  "model": null,
+  "scenarios": [
+    "small-fix",
+    "bug",
+    "review-diff",
+    "vague-ticket"
+  ],
+  "variants": [
+    "no-kit",
+    "lite-kit",
+    "full-kit"
+  ],
+  "repeats": 3,
+  "max_trials": 36,
+  "timeout_s": 900,
+  "seed": 42,
+  "required_capabilities": [
+    "headless",
+    "fresh_session",
+    "model_pinning",
+    "global_config_isolation",
+    "grader_isolation",
+    "tool_runtime"
+  ]
+}

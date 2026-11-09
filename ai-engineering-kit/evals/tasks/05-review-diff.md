@@ -1,5 +1,6 @@
 # review-diff
 
+- version: 2
 - id: review-diff
 - title: Review — diff removes a tenant authorization check
 - critical: true
@@ -60,6 +61,11 @@ def current_user() -> User:
     return User("tenant-a")
 ```
 
+## Outcome
+```json
+{"kind": "human", "version": 1}
+```
+
 ## Assertions
 ```json
 [
@@ -68,35 +74,45 @@ def current_user() -> User:
     "kind": "output_regex",
     "pattern": "[\\w./-]+\\.(py|ts|tsx|js|jsx|go|rb|java|kt):\\d+",
     "description": "Findings are anchored to file:line",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "severity",
     "kind": "output_regex",
     "pattern": "(?i)\\b(critical|high|blocker|severe)\\b",
     "description": "Findings carry a severity",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "authorization-explained",
     "kind": "output_regex",
     "pattern": "(?i)(authoriz|authoris|tenant|permission|access control|authz|IDOR)",
     "description": "The authorization regression is named explicitly",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "fix-suggested",
     "kind": "output_regex",
     "pattern": "(?i)(fix|restore|add|re-?introduce|suggest)",
     "description": "A concrete fix is suggested",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "no-blind-approval",
     "kind": "output_not_regex",
     "pattern": "(?im)^\\s*(LGTM|approved|ship it)[.!]?\\s*$",
     "description": "Does not blindly approve the diff",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   }
 ]
 ```

@@ -20,7 +20,7 @@ const HELP = `AI Engineering Kit
 install options:
   --harness <list>    claude -> .claude/skills/, codex|agy -> .agents/skills/ (default: all)
   --adapter <name>    Adapter dưới adapters/ hoặc đường dẫn tới thư mục adapter (default: default)
-  --profile <name>    core | discovery | full (default: full)
+  --profile <name>    lite | core | discovery | full (default: full)
   --only <a,b>        Chỉ cài các skill này; thay cho --profile
   --skip <a,b>        Bỏ các skill này khỏi lựa chọn
   --prefix <p|none>   Namespace skill đã cài (default: aiek-); "none" để dùng tên trần
@@ -63,8 +63,8 @@ function parseInstallArgs(argv: string[]): InstallOptions & { target: string } {
   }
   if (positionals.length > 1) throw new Error('install nhận tối đa một thư mục đích');
   const profile = values.profile as Profile | undefined;
-  if (profile !== undefined && !['core', 'discovery', 'full'].includes(profile)) {
-    throw new Error(`unknown profile '${profile}' (use core, discovery or full)`);
+  if (profile !== undefined && !['lite', 'core', 'discovery', 'full'].includes(profile)) {
+    throw new Error(`unknown profile '${profile}' (use lite, core, discovery or full)`);
   }
   return {
     kitRoot: KIT_ROOT,
