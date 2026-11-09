@@ -382,5 +382,3 @@ def _sum_usage(steps: list[dict]) -> dict:
         if all(type(step.get(key)) is int and step[key] >= 0 for step in steps):
             result[key] = sum(step[key] for step in steps)
     return result
-
-

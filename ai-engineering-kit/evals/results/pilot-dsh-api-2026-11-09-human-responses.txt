@@ -477,4 +477,3 @@ I'd also make the tenant-scoped variant the only exported loader, so a future en
 - **[Caveat] The hunk header doesn't match its body.** `@@ -8,10 +8,8 @@` claims 10 old / 8 new lines, but only 7 old / 6 new are present and `change.diff` ends at line 13. Combined with the placeholder `index 1111111..2222222` hashes, this looks like a fragment or a hand-edited diff. Please confirm no other hunks were dropped from review — especially other routes with the same pattern.
 - **[Pre-existing, not caused by this diff]** `src/api/orders.py:11` calls `load_order(...)` but the module imports only `APIRouter`, `Depends`, `HTTPException`, and `current_user` (lines 1-3). As written this raises `NameError` at request time. Worth fixing in the same PR, or confirm the real module has an import that was stripped from this excerpt.
 - I could not run the test suite: this host has no usable `workspace-write` sandbox backend, so the review above is static (file inspection only).
-
