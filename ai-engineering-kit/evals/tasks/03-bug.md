@@ -1,5 +1,6 @@
 # bug
 
+- version: 2
 - id: bug
 - title: Bug — login 500 when the email contains a plus sign
 - critical: true
@@ -53,6 +54,11 @@ if __name__ == "__main__":
 Run tests with `python3 -m unittest`.
 ```
 
+## Outcome
+```json
+{"kind": "plus-email", "version": 1}
+```
+
 ## Assertions
 ```json
 [
@@ -61,28 +67,36 @@ Run tests with `python3 -m unittest`.
     "kind": "output_regex",
     "pattern": "(?i)(root cause|root-cause|hypothesis|the cause)",
     "description": "States a root-cause hypothesis instead of patching symptoms",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "regression-test",
     "kind": "output_regex",
     "pattern": "(?i)(regression test|failing test|reproduc)",
     "description": "Registers a reproducing/regression test",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "fix-at-source",
     "kind": "changed_glob",
     "glob": "app/auth.py",
     "description": "The bug is fixed at the source in app/auth.py",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "test-updated",
     "kind": "changed_glob",
     "glob": "tests/**",
     "description": "A test was added or updated for the regression",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   },
   {
     "id": "plus-sign-handled",
@@ -90,21 +104,27 @@ Run tests with `python3 -m unittest`.
     "path": "app/auth.py",
     "pattern": "local.split(\"+\")[1]",
     "description": "The buggy plus-splitting line no longer exists",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "evidence-present",
     "kind": "output_regex",
     "pattern": "(?i)(evidence|verification)",
     "description": "Reports evidence for the fix",
-    "critical": true
+    "critical": true,
+    "dimension": "compliance",
+    "required": true
   },
   {
     "id": "done-present",
     "kind": "output_regex",
     "pattern": "(?i)\\bDONE\\b",
     "description": "Uses the kit DONE handoff; .aiek/core/handoffs.md puts the status line first, so this is ordering-independent (evidence is proven by the evidence assertion)",
-    "critical": false
+    "critical": false,
+    "dimension": "compliance",
+    "required": false
   }
 ]
 ```

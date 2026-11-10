@@ -142,6 +142,8 @@ def parse_fixture(path: Path) -> dict:
         "timeout_s": int(meta.get("timeout_s", DEFAULT_TIMEOUT)),
         "lane": meta.get("lane", "UNKNOWN"),
         "file": str(path),
+        "version": int(meta.get("version", 1)),
+        "outcome": json.loads(_fenced_optional(sections_by_title.get("outcome", "")) or "{}"),
         "prompt": _fenced(sections_by_title.get("prompt", ""), what="prompt"),
         "setup": _sub_blocks(sections_by_title.get("setup", "")),
         "assertions": _parse_assertions(sections_by_title.get("assertions", ""), path),
@@ -149,6 +151,8 @@ def parse_fixture(path: Path) -> dict:
         "mock_response": _fenced_optional(sections_by_title.get("mock response", "")),
         "mock_response_without_kit": _fenced_optional(sections_by_title.get("mock response without kit", "")),
     }
+    from _eval.contracts import validate
+    validate("scenario", fixture)
     if not fixture["mock_response"]:
         raise FixtureError(f"{path}: missing '## Mock response'")
     if not fixture["mock_response_without_kit"]:
@@ -612,10 +616,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--out", type=Path, default=None, help="write the JSON report to this path")
     parser.add_argument("--keep-scratch", action="store_true", help="keep scratch projects and report their paths")
     parser.add_argument("--verbose", "-v", action="store_true", help="per-scenario progress on stderr")
+    parser.add_argument("--report-version", choices=[1, 2], type=int, default=2,
+                        help="v2 separates outcomes/compliance; v1 is a legacy compatibility report")
+    parser.add_argument("--suite", type=Path, help="versioned suite JSON (overrides scenario/runs defaults)")
+    parser.add_argument("--model", help="explicit real model; adapter must verify pinning")
+    parser.add_argument("--experiment-dir", type=Path, help="immutable local evidence directory")
+    parser.add_argument("--resume", action="store_true", help="continue unstarted trials of the same manifest")
+    parser.add_argument("--seed", type=int, default=0, help="paired schedule randomization seed")
+    parser.add_argument("--max-trials", type=int, help="maximum primary trials in this experiment")
+    parser.add_argument("--preflight", action="store_true", help="inspect capabilities without calling a model")
+    parser.add_argument("--regrade", type=Path, help="regrade saved experiment without an agent call")
+    parser.add_argument("--labels", type=Path, help="human label JSON array for --regrade")
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
+def legacy_main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     kit_root = args.kit_root.resolve()
     tasks_dir = (args.tasks_dir or (kit_root / "evals" / "tasks")).resolve()
@@ -712,6 +727,8 @@ def main(argv: list[str] | None = None) -> int:
         payload = benchmark
     else:
         payload = reports[modes[0]]
+    payload["legacy"] = True
+    payload.setdefault("limitations", []).append("Legacy v1 mixes workflow compliance and outcome; not comparable to v2 outcome success.")
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -729,6 +746,17 @@ def main(argv: list[str] | None = None) -> int:
     eprint(f"PASS: pass_rate={reports[modes[-1]]['summary']['pass_rate']:.1%} "
            f">= {args.fail_below:.0%} with no critical failure")
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.report_version == 1:
+        if args.suite or args.model or args.resume or args.preflight or args.regrade or args.labels or args.experiment_dir:
+            eprint("error: v2 experiment options cannot be used with --report-version 1")
+            return 2
+        return legacy_main(argv)
+    from _eval.cli import run
+    return run(args)
 
 
 if __name__ == "__main__":

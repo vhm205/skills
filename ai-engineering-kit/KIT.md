@@ -26,7 +26,7 @@ commands. The narrative walkthrough of every skill is
 | `adapters/` | `default` (auto-discovers commands), `orchexa`, and `_template` |
 | `scripts/` | Installer, project bootstrap, checkers, tests and helper scripts |
 | `docs/` | Workflow guide, adapter guide, review UI guide, upstream mapping, plans, eval reports |
-| `evals/` | Trigger and behavior eval fixtures, runner output and reports |
+| [`evals/`](evals/README.md) | Trigger tests, independent outcome graders, paired trials and evidence reports |
 | `manifest.json` | Version source and skill/extension inventory |
 
 ## Install into a project
@@ -51,3 +51,11 @@ frontmatter, is not installed or discovered by agents, and does not duplicate th
 
 The canonical workflow lives in `core/`; the installable skills live in `skills/`. The optional
 local review UI is documented in [docs/local-review-ui.md](docs/local-review-ui.md).
+
+## Lightweight Small changes
+
+Use `--profile lite` for 5 skills covering Small execution, debugging, verification, review
+and PR descriptions. All profiles use the [Small inline path](core/small-changes.md), with
+fresh evidence and self-review retained. Full remains the install default; missing skills
+must be installed before escalating to a heavier lane. This is an overhead-reduction
+hypothesis, not a measured token or quality improvement.

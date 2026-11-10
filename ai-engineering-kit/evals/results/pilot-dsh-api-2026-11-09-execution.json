@@ -1,0 +1,97 @@
+{
+  "schema": "aiek-live-execution-audit/1",
+  "date": "2026-11-09",
+  "command": [
+    "python3",
+    "scripts/eval_tasks.py",
+    "--suite",
+    "evals/suites/pilot.json",
+    "--model",
+    "deepseek-flash",
+    "--experiment-dir",
+    "evals/results/local/pilot-dsh-api-fixed-2026-11-09",
+    "--out",
+    "evals/results/pilot-dsh-api-fixed-2026-11-09.json"
+  ],
+  "exit_code": 3,
+  "exit_reason": "12 semantic outcomes pending human review; all 18 trials completed without harness errors",
+  "harness_version": "0.2.1-rc.3",
+  "provider_pinned": "deepseek-official",
+  "auth_mode": "api-key",
+  "credential_ref": "DEEPSEEK_API_KEY",
+  "account_login_credentials_forwarded": false,
+  "account_login_home_readable_to_agent": false,
+  "model_requested": "deepseek-flash",
+  "model_observed": null,
+  "manifest_hash": "80e9c6fb87047bd148a2431294ce20d784428eb83b71d3f19580676c2ddebec0",
+  "kit_content_hash": "ebaafffb06baac56752a350243b0644ae9902b2efeec842bbe675ab9a76af5ad",
+  "preflight": {
+    "schema": "aiek-eval-preflight/2",
+    "status": "ready",
+    "harness": {
+      "name": "dsh",
+      "binary_available": true,
+      "version": "0.2.1-rc.3",
+      "capabilities": {
+        "headless": true,
+        "fresh_session": true,
+        "skill_events": true,
+        "tool_events": true,
+        "usage": true,
+        "grader_isolation": true,
+        "global_config_isolation": true,
+        "model_pinning": true,
+        "tool_runtime": true,
+        "authentication": true
+      },
+      "limitations": [
+        "macOS sandbox capability probes are local; Linux requires an isolated runner adapter.",
+        "DSH official provider only; no custom global plugins or settings are loaded.",
+        "Model patch pins requested identity; provider-returned model identity may be unavailable."
+      ]
+    },
+    "model_requested": "deepseek-flash",
+    "missing_capabilities": [],
+    "agent_calls": 0
+  },
+  "artifact_hashes_verified": 18,
+  "trials_completed": 18,
+  "pending_human_labels": 12,
+  "live_fixture_temp_errors": 0,
+  "aborted_experiment_audit": "evals/results/pilot-dsh-api-aborted-2026-11-09.json",
+  "known_tokens_successful_experiment": 1866990,
+  "known_tokens_aborted_experiment": 1305891,
+  "known_tokens_all_experiments_lower_bound": 3172881,
+  "cost_usd": null,
+  "total_usage_complete": false,
+  "unknown_usage_reason": "One started trial in the environment-invalid experiment was interrupted; usage unavailable.",
+  "checks_after_temp_fix": {
+    "eval_tests": {
+      "passed": 39,
+      "failed": 0
+    },
+    "static_kit_check": "pass",
+    "skills_check": "pass",
+    "diff_check": "pass",
+    "real_DSH_subprocess_and_bundled_ripgrep_probe": "pass; no model call",
+    "installer_tests": {
+      "passed": 19,
+      "failed": 0,
+      "note": "Initial postflight run found an embedded transcript-relative link; moved unmodified responses into a plain-text companion; rerun passed."
+    },
+    "helper_tests": {
+      "passed": 60,
+      "failed": 0
+    },
+    "trigger_mock": "exit 0; synthetic heuristic only",
+    "behavior_mock": "exit 0; 14 synthetic plumbing records",
+    "full_python_static_check": "pass",
+    "report_links_and_json": "pass"
+  },
+  "limitations": [
+    "Only bug outcomes have independent pass/fail grades; other outcomes pending human.",
+    "Small fixtures and three repeats do not establish superiority or per-skill attribution.",
+    "Cost unavailable; token totals include cache reads and cannot be converted to USD without verified pricing.",
+    "Remote CI, npm checks and independent review not run this turn."
+  ]
+}

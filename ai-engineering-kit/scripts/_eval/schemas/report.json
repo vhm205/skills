@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "synthetic",
+    "manifest_hash",
+    "variants",
+    "per_scenario",
+    "trial_ids",
+    "verdict",
+    "release_proof",
+    "limitations"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "aiek-eval-report/2"
+      ]
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "variants": {
+      "type": "object"
+    },
+    "per_scenario": {
+      "type": "array"
+    },
+    "trial_ids": {
+      "type": "array",
+      "uniqueItems": true
+    },
+    "verdict": {
+      "enum": [
+        "inconclusive"
+      ]
+    },
+    "release_proof": {
+      "enum": [
+        false
+      ]
+    }
+  }
+}

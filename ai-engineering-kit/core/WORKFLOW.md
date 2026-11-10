@@ -24,7 +24,7 @@ Change request / approved roadmap slice
       ├─ INFRA ─────► shipping-infrastructure (always Large) ─► verifying-change
       │                 ─► reviewing-change ─► accepting-change (ops) ─► DONE
       │
-      ├─ SMALL ─────► executing-task ─► verifying-change ─► reviewing-change ─► DONE
+      ├─ SMALL ─────► inline execution ─► verification ─► self-review ─► compact DONE
       │
       ├─ NORMAL ────► speckit specify ─► [clarify] ─► plan ─► tasks ─► READY TO BUILD
       │                 ─► executing-task (per task, parallel-development if [P])
@@ -108,6 +108,10 @@ to it. Fact ownership (docs vs planner vs tracker vs evidence) is in
 Lane rules are in [classification.md](classification.md). When unsure between two lanes,
 pick the heavier one. You can step down later; stepping up after code exists is expensive.
 
+Small execution is defined in [small-changes.md](small-changes.md); it performs the same
+completion gates inline without mandatory loading of separate stage skills. This applies to
+every installation profile. Profiles reduce installed guidance, never classification or risk gates.
+
 ## Bugs
 
 Bugs use the same lanes. The difference is the first step:
@@ -151,9 +155,10 @@ is impossible, report BLOCKED.
   `executing-task` supplies execution discipline within that loop, not a second loop.
   The `after_implement` hooks own verification, review and one DONE report. If hooks are
   missing, disabled or fail, run the same gates explicitly before claiming DONE.
-- With direct skill execution (including Small), `executing-task` invokes verification and
+- With direct skill execution, `executing-task` invokes verification and
   review and reports DONE itself. Parallel workers return evidence to their coordinator;
-  only the coordinator reports combined completion.
+  only the coordinator reports combined completion. Small inline execution follows
+  [small-changes.md](small-changes.md) instead of invoking those stage skills.
 - Reuse checks from the same unchanged state and scope. Targeted checks prove a task;
   the final gate covers the combined change. Re-run affected checks after review fixes.
 - **Pull request ownership.** When a PR is the integration path, `authoring-pr` writes the

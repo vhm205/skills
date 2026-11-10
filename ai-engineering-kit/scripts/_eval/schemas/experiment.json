@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "suite",
+    "harness",
+    "kit_content_hash",
+    "source_hashes",
+    "fixtures",
+    "schedule",
+    "limits",
+    "model",
+    "release_proof"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "aiek-eval-experiment/2"
+      ]
+    },
+    "suite": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "id",
+        "harness",
+        "model",
+        "scenarios",
+        "variants",
+        "repeats",
+        "max_trials",
+        "timeout_s",
+        "seed"
+      ],
+      "properties": {
+        "schema": {
+          "enum": [
+            "aiek-eval-suite/2"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "harness": {
+          "enum": [
+            "mock",
+            "dsh",
+            "claude",
+            "codex"
+          ]
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "scenarios": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "variants": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "no-kit",
+          "lite-kit",
+              "full-kit"
+            ]
+          }
+        },
+        "repeats": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_trials": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_s": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 900
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "required_capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "kit_content_hash": {
+      "type": "string",
+      "minLength": 64
+    },
+    "schedule": {
+      "type": "array"
+    },
+    "fixtures": {
+      "type": "object"
+    },
+    "source_hashes": {
+      "type": "object"
+    },
+    "release_proof": {
+      "enum": [
+        false
+      ]
+    }
+  }
+}

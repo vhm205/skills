@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "scenario",
+    "variant",
+    "repeat",
+    "status",
+    "synthetic",
+    "duration_s",
+    "usage",
+    "assertions",
+    "error"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "aiek-eval-trial/2"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario": {
+      "type": "string",
+      "minLength": 1
+    },
+    "variant": {
+      "enum": [
+        "no-kit",
+          "lite-kit",
+        "full-kit"
+      ]
+    },
+    "repeat": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "started",
+        "completed",
+        "timeout",
+        "install-error",
+        "auth-error",
+        "harness-error",
+        "grader-error",
+        "unsupported",
+        "interrupted"
+      ]
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "duration_s": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usage": {
+      "type": "object"
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "required": [
+          "id",
+          "dimension",
+          "required",
+          "critical",
+          "status",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dimension": {
+            "enum": [
+              "outcome",
+              "compliance",
+              "safety"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "unavailable",
+              "pending-review",
+              "not-applicable"
+            ]
+          },
+          "evidence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

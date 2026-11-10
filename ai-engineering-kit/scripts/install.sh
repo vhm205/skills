@@ -18,6 +18,7 @@ SKILLS=(exploring-idea shaping-feature intaking-ticket shaping-project executing
 CORE_PROFILE=(executing-task verifying-change accepting-change reviewing-change
               systematic-debugging shipping-infrastructure using-worktrees parallel-development
               test-driven-development finishing-branch authoring-pr)
+LITE_PROFILE=(executing-task verifying-change reviewing-change systematic-debugging authoring-pr)
 DISCOVERY_PROFILE=(exploring-idea shaping-feature intaking-ticket shaping-project)
 SCRIPTS=(resolve_adapter.py verify.py worktree.py traceability.py _adapter_yaml.py)
 MARK_BEGIN="<!-- ai-engineering-kit:begin -->"
@@ -41,6 +42,7 @@ Options:
                       Adapter under adapters/ or a path to an adapter directory
                       (default: default)
   --profile <name>    Skill set to install (default: full)
+                        lite       5 skills for Small changes and PRs
                         core       11 execution/verification/integration skills
                         discovery  4 discovery skills
                         full       all 15 skills
@@ -143,8 +145,8 @@ fi
 
 # Validate the skill selection before touching anything.
 case "$PROFILE" in
-  core|discovery|full) ;;
-  *) die "unknown profile '$PROFILE' (use core, discovery or full)" ;;
+  lite|core|discovery|full) ;;
+  *) die "unknown profile '$PROFILE' (use lite, core, discovery or full)" ;;
 esac
 ONLY_SKILLS=()
 SKIP_SKILLS=()
@@ -167,6 +169,7 @@ for s in "${SKILLS[@]}"; do
     contains "$s" "${ONLY_SKILLS[@]}" || continue
   else
     case "$PROFILE" in
+      lite) contains "$s" "${LITE_PROFILE[@]}" || continue ;;
       core) contains "$s" "${CORE_PROFILE[@]}" || continue ;;
       discovery) contains "$s" "${DISCOVERY_PROFILE[@]}" || continue ;;
       full) ;;

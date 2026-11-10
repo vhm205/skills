@@ -66,7 +66,7 @@ From npm (no checkout, no bash required):
 cd /path/to/project
 specify init --here --integration claude     # once; or codex, agy, copilot, ...
 npx @moment/aiek install . --speckit
-# options: --harness claude,codex,agy  --adapter <name|path>  --profile core|discovery|full
+# options: --harness claude,codex,agy  --adapter <name|path>  --profile lite|core|discovery|full
 #          --only <skills>  --skip <skills>  --prefix <p|none>
 #          --link  --force  --dry-run
 ```
@@ -88,6 +88,13 @@ This installs:
   `traceability`) that skills use when present and that never replace the manual fallback
 - A marked kit block in `AGENTS.md`, and a `CLAUDE.md` that imports it for Claude Code
 - With `--speckit`: the `aiek` extension, the `aiek-core` preset, and the two workflows
+
+For Small work, use `scripts/install.sh <project> --profile lite` or
+`npx @moment/aiek install <project> --profile lite`. Lite installs 5 execution, debugging,
+verification, review and PR skills; the canonical [Small inline path](core/small-changes.md)
+avoids repeated stage loading. Required discovery, risky changes and release work still
+need their own skills and planner. Installs are additive; lite does not prune an existing full
+installation. Use a fresh target when measuring lite.
 
 The default `--profile full` installs all 15 skills. Use `--profile core` for the 11
 execution/verification/integration skills, or `--profile discovery` for the 4 discovery skills;

@@ -21,13 +21,15 @@ For every change request (feature, bug, refactor) or approved roadmap slice:
    artifacts; Small/infra only). That artifact is the only plan; never create a second one.
    Fact ownership: `.aiek/core/documentation.md`.
 4. **Follow the lane:**
-   - SMALL → `executing-task` → `verifying-change` → `reviewing-change` (self) → DONE
+   - SMALL → inline execution, verification and self-review in `.aiek/core/small-changes.md`
+     → compact DONE; do not load multiple skills just to repeat those steps.
    - NORMAL → Spec Kit specify → (clarify) → plan → tasks → implement
    - LARGE → research → specify → clarify → plan → NEEDS DECISION if needed → tasks → analyze → implement (worktree, independent review)
    - INFRA (infrastructure, pipeline, deploy, release process, capacity) → recorded decision
      → `shipping-infrastructure` → `verifying-change` → independent review
      → `accepting-change` (ops)
-5. Bugs start with `systematic-debugging`. Parallel work only via `parallel-development`.
+5. Bugs with an unproven cause start with `systematic-debugging`; known-cause Small fixes
+   follow the inline path. Parallel work only via `parallel-development`.
 6. Before reviewers look, `authoring-pr` writes the description from verification evidence;
    `finishing-branch` only chooses the disposition and reuses that description. Before release,
    `accepting-change` runs the acceptance pass.
@@ -44,3 +46,6 @@ Rules:
 - Do not activate a second planning/bootstrap workflow alongside this kit. Check globally
   installed skills/plugins too; project installation alone does not disable them.
 - Project instructions in this file and in `.aiek/adapter.md` override kit defaults.
+
+Reduced profiles never skip required stages: if a needed skill or planner is absent, report
+the prerequisite and install it before proceeding on that path.

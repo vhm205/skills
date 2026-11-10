@@ -132,13 +132,13 @@ class ProfileTests(unittest.TestCase):
         self.assertFalse(set(profiles['core']) & set(profiles['discovery']))
 
     def test_profiles_install_expected_skill_counts(self):
-        for profile in ('core', 'discovery', 'full'):
+        for profile in ('lite', 'core', 'discovery', 'full'):
             with self.subTest(profile=profile):
                 project = self.new_project('profile-' + profile)
                 self.install(project, '--harness', 'codex', '--profile', profile)
                 expected = set(self.manifest['profiles'][profile])
                 self.assertEqual(self.installed_skills(project), expected)
-                self.assertEqual(len(expected), {'core': 11, 'discovery': 4, 'full': 15}[profile])
+                self.assertEqual(len(expected), {'lite': 5, 'core': 11, 'discovery': 4, 'full': 15}[profile])
                 # core never drags discovery skills in, and vice versa
                 if profile == 'core':
                     self.assertFalse(
@@ -179,7 +179,7 @@ class ProfileTests(unittest.TestCase):
                 self.assertEqual(list(project.iterdir()), [])
 
     def test_dry_run_for_each_profile_writes_nothing(self):
-        for profile in ('core', 'discovery', 'full'):
+        for profile in ('lite', 'core', 'discovery', 'full'):
             with self.subTest(profile=profile):
                 project = self.new_project('dry-' + profile)
                 self.install(project, '--harness', 'codex', '--profile', profile, '--dry-run')

@@ -1,0 +1,112 @@
+{
+  "trials": [
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-0",
+      "scenario": "example",
+      "variant": "full-kit",
+      "repeat": 0,
+      "status": "completed",
+      "synthetic": true,
+      "duration_s": 2,
+      "usage": {
+        "total_tokens": 10
+      },
+      "assertions": [
+        {
+          "id": "outcome",
+          "dimension": "outcome",
+          "status": "pass",
+          "critical": false,
+          "required": true,
+          "evidence": "golden input"
+        }
+      ],
+      "error": null
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-1",
+      "scenario": "example",
+      "variant": "full-kit",
+      "repeat": 1,
+      "status": "completed",
+      "synthetic": true,
+      "duration_s": 2,
+      "usage": {
+        "total_tokens": 20
+      },
+      "assertions": [
+        {
+          "id": "outcome",
+          "dimension": "outcome",
+          "status": "pass",
+          "critical": false,
+          "required": true,
+          "evidence": "golden input"
+        },
+        {
+          "id": "safety",
+          "dimension": "safety",
+          "status": "fail",
+          "critical": true,
+          "required": true,
+          "evidence": "golden input"
+        }
+      ],
+      "error": null
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-2",
+      "scenario": "example",
+      "variant": "full-kit",
+      "repeat": 2,
+      "status": "completed",
+      "synthetic": true,
+      "duration_s": 2,
+      "usage": {
+        "total_tokens": 25
+      },
+      "assertions": [
+        {
+          "id": "outcome",
+          "dimension": "outcome",
+          "status": "pending-review",
+          "critical": false,
+          "required": true,
+          "evidence": "golden input"
+        }
+      ],
+      "error": null
+    },
+    {
+      "schema": "aiek-eval-trial/2",
+      "id": "trial-3",
+      "scenario": "example",
+      "variant": "full-kit",
+      "repeat": 3,
+      "status": "timeout",
+      "synthetic": true,
+      "duration_s": 2,
+      "usage": {},
+      "assertions": [],
+      "error": null
+    }
+  ],
+  "expected": {
+    "started": 4,
+    "completed": 3,
+    "graded": 2,
+    "successes": 1,
+    "quality_rate": 0.5,
+    "end_to_end_rate": 0.25,
+    "coverage": 0.5,
+    "errors": 1,
+    "pending_review": 1,
+    "critical_violations": 1,
+    "total_tokens": null,
+    "known_tokens": 55,
+    "duration_s": 8
+  }
+}
